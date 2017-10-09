@@ -6,43 +6,43 @@ package me.digi.sdk.core.config;
 
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
-import me.digi.sdk.core.BuildConfig;
 import java.text.Normalizer;
 
-@SuppressWarnings("SameParameterValue")
-public class ApiConfig {
-    private static final String API_HOST_URL = "https://" + BuildConfig.BASE_HOST;
+import me.digi.sdk.core.BuildConfig;
+import okhttp3.HttpUrl;
 
-    private final String url;
+public final class ApiConfig {
 
-    public ApiConfig() {
-        this(API_HOST_URL);
-    }
+    private static volatile ApiConfig singleton;
 
-    private ApiConfig(String url) {
+    private final HttpUrl url;
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    public ApiConfig(@NonNull HttpUrl url) {
         this.url = url;
     }
 
+    public static ApiConfig get() {
+        if (singleton == null) {
+            synchronized (ApiConfig.class) {
+                singleton = new ApiConfig(HttpUrl.parse("https://" + BuildConfig.BASE_HOST));
+            }
+        }
+        return singleton;
+    }
+
     public String getUrl() {
-        return url;
+        return url.toString();
     }
 
     public String getHost() {
-        return Uri.parse(getUrl()).getHost();
+        return url.host();
     }
 
-    public Uri.Builder buildUrl(String... paths) {
-        final Uri.Builder builder = Uri.parse(getUrl()).buildUpon();
-        if (paths != null) {
-            for (String p : paths) {
-                builder.appendPath(p);
-            }
-        }
-        return builder;
-    }
-
-    public static String sdkUA(String appName, String versionCode) {
+    public String userAgentString(String appName, String versionCode) {
         String ua = appName +
                 '/' + versionCode +
                 ' ' +
@@ -54,6 +54,16 @@ public class ApiConfig {
                 Build.PRODUCT +
                 ')';
         return fromUtf(Normalizer.normalize(ua, Normalizer.Form.NFD));
+    }
+
+    public Uri.Builder buildUrl(String... paths) {
+        final Uri.Builder builder = Uri.parse(getUrl()).buildUpon();
+        if (paths != null) {
+            for (String p : paths) {
+                builder.appendPath(p);
+            }
+        }
+        return builder;
     }
 
     private static String fromUtf(String str) {

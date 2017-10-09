@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import me.digi.sdk.core.config.ApiConfig;
-import me.digi.sdk.core.entities.HTTPError;
+import me.digi.sdk.core.entities.ErrorResponse;
 import me.digi.sdk.crypto.CACryptoProvider;
 import me.digi.sdk.crypto.CAKeyStore;
 import me.digi.sdk.crypto.DGMCryptoFailureException;
@@ -79,11 +79,11 @@ public class CAContentCryptoInterceptor implements Interceptor {
      */
     private Response mapError(@NonNull String responseMessage, @NonNull String errorMessage, int code, @NonNull Response originalResponse) {
         if (code < 400) return originalResponse;
-        HTTPError error = new HTTPError(errorMessage, code, responseMessage);
+        ErrorResponse error = new ErrorResponse(responseMessage, errorMessage, "", code);
         return originalResponse.newBuilder()
                 .code(code)
                 .message(responseMessage)
-                .body(ResponseBody.create(MediaType.parse("application/json"), gson.toJson(error, HTTPError.class)))
+                .body(ResponseBody.create(MediaType.parse("application/json"), gson.toJson(error, ErrorResponse.class)))
                 .header("Content-Type", "application/json")
                 .build();
     }
@@ -124,7 +124,7 @@ public class CAContentCryptoInterceptor implements Interceptor {
 
     private static class EncryptedPaths {
         private static final String[] whitelist = {"/v1/permission-access/query/_any_/_any_"};
-        private static final ApiConfig thisApi = new ApiConfig();
+        private static final ApiConfig thisApi = ApiConfig.get();
         private static final String ANY_MATCHER = "_any_";
 
         static boolean shouldDecrypt(HttpUrl url) {
