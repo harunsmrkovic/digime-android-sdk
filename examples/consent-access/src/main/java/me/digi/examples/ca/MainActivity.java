@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
         gotoCallback.setVisibility(View.GONE);
         downloadedCount = (TextView) findViewById(R.id.counter);
 
+        DigiMeClient.minRetryPeriod = 1000;
         //Add this activity as a listener to DigiMeClient and start the auth flow
         dgmClient.addListener(this);
         dgmClient.authorize(this, null);
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
     @Override
     public void clientFailedOnFileList(SDKException reason) {
         Log.d(TAG, "Failed to retrieve file list: " + reason.getMessage());
+        statusText.setText(R.string.failed_file_list);
         gotoCallback.setVisibility(View.VISIBLE);
     }
 
@@ -142,11 +144,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
 
     private void updateCounters() {
         int current = counter.decrementAndGet();
-        if (failedCount.get() > 0) {
-            downloadedCount.setText(String.format(Locale.getDefault(), "Downloaded : %d/%d", allFiles - current, allFiles));
-        } else {
-            downloadedCount.setText(String.format(Locale.getDefault(), "Downloaded : %d/%d; Failed: %d", allFiles - current, allFiles, failedCount.get()));
-        }
+        downloadedCount.setText(String.format(Locale.getDefault(), "Downloaded : %d/%d; Failed: %d", allFiles - current, allFiles, failedCount.get()));
         if (current == 0) {
             statusText.setText(R.string.data_retrieved);
         }
