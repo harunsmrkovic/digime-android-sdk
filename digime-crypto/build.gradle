@@ -81,8 +81,8 @@ build.dependsOn(updateVersion)
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-annotations:27.0.0'
-    compile 'com.madgag.spongycastle:prov:1.58.0.0'
-    compile 'com.madgag.spongycastle:core:1.58.0.0'
+    compile 'com.madgag.spongycastle:prov:1.56.0.0'
+    compile 'com.madgag.spongycastle:core:1.56.0.0'
     compile 'com.madgag.spongycastle:pkix:1.54.0.0'
 
     //tests
