@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
         for (final String fileId :
                 files.fileIds) {
             counter.incrementAndGet();
-            DigiMeClient.getInstance().getFileContent(fileId, null);
+            DigiMeClient.getInstance().getFileJSON(fileId, null);
         }
         String progress = getResources().getQuantityString(R.plurals.files_retrieved, files.fileIds.size(), files.fileIds.size());
         statusText.setText(progress);
@@ -125,12 +125,12 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
 
     @Override
     public void contentRetrievedForFile(String fileId, CAFileResponse content) {
-        Log.d(TAG, content.fileContent.toString());
-        updateCounters();
     }
 
     @Override
     public void jsonRetrievedForFile(String fileId, JsonElement content) {
+        Log.d(TAG, content.toString());
+        updateCounters();
     }
 
     @Override
@@ -142,13 +142,6 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
 
     private void updateCounters() {
         int current = counter.decrementAndGet();
-        if (failedCount.get() > 0) {
-            downloadedCount.setText(String.format(Locale.getDefault(), "Downloaded : %d/%d", allFiles - current, allFiles));
-        } else {
-            downloadedCount.setText(String.format(Locale.getDefault(), "Downloaded : %d/%d; Failed: %d", allFiles - current, allFiles, failedCount.get()));
-        }
-        if (current == 0) {
-            statusText.setText(R.string.data_retrieved);
-        }
+        downloadedCount.setText(String.format(Locale.getDefault(), "Downloaded : %d/%d; Failed: %d", allFiles - current, allFiles, failedCount.get()));
     }
 }

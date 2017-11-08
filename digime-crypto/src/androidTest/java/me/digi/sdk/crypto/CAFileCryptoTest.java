@@ -61,7 +61,6 @@ public class CAFileCryptoTest {
     }
 
     @Test
-    @RequiresDevice
     public void pemPrivateKeyParsingTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("test_pem_private.pem");
 
@@ -75,7 +74,6 @@ public class CAFileCryptoTest {
     }
 
     @Test
-    @RequiresDevice
     public void cryptoProviderInitWithBadKeyTest() throws Exception{
         String badKey = "1" + TEST_PRIVATE_KEY;
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(badKey));
@@ -83,7 +81,6 @@ public class CAFileCryptoTest {
     }
 
     @Test
-    @RequiresDevice
     public void encryptedCAFileTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("ca_file_encryption_v2.valid");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(TEST_PRIVATE_KEY));
@@ -99,7 +96,6 @@ public class CAFileCryptoTest {
     }
 
     @Test(expected = DGMCryptoFailureException.class)
-    @RequiresDevice
     public void encryptedCAFileInvalidHashTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("ca_file_encryption_v2.invalid_hash");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(TEST_PRIVATE_KEY));
@@ -108,7 +104,6 @@ public class CAFileCryptoTest {
     }
 
     @Test(expected = DGMCryptoFailureException.class)
-    @RequiresDevice
     public void encryptedCAFileInvalidDSKTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("ca_file_encryption_v2.invalid_dsk");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(TEST_PRIVATE_KEY));
@@ -117,7 +112,6 @@ public class CAFileCryptoTest {
     }
 
     @Test
-    @RequiresDevice
     public void encryptedCAFileNullContentTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("ca_file_encryption_v2.valid_but_null");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(TEST_PRIVATE_KEY));
@@ -126,7 +120,6 @@ public class CAFileCryptoTest {
     }
 
     @Test
-    @RequiresDevice
     public void encryptedBase64StreamTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("base64_encoded.valid");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(DEC_KEY));
@@ -142,7 +135,6 @@ public class CAFileCryptoTest {
     }
 
     @Test
-    @RequiresDevice
     public void encryptedJsonStreamTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("sample_response.json");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(DEC_KEY));

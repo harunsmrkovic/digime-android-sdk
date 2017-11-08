@@ -1,14 +1,9 @@
 apply plugin: 'com.android.application'
 apply from: project.file('../../config/gradle/quality.gradle')
-apply from: project.file('../../config/shared/shared.gradle')
-
-validateJenkinsSampleApp()
-def sampleContractId = fetchWithThrow(new Properties(),'sdkconfig.properties', 'digimeConsentAccessContractId', "Rename sdkconfig.properties.default and substitute \"digimeConsentAccessContractId\" with your contractID.")
-def sampleP12 = fetchWithThrow(new Properties(),'sdkconfig.properties', 'digimeConsentAccessP12Keystore', "Rename sdkconfig.properties.default and substitute \"digimeConsentAccessP12Keystore\" with path of p12 store in assets.")
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 26
+    buildToolsVersion '27.0.1'
 
     defaultConfig {
         applicationId "me.digi.examples.ca"
@@ -16,9 +11,20 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        resValue "string", "SAMPLE_CONTRACT_ID", sampleContractId
-        resValue "string", "P12_KEYSTORE", sampleP12
-        resValue "string", "P12_KEYSTORE_PASS", ""
+
+        /*
+         * Consent Access Configuration parameters:
+         * The following lines set parameters necessary for initialization and usage of the CA API (through SDK):
+         * App ID, Contract ID, Private Key file and Private Key file password if any;
+         * These are helper resource constructors which get injected into AndroidManifest.xml
+         * For further details how these are mapped to meta-data used by the SDK, look at AndroidManifest.xml at the section marked with <DIGI.ME SDK CONFIGURATION PARAMS BEGIN>
+         */
+
+        resValue "string", "APP_ID", "your_real_app_id" // <- sample: "gDdQfubl66rj07webI92m4afPL9va9Z1" (32 characters hex string given by digi.me support)
+        resValue "string", "P12_KEYSTORE_PASSWORD", "your_real_key_password" // <- sample: "20ov;p-1Fi3oL" (the password that goes with your private key). You will need to request the key password from dev support if using pre-set contract ID.
+
+        resValue "string", "CONTRACT_ID", "gzqYsbQ1V1XROWjmqiFLcH2AF1jvcKcg" // <- demo contract ID for testing purposes
+        resValue "string", "P12_KEYSTORE_FILENAME", "CA_RSA_PRIVATE_KEY.p12" // <- demo private key in assets folder, accompanying the demo contract ID
     }
     buildTypes {
         debug {
@@ -47,9 +53,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(path: ':digime-core')
 
-    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:appcompat-v7:27.0.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support:design:27.0.0'
 
     testCompile 'junit:junit:4.12'
 }

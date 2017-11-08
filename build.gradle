@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:2.3.3"
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.5.0"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.5.2"
     }
 }
 
@@ -24,11 +24,6 @@ allprojects {
     project.ext {
         globalVersion = "unspecified";
     }
-}
-
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
 }
 
 task clean(type: Delete) {

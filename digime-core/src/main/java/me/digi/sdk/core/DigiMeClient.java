@@ -747,7 +747,7 @@ public final class DigiMeClient {
                     listener.clientFailedOnFileList(exception);
                 } else if (type.equals(CAFileResponse.class)) {
                     listener.contentRetrieveFailed(reserved, exception);
-                } else if (type.isInstance(JsonElement.class)) {
+                } else if (type.equals(JsonElement.class)) {
                     listener.contentRetrieveFailed(reserved, exception);
                 }
             }
