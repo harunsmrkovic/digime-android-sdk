@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
         setContentView(R.layout.activity_main);
         dgmClient = DigiMeClient.getInstance();
 
-        statusText = (TextView) findViewById(R.id.status_text);
-        gotoCallback = (Button) findViewById(R.id.go_to_callback);
+        statusText = findViewById(R.id.status_text);
+        gotoCallback = findViewById(R.id.go_to_callback);
         gotoCallback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
             }
         });
         gotoCallback.setVisibility(View.GONE);
-        downloadedCount = (TextView) findViewById(R.id.counter);
+        downloadedCount = findViewById(R.id.counter);
 
         //Add this activity as a listener to DigiMeClient and start the auth flow
         dgmClient.addListener(this);

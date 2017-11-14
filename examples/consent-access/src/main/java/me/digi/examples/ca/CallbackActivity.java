@@ -36,7 +36,7 @@ public class CallbackActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_callback);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         this.cb = new SDKCallback<CASession>() {
@@ -53,7 +53,7 @@ public class CallbackActivity extends AppCompatActivity {
             }
         };
 
-        final Button startButton = (Button) findViewById(R.id.start_button);
+        final Button startButton = findViewById(R.id.start_button);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +62,7 @@ public class CallbackActivity extends AppCompatActivity {
             }
         });
 
-        statusText = (TextView) findViewById(R.id.callback_status);
+        statusText = findViewById(R.id.callback_status);
 
     }
 
