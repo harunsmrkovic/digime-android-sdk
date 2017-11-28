@@ -40,7 +40,7 @@ android {
 
     lintOptions {
         lintConfig project.file('../../gradle/lint.xml')
-        disable 'LogConditional', 'GradleCompatible'
+        disable 'LogConditional', 'GradleCompatible', 'IconLauncherShape', 'OldTargetApi'
     }
 
     compileOptions {
