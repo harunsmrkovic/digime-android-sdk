@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
         setContentView(R.layout.activity_main);
         dgmClient = DigiMeClient.getInstance();
 
-        statusText = (TextView) findViewById(R.id.status_text);
-        gotoCallback = (Button) findViewById(R.id.go_to_callback);
+        statusText = findViewById(R.id.status_text);
+        gotoCallback = findViewById(R.id.go_to_callback);
         gotoCallback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,9 +52,8 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
             }
         });
         gotoCallback.setVisibility(View.GONE);
-        downloadedCount = (TextView) findViewById(R.id.counter);
+        downloadedCount = findViewById(R.id.counter);
 
-        DigiMeClient.minRetryPeriod = 1000;
         //Add this activity as a listener to DigiMeClient and start the auth flow
         dgmClient.addListener(this);
         dgmClient.authorize(this, null);
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
         for (final String fileId :
                 files.fileIds) {
             counter.incrementAndGet();
-            DigiMeClient.getInstance().getFileContent(fileId, null);
+            DigiMeClient.getInstance().getFileJSON(fileId, null);
         }
         String progress = getResources().getQuantityString(R.plurals.files_retrieved, files.fileIds.size(), files.fileIds.size());
         statusText.setText(progress);
@@ -121,18 +120,17 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
     @Override
     public void clientFailedOnFileList(SDKException reason) {
         Log.d(TAG, "Failed to retrieve file list: " + reason.getMessage());
-        statusText.setText(R.string.failed_file_list);
         gotoCallback.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void contentRetrievedForFile(String fileId, CAFileResponse content) {
-        Log.d(TAG, content.fileContent.toString());
-        updateCounters();
     }
 
     @Override
     public void jsonRetrievedForFile(String fileId, JsonElement content) {
+        Log.d(TAG, content.toString());
+        updateCounters();
     }
 
     @Override
@@ -145,8 +143,5 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
     private void updateCounters() {
         int current = counter.decrementAndGet();
         downloadedCount.setText(String.format(Locale.getDefault(), "Downloaded : %d/%d; Failed: %d", allFiles - current, allFiles, failedCount.get()));
-        if (current == 0) {
-            statusText.setText(R.string.data_retrieved);
-        }
     }
 }

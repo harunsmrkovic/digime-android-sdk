@@ -16,7 +16,6 @@ import me.digi.examples.ca_no_sdk.R;
 import me.digi.examples.ca_no_sdk.service.GetUserDataTask;
 import me.digi.examples.ca_no_sdk.service.PermissionService;
 import me.digi.examples.ca_no_sdk.service.models.DataGetResponse;
-import me.digi.examples.ca_no_sdk.service.models.File;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
