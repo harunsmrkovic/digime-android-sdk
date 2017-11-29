@@ -21,7 +21,8 @@ public interface ConsentAccessService {
     @CallConfig(shouldRetry = true, retryCount = 2)
     @Headers({
             "Content-type: application/json",
-            "Cache-Control: no-cache"
+            "Cache-Control: no-cache",
+            "Accept: application/json"
     })
     @GET("/v1/permission-access/query/{sessionKey}")
     Call<CAFiles> list(@Path("sessionKey") String sessionKey);
@@ -29,7 +30,8 @@ public interface ConsentAccessService {
     @CallConfig(shouldRetry = true, retryCount = 3, retryOnResponseCode = {404}, retriedExceptions = {IOException.class})
     @Headers({
             "Content-type: application/json",
-            "Cache-Control: no-cache"
+            "Cache-Control: no-cache",
+            "Accept: application/json"
     })
     @GET("/v1/permission-access/query/{sessionKey}/{fileName}")
     Call<CAFileResponse> data(@Path("sessionKey") String sessionKey,
@@ -38,7 +40,8 @@ public interface ConsentAccessService {
     @CallConfig(shouldRetry = true, retryCount = 3, retryOnResponseCode = {404}, retriedExceptions = {IOException.class})
     @Headers({
             "Content-type: application/json",
-            "Cache-Control: no-cache"
+            "Cache-Control: no-cache",
+            "Accept: application/json"
     })
     @GET("/v1/permission-access/query/{sessionKey}/{fileName}")
     Call<JsonElement> dataRaw(@Path("sessionKey") String sessionKey,

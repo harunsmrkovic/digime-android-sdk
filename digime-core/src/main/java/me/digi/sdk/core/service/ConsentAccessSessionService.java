@@ -17,7 +17,8 @@ public interface ConsentAccessSessionService {
     @CallConfig(shouldRetry = false)
     @Headers({
             "Content-type: application/json",
-            "Cache-Control: no-cache"
+            "Cache-Control: no-cache",
+            "Accept: application/json"
     })
     @POST("v1/permission-access/session")
     Call<CASession> getSessionToken(@Body CAContract contract);
