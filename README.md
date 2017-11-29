@@ -1,12 +1,12 @@
 # Digi.me SDK for Android
 
-The Digi.me SDK for Android is a multi-module library that allows seamless authentication with Consent Access service, making content requests and core decryption services. For details on the API and general CA architecture, visit [Dev Support Docs](http://devsupport.digi.me/start.html).
+The Digi.me SDK for Android is a multi-module library that allows seamless authentication with Consent Access service, making content requests and core decryption services. For details on the API and general CA architecture, visit [Dev Support Docs](https://developers.digi.me/consent-access-flow.html).
 
 
 ## Preamble
 
 Digi.me SDK depends on digi.me app being installed to enable user initiated authorization of requests.
-For detailed explanation of the Consent Access architecture please visit [Dev Support Docs](http://devsupport.digi.me/start.html).
+For detailed explanation of the Consent Access architecture please visit [Dev Support Docs](https://developers.digi.me/consent-access-flow.html).
 
 ## Table of Contents
 
@@ -129,7 +129,7 @@ Before accessing the public APIs, a valid Contract ID needs to be registered for
 The Contract ID uniquely identifies a contract with the user that spells out what type of data you want, what you will and won't do with it, how long you will retain it and if you will implement the right to be forgotten.
 It also specifies how the data is encrypted in transit.
 
-To register a Consent Access contract check out [Digi.me Dev Support](http://devsupport.digi.me/). There you can request a Contract ID and App ID to which it is bound.
+To register a Consent Access contract check out [Digi.me Dev Support](https://developers.digi.me). There you can request a Contract ID and App ID to which it is bound.
 
 ### DigiMeClient and it's configuration
 
@@ -434,7 +434,7 @@ DigiMeClient.getInstance().getFileContent(fileId, callback)
 
 Upon success DigiMeClient returns a `CAFileResponse` which contains a list of deserialized content objects (`CAContent`)
 
-For detailed content item structure look at [Dev Docs](http://devsupport.digi.me/downloads.html).
+For detailed content item structure look at [Dev Docs](https://developers.digi.me/data-structure.html).
 
 ### Handling fetch failures and automatic exponential backoff
  
@@ -495,7 +495,7 @@ DigiMeClient.getInstance().getFileJSON(fileId, callback)
 
 Upon success DigiMeClient returns a `JsonElement` which contains complete file content.
 
-For detailed content item structure look at [Dev Docs](http://devsupport.digi.me/downloads.html).
+For detailed content item structure look at [Dev Docs](https://developers.digi.me/data-structure.html).
 
 ### Decryption
 
