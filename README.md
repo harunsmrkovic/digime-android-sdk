@@ -31,6 +31,7 @@ For detailed explanation of the Consent Access architecture please visit [Dev Su
      * [Handling fetch failures and automatic exponential backoff](#handling-fetch-failures-and-automatic-exponential-backoff)
      * [Fetching raw response JSON](#fetching-raw-response-json)
      * [Decryption](#decryption)
+ * [Building Digi.me SDK](#building-digi.me-sdk)
 
 ## Manual Installation
 
@@ -505,3 +506,11 @@ In cases where you don't want to use the SDK for requests, the security module c
 Just import `me.digi.sdk.crypto` package. 
 
 For details on such implementation check out the **examples/consent-access-no-sdk** example app.
+
+## Building Digi.me SDK
+
+TODO use similar approach as Dagger to make SDK development easier - https://github.com/google/dagger/tree/master/util
+
+Dagger is built with [`gradle`]. The tests can be run with `gradlew test //...`.
+`util/install-local-snapshot.sh` will build all of the digi.me SDK libraries and
+install a copy in your local maven repository. TODO - apply `*-SNAPSHOT` automatically
