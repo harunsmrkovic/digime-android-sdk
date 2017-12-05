@@ -206,13 +206,13 @@ public final class DigiMeClient {
                     .add(ApiConfig.get().getHost(), "sha256/dJtgu1DIYCnEB2vznevQ8hj9ADPRHzIN4pVG/xqP1DI=")
                     .add(ApiConfig.get().getHost(), "sha256/wpsB0loL9mSlGQZTWRQtWcIL0S5Wsu6rc85ToklfkDE=")
                     .add(ApiConfig.get().getHost(), "sha256/L/ZH1QCgUbk0OG8ePmvLnsTxUnjCzizynPQIw3iWxVo=")
-                    .add(ApiConfig.get().getHost(), "sha256/NwQiJdUz2GDUQloxMzERz/w+Smd6i898hjq6g2FIJbg=") //int
-                    .add(ApiConfig.get().getHost(), "sha256/HC6oU3LGzhkwHionuDaZacaIbjwYaMT/Qc7bxWLyy8g=") //prod
+                    .add(ApiConfig.get().getHost(), "sha256/NwQiJdUz2GDUQloxMzERz/w+Smd6i898hjq6g2FIJbg=") //integration
+                    .add(ApiConfig.get().getHost(), "sha256/HC6oU3LGzhkwHionuDaZacaIbjwYaMT/Qc7bxWLyy8g=") //prod 1
+                    .add(ApiConfig.get().getHost(), "sha256/2qix+QNHzGWG5nhEFNIMxPZ57YbgT0liSisVLERNzt8=") //prod 2
+                    .add(ApiConfig.get().getHost(), "sha256/W8QTLPG35cP39gFmUjKLLKAlHrYmGxvHf5Zf+INBZzo=") //prod 3
                     .add(ApiConfig.get().getHost(), "sha256/3Q5tS8ejLixxAC+UORUXfDdXpg76r113b2/MAQoWI84=") //enc
-                    .add(ApiConfig.get().getHost(), "sha256/FuXLwrAfrO4L3Cu03eXcXAH1BnnQRJeqy8ft+dVB4TI=") //sandbox
-                    .add(ApiConfig.get().getHost(), "sha256/0DDcdwur6iSIg9T1iqwfyf89d132/ydO7WdrODMoqrk=") //alpha
-                    .add(ApiConfig.get().getHost(), "sha256/jk6om5FFlGkLZ/thBD1Vns1rRawKvnu1P+Iv0/fP5yk=") //sandbox bizdev
-                    .add(ApiConfig.get().getHost(), "sha256/41Vcs2jOzcXdsDsbDt/nsNQRUZsYhCTPoeODK6VaWF0=") //sandbox star
+                    .add(ApiConfig.get().getHost(), "sha256/NwQiJdUz2GDUQloxMzERz/w+Smd6i898hjq6g2FIJbg=") //sandbox
+                    .add(ApiConfig.get().getHost(), "sha256/7e4V8WPjNT2QNQkQhYM3U6JIsehkNUmnZzRqhY82hh8=") //alpha
                     .build();
         }
     }
