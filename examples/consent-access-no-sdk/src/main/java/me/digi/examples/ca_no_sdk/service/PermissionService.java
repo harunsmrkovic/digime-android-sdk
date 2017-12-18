@@ -19,26 +19,34 @@ import retrofit2.http.Path;
 public interface PermissionService {
 
     @Headers({
-        "content-type: application/json",
-        "Cache-Control: no-cache"
+        "Content-type: application/json",
+        "Cache-Control: no-cache",
+        "Accept: application/json"
     })
     @POST("v1/permission-access/session")
     Call<SessionKeyCreateResponse> getSessionToken(@Body SessionTokenBody sessionTokenBody);
 
     @Headers({
         "Content-type: application/json",
-        "Cache-Control: no-cache"
+        "Cache-Control: no-cache",
+        "Accept: application/json"
     })
     @GET("v1/permission-access/query/{sessionKey}")
     Call<DataGetResponse> listDataFiles(@Path("sessionKey") String sessionKey);
 
     @Headers({
         "Content-type: application/json",
-        "Cache-Control: no-cache"
+        "Cache-Control: no-cache",
+        "Accept: application/json"
     })
     @GET("v1/permission-access/query/{sessionKey}/{fileName}")
     Call<DataGetEncryptedResponse> getDataFile(@Path("sessionKey") String sessionKey, @Path("fileName") String fileName);
 
+    @Headers({
+            "Content-type: application/json",
+            "Cache-Control: no-cache",
+            "Accept: application/json"
+    })
     @GET("v1/permission-access/query/{sessionKey}/{fileName}")
     Call<DataGetResponse> getDataFileUnencrypted(@Path("sessionKey") String sessionKey, @Path("fileName") String fileName);
 }
