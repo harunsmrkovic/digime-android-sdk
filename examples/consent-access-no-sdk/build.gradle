@@ -41,7 +41,7 @@ android {
             
             buildConfigField "String", "APP_ID",  '"your_real_app_id"' // <- sample: "gDdQfubl66rj07webI92m4afPL9va9Z1" (32 characters hex string given by digi.me support)
             buildConfigField "String", "CONTRACT_ID",  '"gzqYsbQ1V1XROWjmqiFLcH2AF1jvcKcg"'
-            buildConfigField "String", "P12_STORE",  '"<Replace with p12 file path in assets>"'
+            buildConfigField "String", "P12_STORE",  '"CA_RSA_PRIVATE_KEY.p12"'
             buildConfigField "String", "P12_PASS",  '"<Replace with p12 file password if any>"' // <- sample: "20ov;p-1Fi3oL" (the password that goes with your private key). You will need to request the key password from dev support if using pre-set contract ID.
         }
         sandbox {
