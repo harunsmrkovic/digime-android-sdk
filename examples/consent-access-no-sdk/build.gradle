@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 apply from: project.file('../../config/gradle/quality.gradle')
 
+repositories {
+    maven { url "https://repository.sysdigi.net/m2/libs-release"}
+}
+
 android {
     compileSdkVersion 26
     buildToolsVersion '27.0.1'
@@ -62,7 +66,7 @@ android {
 }
 
 dependencies {
-    compile project(path: ':digime-crypto')
+    compile 'me.digi.sdk:digime-crypto:1.1.3'
     compile 'com.android.support:appcompat-v7:27.0.0'
     compile 'com.android.support:design:27.0.0'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
