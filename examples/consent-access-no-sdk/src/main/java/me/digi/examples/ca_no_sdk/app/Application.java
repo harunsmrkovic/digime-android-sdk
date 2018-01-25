@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 digi.me. All rights reserved.
+ * Copyright (c) 2009-2018 digi.me Limited. All rights reserved.
  */
 
 package me.digi.examples.ca_no_sdk.app;
