@@ -30,6 +30,7 @@ For detailed explanation of the Consent Access architecture please visit [Dev Su
   * [Fetching data](#fetching-data)
      * [Handling fetch failures and automatic exponential backoff](#handling-fetch-failures-and-automatic-exponential-backoff)
      * [Fetching raw response JSON](#fetching-raw-response-json)
+     * [Fetching Account metadata](#fetching-account-metadata)
      * [Decryption](#decryption)
 
 ## Manual Installation
@@ -56,7 +57,7 @@ For detailed explanation of the Consent Access architecture please visit [Dev Su
 ```gradle
 
    dependencies {
-        compile 'me.digi.sdk:digime-core:1.1.3'
+        compile 'me.digi.sdk:digime-core:1.2.0'
    }
 ```
 
@@ -69,7 +70,7 @@ For testing purposes or initial integartion _dev_ version of the library should 
 ```gradle
 
    dependencies {
-        compile '...:digime-core:1.1.3-dev'
+        compile '...:digime-core:1.2.0-dev'
    }
 ```
 
@@ -79,7 +80,7 @@ To use snapshot builds use the following dependency:
 ```gradle
 
    dependencies {
-        compile '...:digime-core:1.1.4-SNAPSHOT'
+        compile '...:digime-core:1.2.1-SNAPSHOT'
    }
 ```
 
@@ -415,7 +416,7 @@ Upon successful authorization you can request user's files.
 To fetch the list of available files for your contract:
 
 ```java
- /*  @param callback         reference to the SDKCallback or null if using SDKListener
+ /*  @param callback         reference to the SDKCallback<CAFiles> or null if using SDKListener
   * 
   */
 DigiMeClient.getInstance().getFileList(callback)
@@ -427,7 +428,7 @@ Finally you can use the returned file IDs to fetch their data:
 
 ```java
  /* @param fileId         ID of the file to retrieve
-  * @param callback         reference to the SDKCallback or null if using SDKListener
+  * @param callback         reference to the SDKCallback<CAFileResponse> or null if using SDKListener
   */
 DigiMeClient.getInstance().getFileContent(fileId, callback)
 ```
@@ -488,7 +489,7 @@ As with regular fetch you can retrieve the data once you have the list of file I
 
 ```java
  /* @param fileId         ID of the file to retrieve
-  * @param callback         reference to the SDKCallback or null if using SDKListener
+  * @param callback         reference to the SDKCallback<JsonElement> or null if using SDKListener
   */
 DigiMeClient.getInstance().getFileJSON(fileId, callback)
 ```
@@ -496,6 +497,23 @@ DigiMeClient.getInstance().getFileJSON(fileId, callback)
 Upon success DigiMeClient returns a `JsonElement` which contains complete file content.
 
 For detailed content item structure look at [Dev Docs](https://developers.digi.me/data-structure.html).
+
+### Fetching Account metadata
+
+DigiMeSDK also provides relevant metadata about **service accounts** linked to returned file content.
+You can fetch account details after obtaining a valid authorized session key with:
+
+```java
+ /* 
+  * @param callback         reference to the SDKCallback<CAAccounts> or null if using SDKListener
+  */
+DigiMeClient.getInstance().getAccounts(callback)
+```
+
+Upon success DigiMeClient returns a `CAAccounts` object which contains `List<>` of `CAAccount` objects.
+
+Among others, most notable properties of`CAAccount` object are `service.name` - name of the underlying service,
+`accountId` - account identifier which can be used to link returned entities to specific account.
 
 ### Decryption
 

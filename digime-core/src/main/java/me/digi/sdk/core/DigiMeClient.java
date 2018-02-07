@@ -24,6 +24,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.FutureTask;
 
 import me.digi.sdk.core.config.ApiConfig;
+import me.digi.sdk.core.entities.CAAccounts;
 import me.digi.sdk.core.entities.CAFileResponse;
 import me.digi.sdk.core.entities.CAFiles;
 import me.digi.sdk.core.internal.AuthorizationException;
@@ -342,6 +343,19 @@ public final class DigiMeClient {
         if (!validateSession(session, proxy)) return;
         //noinspection ConstantConditions
         getApi().consentAccessService().list(session.sessionKey)
+                .enqueue(proxy);
+    }
+
+    public void getAccounts(SDKCallback<CAAccounts> callback) {
+        getAccountsWithSession(getSessionManager().getCurrentSession(), callback);
+    }
+
+    public void getAccountsWithSession(CASession session, SDKCallback<CAAccounts> callback) {
+        checkClientInitialized();
+        ContentForwardCallback<CAAccounts> proxy = new ContentForwardCallback<>(callback, null, CAAccounts.class);
+        if (!validateSession(session, proxy)) return;
+        //noinspection ConstantConditions
+        getApi().consentAccessService().accounts(session.sessionKey)
                 .enqueue(proxy);
     }
 
@@ -734,6 +748,8 @@ public final class DigiMeClient {
                     listener.contentRetrievedForFile(reserved, (CAFileResponse) returnedObject);
                 } else if (returnedObject instanceof JsonElement) {
                     listener.jsonRetrievedForFile(reserved, (JsonElement) returnedObject);
+                } else if (returnedObject instanceof CAAccounts) {
+                    listener.accountsRetrieved((CAAccounts) returnedObject);
                 }
             }
         }
@@ -750,6 +766,8 @@ public final class DigiMeClient {
                     listener.contentRetrieveFailed(reserved, exception);
                 } else if (type.equals(JsonElement.class)) {
                     listener.contentRetrieveFailed(reserved, exception);
+                } else if (type.equals(CAAccounts.class)) {
+                    listener.accountsRetrieveFailed(exception);
                 }
             }
         }

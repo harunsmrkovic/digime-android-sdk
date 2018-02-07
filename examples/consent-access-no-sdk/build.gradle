@@ -60,7 +60,7 @@ android {
 
     lintOptions {
         lintConfig project.file('../../gradle/lint.xml')
-        disable 'SetTextI18n', 'SelectableText', 'GradleCompatible'
+        disable 'SetTextI18n', 'SelectableText', 'GradleCompatible', 'IconLauncherShape', 'OldTargetApi'
     }
 
     compileOptions {

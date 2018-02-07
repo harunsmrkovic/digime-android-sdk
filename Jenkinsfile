@@ -19,11 +19,12 @@ node('android') {
         stage('test') {
             sh "./gradlew test -PBUILD_NUMBER=${env.BUILD_NUMBER}"
         }
-        stage('android-test') {
-            lock(resource: "emulator_${env.NODE_NAME}") {
-                sh "./gradlew connectedAndroidTest"
-            }
-        }
+        //Disable instrumented tests for now
+        //stage('android-test') {
+        //    lock(resource: "emulator_${env.NODE_NAME}") {
+        //        sh "./gradlew connectedAndroidTest"
+        //    }
+        //}
         stage('publish-junit') {
             junit '**/TEST-*.xml'
         }

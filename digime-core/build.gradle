@@ -12,6 +12,7 @@ android {
 
     defaultConfig {
         versionCode 1
+        versionName readVersion()
         minSdkVersion 21
         targetSdkVersion 26
         consumerProguardFiles 'proguard-rules.pro'
@@ -21,7 +22,6 @@ android {
         debug {
             buildConfigField "String", "BASE_HOST",  "\"${exports.globalEndpoint}\""
             buildConfigField "boolean", "LOG_REQUESTS",  "true"
-            versionNameSuffix "-SNAPSHOT"
         }
 
         release {
@@ -60,17 +60,23 @@ android {
     }
 }
 
-task updateVersion {
-    project.version = null
+Object readVersion() {
     def versionClass = file('src/main/java/me/digi/sdk/core/DigiMeSDKVersion.java')
+    def outVersion = null
     versionClass.eachLine{
         def regex = (it =~ /(?:.*VERSION = \")(.*)(?:\".*)/)
         if (regex.matches()) {
-            project.version = regex[0][1]
-            project.ext.globalVersion = regex[0][1]
-            return
+            outVersion = regex[0][1]
         }
     }
+    return outVersion
+}
+
+task updateVersion {
+    project.version = null
+    def ver = readVersion()
+    project.version = ver
+    project.ext.globalVersion = ver
     if (project.version.is('unspecified')) {
         throw new GradleScriptException('Version could not be found.', null)
     }

@@ -14,7 +14,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
+import me.digi.sdk.core.entities.CAAccounts;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.DigiMeAuthorizationManager;
 import me.digi.sdk.core.DigiMeClient;
@@ -31,6 +33,7 @@ public class CallbackActivity extends AppCompatActivity {
     private SDKCallback<CASession> cb;
     private DigiMeAuthorizationManager authManager;
     private TextView statusText;
+    private TextView accountInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class CallbackActivity extends AppCompatActivity {
         });
 
         statusText = findViewById(R.id.callback_status);
+        accountInfo = findViewById(R.id.account_info);
 
     }
 
@@ -93,6 +97,7 @@ public class CallbackActivity extends AppCompatActivity {
         DigiMeClient.getInstance().getFileList(new SDKCallback<CAFiles>() {
             @Override
             public void succeeded(SDKResponse<CAFiles> result) {
+                requestAccounts();
                 CAFiles files = result.body;
                 getFileContent(files.fileIds);
             }
@@ -120,6 +125,22 @@ public class CallbackActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void requestAccounts() {
+        accountInfo.setText(R.string.fetch_accounts);
+        DigiMeClient.getInstance().getAccounts(new SDKCallback<CAAccounts>() {
+            @Override
+            public void succeeded(SDKResponse<CAAccounts> result) {
+                accountInfo.setText(String.format(Locale.getDefault(),"Returning data for %d accounts: %s", result.body.accounts.size(), result.body.getAllServiceNames()));
+            }
+
+            @Override
+            public void failed(SDKException exception) {
+                Log.d(TAG, "Failed to retrieve account details for session. Reason: " + exception);
+                accountInfo.setText(R.string.account_fail);
+            }
+        });
     }
 
     private void writeStatus(String status) {

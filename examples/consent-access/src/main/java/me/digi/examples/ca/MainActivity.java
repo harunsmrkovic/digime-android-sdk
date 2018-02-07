@@ -17,6 +17,7 @@ import com.google.gson.JsonElement;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import me.digi.sdk.core.entities.CAAccounts;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.DigiMeClient;
 import me.digi.sdk.core.SDKException;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
     private TextView statusText;
     private Button gotoCallback;
     private TextView downloadedCount;
+    private TextView accountInfo;
     private DigiMeClient dgmClient;
     private final AtomicInteger counter = new AtomicInteger(0);
     private final AtomicInteger failedCount = new AtomicInteger(0);
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
         dgmClient = DigiMeClient.getInstance();
 
         statusText = findViewById(R.id.status_text);
+        accountInfo = findViewById(R.id.accountInfo);
         gotoCallback = findViewById(R.id.go_to_callback);
         gotoCallback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,16 +103,21 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
 
     @Override
     public void authorizeFailedWithWrongRequestCode() {
-
+        Log.d(TAG, "We received a wrong request code while authorization was in progress!");
     }
 
     @Override
     public void clientRetrievedFileList(CAFiles files) {
+        accountInfo.setText(R.string.fetch_accounts);
+        //Fetch account metadata
+        DigiMeClient.getInstance().getAccounts(null);
+
         downloadedCount.setText(String.format(Locale.getDefault(), "Downloaded : %d/%d", 0, files.fileIds.size()));
         allFiles = files.fileIds.size();
         for (final String fileId :
                 files.fileIds) {
             counter.incrementAndGet();
+            //Fetch content for returned file IDs
             DigiMeClient.getInstance().getFileJSON(fileId, null);
         }
         String progress = getResources().getQuantityString(R.plurals.files_retrieved, files.fileIds.size(), files.fileIds.size());
@@ -138,6 +146,17 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
         Log.d(TAG, "Failed to retrieve file content for file: " + fileId + "; Reason: " + reason);
         failedCount.incrementAndGet();
         updateCounters();
+    }
+
+    @Override
+    public void accountsRetrieved(CAAccounts accounts) {
+        accountInfo.setText(String.format(Locale.getDefault(),"Returning data for %d accounts: %s", accounts.accounts.size(), accounts.getAllServiceNames()));
+    }
+
+    @Override
+    public void accountsRetrieveFailed(SDKException reason) {
+        Log.d(TAG, "Failed to retrieve account details for session. Reason: " + reason);
+        accountInfo.setText(R.string.account_fail);
     }
 
     private void updateCounters() {

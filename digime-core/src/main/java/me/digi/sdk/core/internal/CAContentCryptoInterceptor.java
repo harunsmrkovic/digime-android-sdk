@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import me.digi.sdk.core.config.ApiConfig;
 import me.digi.sdk.core.entities.ErrorResponse;
@@ -56,7 +57,7 @@ public class CAContentCryptoInterceptor implements Interceptor {
             }
             String newBody = null;
             try {
-                newBody = extractEncryptedString(parsedMap);
+                newBody = extractEncryptedString(parsedMap, EncryptedPaths.isAccountsPath(response.request().url()));
             } catch (DGMCryptoFailureException dge) {
                 return mapError("Decryption failure", "Failed to decrypt content", 411, response);
             }
@@ -96,7 +97,7 @@ public class CAContentCryptoInterceptor implements Interceptor {
         return treeMap.get(CONTENT_KEY) != null && (treeMap.get(CONTENT_KEY) instanceof String);
     }
 
-    private String extractEncryptedString(LinkedTreeMap<String, Object> parsedMap) throws DGMCryptoFailureException {
+    private String extractEncryptedString(LinkedTreeMap<String, Object> parsedMap, boolean stripFileContent) throws DGMCryptoFailureException {
         String decrypted;
         try {
             //We can assume the check has already passed at the call site
@@ -112,8 +113,12 @@ public class CAContentCryptoInterceptor implements Interceptor {
 
         String returnJson;
         try {
-            parsedMap.put("fileContent", gson.fromJson(decrypted, JsonElement.class));
-            returnJson = gson.toJson(parsedMap);
+            if (!stripFileContent) {
+                parsedMap.put("fileContent", gson.fromJson(decrypted, JsonElement.class));
+                returnJson = gson.toJson(parsedMap);
+            } else {
+                returnJson = decrypted;
+            }
         } catch (Exception ex) {
             return null;
         }
@@ -126,6 +131,7 @@ public class CAContentCryptoInterceptor implements Interceptor {
         private static final String[] whitelist = {"v1/permission-access/query/_any_/_any_"};
         private static final ApiConfig thisApi = ApiConfig.get();
         private static final String ANY_MATCHER = "_any_";
+        private static final String ACCOUNT_FILE = "accounts.json";
 
         static boolean shouldDecrypt(HttpUrl url) {
             boolean match = false;
@@ -143,6 +149,11 @@ public class CAContentCryptoInterceptor implements Interceptor {
                 if (match) break;
             }
             return match;
+        }
+
+        static boolean isAccountsPath(HttpUrl url) {
+            List<String> segments = url.pathSegments();
+            return segments.get(segments.size() - 1).endsWith(ACCOUNT_FILE);
         }
     }
 }

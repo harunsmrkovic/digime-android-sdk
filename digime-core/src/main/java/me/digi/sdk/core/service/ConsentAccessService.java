@@ -8,6 +8,7 @@ import com.google.gson.JsonElement;
 
 import java.io.IOException;
 
+import me.digi.sdk.core.entities.CAAccounts;
 import me.digi.sdk.core.entities.CAFileResponse;
 import me.digi.sdk.core.entities.CAFiles;
 import me.digi.sdk.core.internal.network.CallConfig;
@@ -27,7 +28,7 @@ public interface ConsentAccessService {
     @GET("/v1/permission-access/query/{sessionKey}")
     Call<CAFiles> list(@Path("sessionKey") String sessionKey);
 
-    @CallConfig(shouldRetry = true, retryCount = 3, retryOnResponseCode = {404}, retriedExceptions = {IOException.class})
+    @CallConfig(shouldRetry = true, retryCount = 9, retryOnResponseCode = {404}, retriedExceptions = {IOException.class})
     @Headers({
             "Content-type: application/json",
             "Cache-Control: no-cache",
@@ -37,7 +38,7 @@ public interface ConsentAccessService {
     Call<CAFileResponse> data(@Path("sessionKey") String sessionKey,
                               @Path("fileName") String fileName);
 
-    @CallConfig(shouldRetry = true, retryCount = 3, retryOnResponseCode = {404}, retriedExceptions = {IOException.class})
+    @CallConfig(shouldRetry = true, retryCount = 9, retryOnResponseCode = {404}, retriedExceptions = {IOException.class})
     @Headers({
             "Content-type: application/json",
             "Cache-Control: no-cache",
@@ -46,4 +47,13 @@ public interface ConsentAccessService {
     @GET("/v1/permission-access/query/{sessionKey}/{fileName}")
     Call<JsonElement> dataRaw(@Path("sessionKey") String sessionKey,
                               @Path("fileName") String fileName);
+
+    @CallConfig(shouldRetry = true, retryCount = 5, retryOnResponseCode = {404}, retriedExceptions = {IOException.class})
+    @Headers({
+            "Content-type: application/json",
+            "Cache-Control: no-cache",
+            "Accept: application/json"
+    })
+    @GET("/v1/permission-access/query/{sessionKey}/accounts.json")
+    Call<CAAccounts> accounts(@Path("sessionKey") String sessionKey);
 }
