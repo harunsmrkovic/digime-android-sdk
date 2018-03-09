@@ -6,10 +6,12 @@ package me.digi.sdk.core;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,11 +22,14 @@ import me.digi.sdk.core.internal.AuthorizationException;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.SessionManager;
 
+@SuppressWarnings("WeakerAccess")
 public class DigiMeAuthorizationManager {
     private static final String KEY_SESSION_TOKEN = "KEY_SESSION_TOKEN";
     private static final String KEY_APP_ID = "KEY_APP_ID";
+    private static final String KEY_APP_NAME = "KEY_APP_NAME";
     private static final String PERMISSION_ACCESS_INTENT_ACTION = "android.intent.action.DIGI_PERMISSION_REQUEST";
     private static final String PERMISSION_ACCESS_INTENT_TYPE = "text/plain";
+    private static final String DEFAULT_UNKNOWN_APP_NAME = "Android SDK App";
     private static final String DIGI_ME_PACKAGE_ID = "me.digi.app3";
     private static final int REQUEST_CODE = 762;
 
@@ -32,6 +37,7 @@ public class DigiMeAuthorizationManager {
     private SDKCallback<CASession> callback;
 
     private final String appId;
+    private String appName;
     private final CASession session;
     private final SessionManager<CASession> sManager;
 
@@ -50,20 +56,27 @@ public class DigiMeAuthorizationManager {
     }
 
     public DigiMeAuthorizationManager() {
-        this(DigiMeClient.getApplicationId(), DigiMeClient.getInstance().getSessionManager());
+        this(DigiMeClient.getApplicationId(), DigiMeClient.getApplicationName(), DigiMeClient.getInstance().getSessionManager());
     }
 
-    public DigiMeAuthorizationManager(String applicationId, SessionManager<CASession> manager) {
+    public DigiMeAuthorizationManager(String applicationId, String applicationName, SessionManager<CASession> manager) {
         this.appId = applicationId;
+        this.appName = applicationName;
         this.sManager = manager;
         this.session = null;
+        verifyAppName();
     }
 
-    public DigiMeAuthorizationManager(String appId, CASession session) {
-        this.appId = appId;
+    public DigiMeAuthorizationManager(String applicationId, String applicationName, CASession session) {
+        this.appId = applicationId;
+        this.appName = applicationName;
         this.session = session;
         this.sManager = null;
+        verifyAppName();
+    }
 
+    public int getRequestCode() {
+        return REQUEST_CODE;
     }
 
     public void beginAuthorization(Activity activity, SDKCallback<CASession> callback) {
@@ -93,11 +106,14 @@ public class DigiMeAuthorizationManager {
             return false;
         }
         this.callback = callback;
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(PERMISSION_ACCESS_INTENT_ACTION);
-        sendIntent.putExtra(KEY_SESSION_TOKEN, session.getSessionKey());
-        sendIntent.putExtra(KEY_APP_ID, appId);
-        sendIntent.setType(PERMISSION_ACCESS_INTENT_TYPE);
+        Intent sendIntent = new Intent()
+                .setPackage(DIGI_ME_PACKAGE_ID)
+                .setAction(PERMISSION_ACCESS_INTENT_ACTION)
+                .setType(PERMISSION_ACCESS_INTENT_TYPE)
+                .putExtra(KEY_SESSION_TOKEN, session.getSessionKey())
+                .putExtra(KEY_APP_ID, appId)
+                .putExtra(KEY_APP_NAME, appName);
+
 
         if (verifyIntentCanBeHandled(sendIntent, activity.getPackageManager())) {
             activity.startActivityForResult(sendIntent, REQUEST_CODE);
@@ -116,12 +132,25 @@ public class DigiMeAuthorizationManager {
         return requestSession;
     }
 
-    public int getRequestCode() {
-        return REQUEST_CODE;
+    private void verifyAppName() {
+        if (TextUtils.isEmpty(appName)) {
+            final PackageManager pm = DigiMeClient.getApplicationContext().getPackageManager();
+            ApplicationInfo ai;
+            try {
+                ai = pm.getApplicationInfo(DigiMeClient.getApplicationContext().getPackageName(), 0);
+            } catch (final PackageManager.NameNotFoundException e) {
+                ai = null;
+            }
+            this.appName = ai != null ? (String) pm.getApplicationLabel(ai) : DEFAULT_UNKNOWN_APP_NAME;
+        }
     }
 
     @SuppressWarnings("PackageManagerGetSignatures")
     private boolean verifyIntentCanBeHandled(Intent intent, PackageManager packageManager) {
+        ResolveInfo resolveInfo = packageManager.resolveActivity(intent, 0);
+        if (resolveInfo == null) {
+            return false;
+        }
         List activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         if (activities.size() == 0) {
             return false;
@@ -132,12 +161,14 @@ public class DigiMeAuthorizationManager {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+        //TODO reenable it! DIGI-3922
+        /*
         for (Signature s : packageInfo.signatures) {
-            //TODO reenable it! DIGI-3922
-            /*if (!PackageSignatures.matchesSignature(s.toCharsString())) {
+            if (!PackageSignatures.matchesSignature(s.toCharsString())) {
                 return false;
-            }*/
+            }
         }
+        */
         return true;
     }
 

@@ -5,5 +5,5 @@
 package me.digi.sdk.core;
 
 public final class DigiMeSDKVersion {
-    public static final String VERSION = "1.2.0-SNAPSHOT";
+    public static final String VERSION = "1.2.1-SNAPSHOT";
 }

@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
 import com.google.gson.JsonElement;
@@ -37,7 +39,7 @@ import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 
 
-@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "SameParameterValue", "UnusedReturnValue", "StaticFieldLeak"})
+@SuppressWarnings({"BooleanMethodIsAlwaysInverted", "SameParameterValue", "UnusedReturnValue", "StaticFieldLeak", "WeakerAccess"})
 public final class DigiMeClient {
     static final String TAG = "DigiMeCore";
 
@@ -213,7 +215,7 @@ public final class DigiMeClient {
                     .add(ApiConfig.get().getHost(), "sha256/W8QTLPG35cP39gFmUjKLLKAlHrYmGxvHf5Zf+INBZzo=") //prod 3
                     .add(ApiConfig.get().getHost(), "sha256/3Q5tS8ejLixxAC+UORUXfDdXpg76r113b2/MAQoWI84=") //enc
                     .add(ApiConfig.get().getHost(), "sha256/+/QBUOjekzuaexmKgLE0F6h38yChLNA6WQWukjgeHhU=") //sandbox
-                    .add(ApiConfig.get().getHost(), "sha256/7e4V8WPjNT2QNQkQhYM3U6JIsehkNUmnZzRqhY82hh8=") //alpha
+                    .add(ApiConfig.get().getHost(), "sha256/KGly2EGch50TeXQ4Cjido5Lip2LjXHv0yRETaR1YCdM=") //alpha
                     .build();
         }
     }
@@ -245,12 +247,12 @@ public final class DigiMeClient {
         return consentAccessSessionManager;
     }
 
-    public void addListener(final SDKListener listener) {
+    public void addListener(@NonNull final SDKListener listener) {
         if (!listeners.contains(listener))
             listeners.add(listener);
     }
 
-    public boolean removeListener(final SDKListener listener) {
+    public boolean removeListener(@NonNull final SDKListener listener) {
         return this.listeners.remove(listener);
     }
 
@@ -269,34 +271,37 @@ public final class DigiMeClient {
      *  Public methods
      */
 
-    public DigiMeAuthorizationManager authorize(Activity activity, SDKCallback<CASession> callback) {
+    public DigiMeAuthorizationManager authorize(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
         checkClientInitialized();
         createSession(new AutoSessionForwardCallback(activity, callback));
         return getAuthManager();
     }
 
-    public DigiMeAuthorizationManager authorizeInitializedSession(Activity activity, SDKCallback<CASession> callback) {
+    public DigiMeAuthorizationManager authorizeInitializedSession(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
         checkClientInitialized();
-        DigiMeAuthorizationManager mgr = new DigiMeAuthorizationManager();
-        authorizeInitializedSessionWithManager(mgr, activity, callback);
-        return mgr;
+        authorizeInitializedSessionWithManager(getAuthManager(), activity, callback);
+        return getAuthManager();
     }
 
-    public DigiMeAuthorizationManager authorizeInitializedSession(CASession session, Activity activity, SDKCallback<CASession> callback) {
+    public DigiMeAuthorizationManager authorizeInitializedSession(@NonNull CASession session, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
         checkClientInitialized();
-        DigiMeAuthorizationManager mgr = new DigiMeAuthorizationManager(DigiMeClient.getApplicationId(), session);
-        authorizeInitializedSessionWithManager(mgr, activity, callback);
-        return mgr;
+        SDKCallback<CASession> forwarder = new AuthorizationForwardCallback(callback);
+        if (!validateSession(session, forwarder)) return getAuthManager();
+
+        getSessionManager().clearCurrentSession();
+        getSessionManager().setCurrentSession(session);
+        authorizeInitializedSessionWithManager(getAuthManager(), activity, callback);
+        return getAuthManager();
     }
 
-    public void authorizeInitializedSessionWithManager(DigiMeAuthorizationManager authManager, Activity activity, SDKCallback<CASession> callback) {
+    public void authorizeInitializedSessionWithManager(DigiMeAuthorizationManager authManager, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
         if (authManager == null) {
             throw new IllegalArgumentException("Authorization Manager can not be null.");
         }
-        authManager.beginAuthorization(activity, new AuthorizationForwardCallback(callback));
+        authManager.beginAuthorization(activity, (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback));
     }
 
-    public void createSession(SDKCallback<CASession>callback) throws DigiMeException {
+    public void createSession(@Nullable SDKCallback<CASession>callback) throws DigiMeException {
         if (!flow.isInitialized()) {
             throw new DigiMeException("No contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", CONSENT_ACCESS_CONTRACTS_PATH);
         }
@@ -304,7 +309,7 @@ public final class DigiMeClient {
         createSession(flow.currentId, callback);
     }
 
-    public void createSession(String contractId, SDKCallback<CASession>callback) {
+    public void createSession(@NonNull String contractId, @Nullable SDKCallback<CASession>callback) {
         boolean useFlow = false;
         CAContract contract;
         if (flow.isInitialized()) {
@@ -321,7 +326,7 @@ public final class DigiMeClient {
         startSessionWithContract(contract, callback);
     }
 
-    public void startSessionWithContract(CAContract contract, SDKCallback<CASession> callback) {
+    public void startSessionWithContract(CAContract contract, @Nullable SDKCallback<CASession> callback) {
         checkClientInitialized();
         DigiMeAPIClient client = getDefaultApi();
         SessionForwardCallback dispatchCallback;
@@ -330,14 +335,17 @@ public final class DigiMeClient {
         } else {
             dispatchCallback = new SessionForwardCallback(callback);
         }
+        if (contract == null) {
+            dispatchCallback.failed(new SDKValidationException("Contract is null. Session can not be initialized!"));
+        }
         client.sessionService().getSessionToken(contract).enqueue(dispatchCallback);
     }
 
-    public void getFileList(SDKCallback<CAFiles> callback) {
+    public void getFileList(@Nullable SDKCallback<CAFiles> callback) {
         getFileListWithSession(getSessionManager().getCurrentSession(), callback);
     }
 
-    public void getFileListWithSession(CASession session, SDKCallback<CAFiles> callback) {
+    public void getFileListWithSession(CASession session, @Nullable SDKCallback<CAFiles> callback) {
         checkClientInitialized();
         ContentForwardCallback<CAFiles> proxy = new ContentForwardCallback<>(callback, null, CAFiles.class);
         if (!validateSession(session, proxy)) return;
@@ -346,11 +354,11 @@ public final class DigiMeClient {
                 .enqueue(proxy);
     }
 
-    public void getAccounts(SDKCallback<CAAccounts> callback) {
+    public void getAccounts(@Nullable SDKCallback<CAAccounts> callback) {
         getAccountsWithSession(getSessionManager().getCurrentSession(), callback);
     }
 
-    public void getAccountsWithSession(CASession session, SDKCallback<CAAccounts> callback) {
+    public void getAccountsWithSession(CASession session, @Nullable SDKCallback<CAAccounts> callback) {
         checkClientInitialized();
         ContentForwardCallback<CAAccounts> proxy = new ContentForwardCallback<>(callback, null, CAAccounts.class);
         if (!validateSession(session, proxy)) return;
@@ -359,11 +367,11 @@ public final class DigiMeClient {
                 .enqueue(proxy);
     }
 
-    public void getFileContent(String fileId, SDKCallback<CAFileResponse> callback) {
+    public void getFileContent(String fileId, @Nullable SDKCallback<CAFileResponse> callback) {
         getFileContentWithSession(fileId, getSessionManager().getCurrentSession(), callback);
     }
 
-    public void getFileContentWithSession(String fileId, CASession session, SDKCallback<CAFileResponse> callback) {
+    public void getFileContentWithSession(String fileId, CASession session, @Nullable SDKCallback<CAFileResponse> callback) {
         checkClientInitialized();
         ContentForwardCallback<CAFileResponse> proxy = new ContentForwardCallback<>(callback, fileId, CAFileResponse.class);
         if (!validateSession(session, proxy)) return;
@@ -375,11 +383,11 @@ public final class DigiMeClient {
                 .enqueue(proxy);
     }
 
-    public void getFileJSON(String fileId, SDKCallback<JsonElement> callback) {
+    public void getFileJSON(String fileId, @Nullable SDKCallback<JsonElement> callback) {
         getFileJSONWithSession(fileId, getSessionManager().getCurrentSession(), callback);
     }
 
-    public void getFileJSONWithSession(String fileId, CASession session, SDKCallback<JsonElement> callback) {
+    public void getFileJSONWithSession(String fileId, CASession session, @Nullable SDKCallback<JsonElement> callback) {
         checkClientInitialized();
         ContentForwardCallback<JsonElement> proxy = new ContentForwardCallback<>(callback, fileId, JsonElement.class);
         if (!validateSession(session, proxy)) return;
