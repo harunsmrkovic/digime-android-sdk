@@ -57,7 +57,7 @@ For detailed explanation of the Consent Access architecture please visit [Dev Su
 ```gradle
 
    dependencies {
-        compile 'me.digi.sdk:digime-core:1.2.0'
+        compile 'me.digi.sdk:digime-core:1.2.1'
    }
 ```
 
