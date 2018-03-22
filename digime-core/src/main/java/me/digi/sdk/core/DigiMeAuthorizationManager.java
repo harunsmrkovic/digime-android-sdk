@@ -15,45 +15,39 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import me.digi.sdk.core.internal.AuthorizationException;
+import me.digi.sdk.core.internal.ipc.AuthorizationResolver;
+import me.digi.sdk.core.internal.ipc.DigiMeDirectResolver;
+import me.digi.sdk.core.internal.ipc.DigiMeFirstInstallResolver;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.SessionManager;
 
 @SuppressWarnings("WeakerAccess")
 public class DigiMeAuthorizationManager {
+    public static final String DIGI_ME_PACKAGE_ID = "me.digi.app3";
+
     private static final String KEY_SESSION_TOKEN = "KEY_SESSION_TOKEN";
     private static final String KEY_APP_ID = "KEY_APP_ID";
     private static final String KEY_APP_NAME = "KEY_APP_NAME";
     private static final String PERMISSION_ACCESS_INTENT_ACTION = "android.intent.action.DIGI_PERMISSION_REQUEST";
     private static final String PERMISSION_ACCESS_INTENT_TYPE = "text/plain";
     private static final String DEFAULT_UNKNOWN_APP_NAME = "Android SDK App";
-    private static final String DIGI_ME_PACKAGE_ID = "me.digi.app3";
     private static final int REQUEST_CODE = 762;
 
-    private static final AtomicReference<Boolean> authInProgress = new AtomicReference<>(null);
+    private WeakReference<Activity> authActivity;
+    private AuthorizationResolver resolver;
+
+    private static final AtomicReference<DigiMeAuthorizationState> authInProgress = new AtomicReference<>(DigiMeAuthorizationState.IDLE);
     private SDKCallback<CASession> callback;
 
     private final String appId;
     private String appName;
     private final CASession session;
     private final SessionManager<CASession> sManager;
-
-    @SuppressWarnings("UnusedParameters")
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                callback.succeeded(new SDKResponse<>(extractSession(), null));
-            } else {
-                callback.failed(new AuthorizationException("Access denied", extractSession(), AuthorizationException.Reason.ACCESS_DENIED));
-            }
-            authInProgress.set(Boolean.FALSE);
-        } else {
-            callback.failed(new AuthorizationException("Access denied", null, AuthorizationException.Reason.WRONG_CODE));
-        }
-    }
 
     public DigiMeAuthorizationManager() {
         this(DigiMeClient.getApplicationId(), DigiMeClient.getApplicationName(), DigiMeClient.getInstance().getSessionManager());
@@ -79,6 +73,30 @@ public class DigiMeAuthorizationManager {
         return REQUEST_CODE;
     }
 
+    @SuppressWarnings("UnusedParameters")
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                callback.succeeded(new SDKResponse<>(extractSession(), null));
+            } else {
+                callback.failed(new AuthorizationException("Access denied", extractSession(), AuthorizationException.Reason.ACCESS_DENIED));
+            }
+            cancelOngoingAuthorization();
+        } else {
+            callback.failed(new AuthorizationException("Access denied", null, AuthorizationException.Reason.WRONG_CODE));
+        }
+    }
+
+    public void resolveAuthorizationPath(Activity activity, SDKCallback<CASession> callback, boolean overrideSessionCreate) {
+        if (nativeClientAvailable(activity)) {
+            resolver = new DigiMeDirectResolver();
+        } else {
+            resolver = new DigiMeFirstInstallResolver();
+        }
+        resolver.overrideSessionCreation(overrideSessionCreate);
+        resolver.resolveAuthFlow(this, activity, callback);
+    }
+
     public void beginAuthorization(Activity activity, SDKCallback<CASession> callback) {
         if (activity == null) {
             throw new IllegalArgumentException("Must set the activity to start the flow.");
@@ -87,8 +105,53 @@ public class DigiMeAuthorizationManager {
             throw new IllegalArgumentException("Must set the callback.");
         }
         if (!activity.isFinishing()) {
+            authActivity = new WeakReference<>(activity);
             prepareRequest(activity, callback);
         }
+    }
+
+    public void beginDeferredAuthorization(Activity activity, SDKCallback<CASession> callback) {
+        if (activity == null) {
+            throw new IllegalArgumentException("Must set the activity to start the flow.");
+        }
+        if (callback == null) {
+            throw new IllegalArgumentException("Must set the callback.");
+        }
+        if (!activity.isFinishing()) {
+            if (!markInDeferredProgress()) {
+                callback.failed(new AuthorizationException("Authorization already in progress! Explicitly call cancelOngoingAuthorization() to explictly restart authorization."));
+                cancelOngoingAuthorization();
+                return;
+            }
+            this.authActivity = new WeakReference<>(activity);
+            this.callback = callback;
+            startInstallDigiMeFlow(activity);
+        } else {
+            callback.failed(new AuthorizationException("Activity in finished state!"));
+            cancelOngoingAuthorization();
+        }
+    }
+
+    public void protocolResolved() {
+        if (isInProgress() || isDeferred()) {
+            resolver.clientResolved(callback);
+        }
+    }
+
+    public void cancelOngoingAuthorization() {
+        if (isDeferred()) {
+            callback.failed(new AuthorizationException("Authorization timed out while waiting for native client!"));
+        }
+        resolver.stop();
+        clearProgress();
+        resolver = null;
+        this.authActivity = null;
+        this.callback = null;
+    }
+
+    public boolean nativeClientAvailable(Activity activity) {
+        Intent appIntent = createAppIntent(null);
+        return verifyIntentCanBeHandled(appIntent, activity.getPackageManager());
     }
 
     private void prepareRequest(Activity activity, SDKCallback<CASession> callback) {
@@ -98,6 +161,7 @@ public class DigiMeAuthorizationManager {
         }
         if (!sendRequest(requestSession, activity, callback)) {
             callback.failed(new AuthorizationException("Consent Access authorization is already in progress.", requestSession, AuthorizationException.Reason.IN_PROGRESS));
+
         }
     }
 
@@ -106,14 +170,7 @@ public class DigiMeAuthorizationManager {
             return false;
         }
         this.callback = callback;
-        Intent sendIntent = new Intent()
-                .setPackage(DIGI_ME_PACKAGE_ID)
-                .setAction(PERMISSION_ACCESS_INTENT_ACTION)
-                .setType(PERMISSION_ACCESS_INTENT_TYPE)
-                .putExtra(KEY_SESSION_TOKEN, session.getSessionKey())
-                .putExtra(KEY_APP_ID, appId)
-                .putExtra(KEY_APP_NAME, appName);
-
+        Intent sendIntent = createAppIntent(session);
 
         if (verifyIntentCanBeHandled(sendIntent, activity.getPackageManager())) {
             activity.startActivityForResult(sendIntent, REQUEST_CODE);
@@ -122,6 +179,19 @@ public class DigiMeAuthorizationManager {
             return false;
         }
         return true;
+    }
+
+    private Intent createAppIntent(CASession intentSession) {
+        Intent appIntent = new Intent()
+                .setPackage(DIGI_ME_PACKAGE_ID)
+                .setAction(PERMISSION_ACCESS_INTENT_ACTION)
+                .setType(PERMISSION_ACCESS_INTENT_TYPE);
+        if (intentSession != null) {
+                appIntent.putExtra(KEY_SESSION_TOKEN, intentSession.getSessionKey())
+                         .putExtra(KEY_APP_ID, appId)
+                         .putExtra(KEY_APP_NAME, appName);
+        }
+        return appIntent;
     }
 
     private CASession extractSession() {
@@ -186,19 +256,39 @@ public class DigiMeAuthorizationManager {
         if (isInProgress()) {
             Log.d(DigiMeClient.TAG, "Consent Access authorization is already in progress.");
         } else {
-            result = authInProgress.compareAndSet(null, Boolean.TRUE);
-            if (!result) {
-                result = authInProgress.compareAndSet(Boolean.FALSE, Boolean.TRUE);
-            }
-            if (!result) {
-                Log.d(DigiMeClient.TAG, "Consent Access authorization is already in progress.");
-            }
+            authInProgress.set(DigiMeAuthorizationState.IN_PROGRESS);
+            result = true;
         }
         return result;
     }
 
+    private boolean markInDeferredProgress() {
+        boolean result = false;
+        if (isInProgress() || isDeferred()) {
+            Log.d(DigiMeClient.TAG, "Consent Access authorization is already in progress.");
+        } else {
+            authInProgress.set(DigiMeAuthorizationState.DEFERRED);
+            result = true;
+        }
+        return result;
+    }
+
+    private void clearProgress() {
+        authInProgress.set(DigiMeAuthorizationState.IDLE);
+    }
+
     public boolean isInProgress() {
-        return authInProgress.get() != null && authInProgress.get() != Boolean.FALSE;
+        return authInProgress.get() != null && authInProgress.get() == DigiMeAuthorizationState.IN_PROGRESS;
+    }
+
+    public boolean isDeferred() {
+        return authInProgress.get() != null && authInProgress.get() == DigiMeAuthorizationState.DEFERRED;
+    }
+
+    public enum DigiMeAuthorizationState {
+        IDLE,
+        IN_PROGRESS,
+        DEFERRED
     }
 
     private static class PackageSignatures {

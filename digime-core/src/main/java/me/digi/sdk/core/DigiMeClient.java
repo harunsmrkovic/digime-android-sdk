@@ -5,6 +5,7 @@
 package me.digi.sdk.core;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -273,7 +274,8 @@ public final class DigiMeClient {
 
     public DigiMeAuthorizationManager authorize(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
         checkClientInitialized();
-        createSession(new AutoSessionForwardCallback(activity, callback));
+        SDKCallback<CASession> forwarder = new AutoSessionForwardCallback(activity, callback);
+        getAuthManager().resolveAuthorizationPath(activity, forwarder, false);
         return getAuthManager();
     }
 
@@ -298,7 +300,11 @@ public final class DigiMeClient {
         if (authManager == null) {
             throw new IllegalArgumentException("Authorization Manager can not be null.");
         }
-        authManager.beginAuthorization(activity, (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback));
+        SDKCallback<CASession> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
+        if (!authManager.nativeClientAvailable(activity)) {
+            forwarder = new AutoSessionForwardCallback(activity, callback, true);
+        }
+        authManager.resolveAuthorizationPath(activity, forwarder, true);
     }
 
     public void createSession(@Nullable SDKCallback<CASession>callback) throws DigiMeException {
@@ -627,9 +633,14 @@ public final class DigiMeClient {
 
     class SessionForwardCallback extends SDKCallback<CASession> {
         final SDKCallback<CASession> callback;
+        private boolean overrideSessionCallback = false;
 
         SessionForwardCallback(SDKCallback<CASession> callback) {
             this.callback = callback;
+        }
+        SessionForwardCallback(SDKCallback<CASession> callback, boolean overrideSessionCallback) {
+            this.callback = callback;
+            this.overrideSessionCallback = overrideSessionCallback;
         }
 
         @Override
@@ -642,7 +653,7 @@ public final class DigiMeClient {
             CASessionManager sm = (CASessionManager)consentAccessSessionManager;
             sm.setCurrentSession(session);
             getInstance().getApi(session);
-            if (callback != null) {
+            if (callback != null && !overrideSessionCallback) {
                 callback.succeeded(new SDKResponse<>(session, result.response));
             }
             for (SDKListener listener : listeners) {
@@ -666,6 +677,11 @@ public final class DigiMeClient {
 
         AutoSessionForwardCallback(Activity activity, SDKCallback<CASession> callback) {
             super(callback);
+            callActivity = new WeakReference<>(activity);
+        }
+
+        AutoSessionForwardCallback(Activity activity, SDKCallback<CASession> callback, boolean overrideCallback) {
+            super(callback, overrideCallback);
             callActivity = new WeakReference<>(activity);
         }
         @Override
