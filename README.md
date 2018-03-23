@@ -57,7 +57,7 @@ For detailed explanation of the Consent Access architecture please visit [Dev Su
 ```gradle
 
    dependencies {
-        compile 'me.digi.sdk:digime-core:1.2.1'
+        compile 'me.digi.sdk:digime-core:1.3.0'
    }
 ```
 
@@ -70,7 +70,7 @@ For testing purposes or initial integartion _dev_ version of the library should 
 ```gradle
 
    dependencies {
-        compile '...:digime-core:1.2.0-dev'
+        compile '...:digime-core:1.3.0-dev'
    }
 ```
 
@@ -80,7 +80,7 @@ To use snapshot builds use the following dependency:
 ```gradle
 
    dependencies {
-        compile '...:digime-core:1.2.1-SNAPSHOT'
+        compile '...:digime-core:1.3.0-SNAPSHOT'
    }
 ```
 
