@@ -552,7 +552,11 @@ public final class DigiMeClient {
 
         private Flow() {
             this.lookup = new ConcurrentHashMap<>();
-            this.identifiers = new ArrayList<>(Arrays.asList(DigiMeClient.contractIds));
+            if (DigiMeClient.contractIds == null || DigiMeClient.contractIds.length == 0) {
+                this.identifiers = new ArrayList<>();
+            } else {
+                this.identifiers = new ArrayList<>(Arrays.asList(DigiMeClient.contractIds));
+            }
             tryInit();
         }
 
