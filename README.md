@@ -1,12 +1,12 @@
 # Digi.me SDK for Android
 
-The Digi.me SDK for Android is a multi-module library that allows seamless authentication with Consent Access service, making content requests and core decryption services. For details on the API and general CA architecture, visit [Dev Support Docs](https://developers.digi.me/consent-access-flow.html).
+The Digi.me SDK for Android is a multi-module library that allows seamless authentication with Consent Access service, making content requests and core decryption services. For details on the API and general CA architecture, visit [Dev Support Docs](https://developers.digi.me/consent-access).
 
 
 ## Preamble
 
 Digi.me SDK depends on digi.me app being installed to enable user initiated authorization of requests.
-For detailed explanation of the Consent Access architecture please visit [Dev Support Docs](https://developers.digi.me/consent-access-flow.html).
+For detailed explanation of the Consent Access architecture please visit [Dev Support Docs](https://developers.digi.me/consent-access).
 
 ## Table of Contents
 
