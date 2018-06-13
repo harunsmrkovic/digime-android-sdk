@@ -5,8 +5,10 @@
 package me.digi.examples.ca;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,17 +16,19 @@ import android.widget.TextView;
 
 import com.google.gson.JsonElement;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import me.digi.sdk.core.entities.CAAccounts;
-import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.DigiMeClient;
 import me.digi.sdk.core.SDKException;
 import me.digi.sdk.core.SDKListener;
+import me.digi.sdk.core.entities.CAAccounts;
 import me.digi.sdk.core.entities.CAFileResponse;
 import me.digi.sdk.core.entities.CAFiles;
 import me.digi.sdk.core.internal.AuthorizationException;
+import me.digi.sdk.core.session.CASession;
 
 public class MainActivity extends AppCompatActivity implements SDKListener {
 
@@ -38,6 +42,11 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
     private final AtomicInteger failedCount = new AtomicInteger(0);
     private int allFiles = 0;
 
+
+    private RecyclerView listView;
+    private Adapter adapter;
+    private Map<String, String> data = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,19 +56,24 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
         statusText = findViewById(R.id.status_text);
         accountInfo = findViewById(R.id.accountInfo);
         gotoCallback = findViewById(R.id.go_to_callback);
+        listView = findViewById(R.id.list);
+
+        adapter = new Adapter();
+
+        listView.setLayoutManager(new LinearLayoutManager(this));
+        listView.setAdapter(adapter);
         gotoCallback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dgmClient.removeListener(MainActivity.this);
-                startActivity(new Intent(MainActivity.this, CallbackActivity.class));
+                dgmClient.authorize(MainActivity.this, null);;
             }
         });
-        gotoCallback.setVisibility(View.GONE);
+        //gotoCallback.setVisibility(View.GONE);
         downloadedCount = findViewById(R.id.counter);
 
         //Add this activity as a listener to DigiMeClient and start the auth flow
         dgmClient.addListener(this);
-        dgmClient.authorize(this, null);
+        //dgmClient.authorize(this, null);
 
     }
 
@@ -117,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
         for (final String fileId :
                 files.fileIds) {
             counter.incrementAndGet();
+            data.put(fileId, "");
             //Fetch content for returned file IDs
             DigiMeClient.getInstance().getFileJSON(fileId, null);
         }
@@ -138,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
     @Override
     public void jsonRetrievedForFile(String fileId, JsonElement content) {
         Log.d(TAG, content.toString());
+        data.put(fileId, content.toString());
+        adapter.setData(data);
         updateCounters();
     }
 
