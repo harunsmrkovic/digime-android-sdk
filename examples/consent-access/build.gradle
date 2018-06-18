@@ -6,13 +6,13 @@ apply plugin: 'com.android.application'
 apply from: project.file('../../config/gradle/quality.gradle')
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.1'
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildTools
 
     defaultConfig {
         applicationId "me.digi.examples.ca"
-        minSdkVersion 21
-        targetSdkVersion 26
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -54,12 +54,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(path: ':digime-core')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':digime-core')
 
-    compile 'com.android.support:appcompat-v7:27.0.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:27.0.0'
+    implementation "com.android.support:appcompat-v7:$versions.supportLibrary"
+    implementation "com.android.support:design:$versions.supportLibrary"
+    implementation "com.android.support.constraint:constraint-layout:$versions.constraintLayout"
 
-    testCompile 'junit:junit:4.12'
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+
+    testImplementation "junit:junit:$versions.junit"
 }
