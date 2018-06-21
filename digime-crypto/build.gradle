@@ -6,12 +6,12 @@ apply plugin: 'com.android.library'
 apply from: project.file('../config/gradle/quality.gradle')
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.1'
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildTools
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 26
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionCode 1
         consumerProguardFiles 'proguard-rules.pro'
@@ -51,13 +51,9 @@ android {
     }
 
     libraryVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.aar')) {
-                def fileName = ""
-                fileName = "digime-crypto-${project.ext.globalVersion}.aar"
-                output.outputFile = new File(outputFile.parent, fileName)
-            }
+        variant.outputs.all {
+            outputFileName = "digime-crypto-${project.ext.globalVersion}.aar"
+            println 'OutputFile : ' + outputFileName
         }
     }
 }
@@ -82,20 +78,20 @@ task updateVersion {
 build.dependsOn(updateVersion)
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-annotations:27.0.0'
-    compile 'com.madgag.spongycastle:prov:1.56.0.0'
-    compile 'com.madgag.spongycastle:core:1.56.0.0'
-    compile 'com.madgag.spongycastle:pkix:1.54.0.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:support-annotations:$versions.supportLibrary"
+    implementation 'com.madgag.spongycastle:prov:1.56.0.0'
+    implementation 'com.madgag.spongycastle:core:1.56.0.0'
+    implementation 'com.madgag.spongycastle:pkix:1.54.0.0'
 
     //tests
-    testCompile 'junit:junit:4.12'
+    testImplementation "junit:junit:$versions.junit"
 
-    androidTestCompile 'com.google.code.gson:gson:2.8.2'
-    androidTestCompile 'com.android.support:support-annotations:27.0.0'
-    androidTestCompile 'com.android.support.test:runner:1.0.1'
-    androidTestCompile 'com.android.support.test:rules:1.0.1'
-    androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
+    androidTestImplementation "com.google.code.gson:gson:$versions.gson"
+    androidTestImplementation "com.android.support:support-annotations:$versions.supportLibrary"
+    androidTestImplementation "com.android.support.test:runner:$versions.testSupportLibrary"
+    androidTestImplementation "com.android.support.test:rules:$versions.testSupportLibrary"
+    androidTestImplementation "org.hamcrest:hamcrest-library:$versions.hamcrest"
 }
 
 apply from: project.file('../config/gradle/publishing.gradle')

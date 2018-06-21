@@ -7,14 +7,14 @@ apply from: project.file('../config/gradle/quality.gradle')
 apply from: project.file('../config/gradle/import.gradle')
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.1'
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildTools
 
     defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
         versionCode 1
         versionName readVersion()
-        minSdkVersion 21
-        targetSdkVersion 26
         consumerProguardFiles 'proguard-rules.pro'
     }
     
@@ -49,13 +49,9 @@ android {
     }
 
     libraryVariants.all { variant ->
-        variant.outputs.each { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.aar')) {
-                def fileName = ""
-                fileName = "digime-core-${version}.aar"
-                output.outputFile = new File(outputFile.parent, fileName)
-            }
+        variant.outputs.all {
+            outputFileName = "digime-core-${version}.aar"
+            println 'OutputFile : ' + outputFileName
         }
     }
 }
@@ -106,16 +102,20 @@ updateReadmeVersion.dependsOn(updateVersion)
 build.dependsOn(updateVersion)
 
 dependencies {
-    compile project(path: ':digime-crypto')
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.squareup.okhttp3:okhttp:3.9.0'
-    compile 'com.android.support:support-annotations:27.0.2'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation project(path: ':digime-crypto')
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'com.squareup.okhttp3:mockwebserver:3.9.0'
+    implementation "com.android.support:support-annotations:$versions.supportLibrary"
+
+    implementation "com.google.code.gson:gson:$versions.gson"
+
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+
+    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+
+    testImplementation "junit:junit:$versions.junit"
+    testImplementation "com.squareup.okhttp3:mockwebserver:$versions.okhttp"
 }
 
 apply from: project.file('../config/gradle/publishing.gradle')
