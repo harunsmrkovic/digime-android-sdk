@@ -17,6 +17,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.VHolder> {
     }
 
     public void setData(Map<String, String> data) {
+        this.data.clear();
         this.data.addAll(data.values());
         notifyDataSetChanged();
     }
@@ -29,7 +30,38 @@ public class Adapter extends RecyclerView.Adapter<Adapter.VHolder> {
     @Override
     public void onBindViewHolder(VHolder holder, int position) {
         TextView textView = holder.itemView.findViewById(R.id.item);
-        textView.setText(data.get(position));
+        textView.setText(formatString(data.get(position)));
+    }
+
+    private static String formatString(String text){
+        StringBuilder json = new StringBuilder();
+        String indentString = "";
+
+        for (int i = 0; i < text.length(); i++) {
+            char letter = text.charAt(i);
+            switch (letter) {
+                case '{':
+                case '[':
+                    json.append("\n" + indentString + letter + "\n");
+                    indentString = indentString + "\t";
+                    json.append(indentString);
+                    break;
+                case '}':
+                case ']':
+                    indentString = indentString.replaceFirst("\t", "");
+                    json.append("\n" + indentString + letter);
+                    break;
+                case ',':
+                    json.append(letter + "\n" + indentString);
+                    break;
+
+                default:
+                    json.append(letter);
+                    break;
+            }
+        }
+
+        return json.toString();
     }
 
     @Override
