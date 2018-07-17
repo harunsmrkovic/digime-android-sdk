@@ -45,13 +45,13 @@ public class CallbackActivity extends AppCompatActivity {
         this.cb = new SDKCallback<CASession>() {
             @Override
             public void succeeded(SDKResponse<CASession> result) {
-                onSessionReceived();
-                writeStatus("Session created!");
+                writeStatus("Session authorized!");
+                requestFileList();
             }
 
             @Override
             public void failed(SDKException exception) {
-                writeStatus("Session create failed!");
+                writeStatus("Authorization failed!");
                 Log.d(TAG, exception.getMessage());
             }
         };
@@ -61,7 +61,7 @@ public class CallbackActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startButton.setVisibility(View.GONE);
-                DigiMeClient.getInstance().createSession(cb);
+                DigiMeClient.getInstance().authorize(CallbackActivity.this, cb);
             }
         });
 
@@ -76,21 +76,6 @@ public class CallbackActivity extends AppCompatActivity {
         if (authManager != null) {
             authManager.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-    public void onSessionReceived() {
-        authManager = DigiMeClient.getInstance().authorizeInitializedSession(this, new SDKCallback<CASession>() {
-            @Override
-            public void succeeded(SDKResponse<CASession> result) {
-                writeStatus("Session authorized!");
-                requestFileList();
-            }
-
-            @Override
-            public void failed(SDKException exception) {
-                writeStatus("Authorization failed!");
-            }
-        });
     }
 
     public void requestFileList() {

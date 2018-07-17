@@ -279,34 +279,6 @@ public final class DigiMeClient {
         return getAuthManager();
     }
 
-    public DigiMeAuthorizationManager authorizeInitializedSession(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
-        checkClientInitialized();
-        authorizeInitializedSessionWithManager(getAuthManager(), activity, callback);
-        return getAuthManager();
-    }
-
-    public DigiMeAuthorizationManager authorizeInitializedSession(@NonNull CASession session, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
-        checkClientInitialized();
-        SDKCallback<CASession> forwarder = new AuthorizationForwardCallback(callback);
-        if (!validateSession(session, forwarder)) return getAuthManager();
-
-        getSessionManager().clearCurrentSession();
-        getSessionManager().setCurrentSession(session);
-        authorizeInitializedSessionWithManager(getAuthManager(), activity, callback);
-        return getAuthManager();
-    }
-
-    public void authorizeInitializedSessionWithManager(DigiMeAuthorizationManager authManager, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
-        if (authManager == null) {
-            throw new IllegalArgumentException("Authorization Manager can not be null.");
-        }
-        SDKCallback<CASession> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
-        if (!authManager.nativeClientAvailable(activity)) {
-            forwarder = new AutoSessionForwardCallback(activity, callback, true);
-        }
-        authManager.resolveAuthorizationPath(activity, forwarder, true);
-    }
-
     public void createSession(@Nullable SDKCallback<CASession>callback) throws DigiMeException {
         if (!flow.isInitialized()) {
             throw new DigiMeException("No contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", CONSENT_ACCESS_CONTRACTS_PATH);
@@ -451,6 +423,17 @@ public final class DigiMeClient {
     /**
      *  Private helpers
      */
+
+    private void authorizeInitializedSessionWithManager(DigiMeAuthorizationManager authManager, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
+        if (authManager == null) {
+            throw new IllegalArgumentException("Authorization Manager can not be null.");
+        }
+        SDKCallback<CASession> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
+        if (!authManager.nativeClientAvailable(activity)) {
+            forwarder = new AutoSessionForwardCallback(activity, callback, true);
+        }
+        authManager.resolveAuthorizationPath(activity, forwarder, true);
+    }
 
     private static void updatePropertiesFromMetadata(Context context) {
         if (context == null) {
