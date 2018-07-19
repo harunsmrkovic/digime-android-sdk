@@ -5,7 +5,6 @@
 package me.digi.sdk.core;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -279,6 +278,7 @@ public final class DigiMeClient {
         return getAuthManager();
     }
 
+    @Deprecated
     public void createSession(@Nullable SDKCallback<CASession>callback) throws DigiMeException {
         if (!flow.isInitialized()) {
             throw new DigiMeException("No contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", CONSENT_ACCESS_CONTRACTS_PATH);
