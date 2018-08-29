@@ -209,7 +209,7 @@ public final class DigiMeClient {
                     .add(ApiConfig.get().getHost(), "sha256/dJtgu1DIYCnEB2vznevQ8hj9ADPRHzIN4pVG/xqP1DI=")
                     .add(ApiConfig.get().getHost(), "sha256/wpsB0loL9mSlGQZTWRQtWcIL0S5Wsu6rc85ToklfkDE=")
                     .add(ApiConfig.get().getHost(), "sha256/L/ZH1QCgUbk0OG8ePmvLnsTxUnjCzizynPQIw3iWxVo=")
-                    .add(ApiConfig.get().getHost(), "sha256/NwQiJdUz2GDUQloxMzERz/w+Smd6i898hjq6g2FIJbg=") //integration
+                    .add(ApiConfig.get().getHost(), "sha256/YxigD5mXO/e2a+8fJrBBd/nDqFhwWfcZynp6EatNsso=") //integration
                     .add(ApiConfig.get().getHost(), "sha256/HC6oU3LGzhkwHionuDaZacaIbjwYaMT/Qc7bxWLyy8g=") //prod 1
                     .add(ApiConfig.get().getHost(), "sha256/2qix+QNHzGWG5nhEFNIMxPZ57YbgT0liSisVLERNzt8=") //prod 2
                     .add(ApiConfig.get().getHost(), "sha256/W8QTLPG35cP39gFmUjKLLKAlHrYmGxvHf5Zf+INBZzo=") //prod 3
