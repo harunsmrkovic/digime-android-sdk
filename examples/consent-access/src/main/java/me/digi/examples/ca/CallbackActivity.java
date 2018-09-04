@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import me.digi.sdk.core.entities.CAAccounts;
 import me.digi.sdk.core.session.CASession;
-import me.digi.sdk.core.DigiMeAuthorizationManager;
+import me.digi.sdk.core.DigiMeConsentAccessAuthManager;
 import me.digi.sdk.core.DigiMeClient;
 import me.digi.sdk.core.SDKCallback;
 import me.digi.sdk.core.SDKException;
@@ -31,7 +31,7 @@ public class CallbackActivity extends AppCompatActivity {
 
     private static final String TAG = "DemoCallbackActivity";
     private SDKCallback<CASession> cb;
-    private DigiMeAuthorizationManager authManager;
+    private DigiMeConsentAccessAuthManager authManager;
     private TextView statusText;
     private TextView accountInfo;
 

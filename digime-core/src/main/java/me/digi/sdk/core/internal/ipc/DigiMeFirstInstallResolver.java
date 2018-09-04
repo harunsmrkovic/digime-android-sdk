@@ -10,7 +10,8 @@ import android.os.Looper;
 
 import java.util.concurrent.TimeUnit;
 
-import me.digi.sdk.core.DigiMeAuthorizationManager;
+import me.digi.sdk.core.DigiMeBaseAuthManager;
+import me.digi.sdk.core.DigiMeConsentAccessAuthManager;
 import me.digi.sdk.core.DigiMeClient;
 import me.digi.sdk.core.SDKCallback;
 import me.digi.sdk.core.session.CASession;
@@ -19,7 +20,7 @@ public class DigiMeFirstInstallResolver implements AuthorizationResolver {
     private static final int TIMEOUT_MINUTES = 10;
     private static final Handler mainLoopHandler = new Handler(Looper.getMainLooper());
     private final Runnable timeoutHandler;
-    private volatile DigiMeAuthorizationManager authorizationManager;
+    private volatile DigiMeBaseAuthManager authorizationManager;
 
     public DigiMeFirstInstallResolver() {
         timeoutHandler = new Runnable() {
@@ -31,7 +32,7 @@ public class DigiMeFirstInstallResolver implements AuthorizationResolver {
     }
 
     @Override
-    public void resolveAuthFlow(DigiMeAuthorizationManager authManager, Activity activity, SDKCallback<CASession> authCallback) {
+    public void resolveAuthFlow(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<CASession> authCallback) {
         InstallReceiver.registerForMessages();
         authorizationManager = authManager;
         authManager.beginDeferredAuthorization(activity, authCallback);

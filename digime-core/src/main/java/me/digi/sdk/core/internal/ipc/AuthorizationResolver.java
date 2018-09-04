@@ -6,12 +6,12 @@ package me.digi.sdk.core.internal.ipc;
 
 import android.app.Activity;
 
-import me.digi.sdk.core.DigiMeAuthorizationManager;
+import me.digi.sdk.core.DigiMeBaseAuthManager;
 import me.digi.sdk.core.SDKCallback;
 import me.digi.sdk.core.session.CASession;
 
 public interface AuthorizationResolver {
-    void resolveAuthFlow(DigiMeAuthorizationManager authManager, Activity activity, SDKCallback<CASession> authCallback);
+    void resolveAuthFlow(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<CASession> authCallback);
     void clientResolved(SDKCallback<CASession> authCallback);
     void stop();
     void overrideSessionCreation(boolean shouldOverride);

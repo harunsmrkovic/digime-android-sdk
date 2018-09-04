@@ -48,7 +48,8 @@ public final class DigiMeClient {
     private static volatile Executor coreExecutor;
     private static volatile String applicationId;
     private static volatile String applicationName;
-    private static volatile String[] contractIds;
+    private static volatile String[] caContractIds;
+    private static volatile String[] postboxContractIds;
 
     private static final boolean debugEnabled = BuildConfig.DEBUG;
 
@@ -90,27 +91,37 @@ public final class DigiMeClient {
     private static final String APPLICATION_ID_PATH = "me.digi.sdk.AppId";
     private static final String APPLICATION_NAME_PATH = "me.digi.sdk.AppName";
     private static final String CONSENT_ACCESS_CONTRACTS_PATH = "me.digi.sdk.Contracts";
+    private static final String POSTBOX_CONTRACTS_PATH = "me.digi.sdk.PostboxContracts";
 
     private static CASession defaultSession;
     private final List<SDKListener> listeners = new CopyOnWriteArrayList<>();
 
     private final ConcurrentHashMap<CASession, DigiMeAPIClient> networkClients;
     private volatile CertificatePinner certificatePinner;
-    private volatile DigiMeAuthorizationManager authManager;
+    private volatile DigiMeConsentAccessAuthManager authManager;
+    private volatile DigiMePostboxAuthManager postboxAuthManager;
 
     private SessionManager<CASession> consentAccessSessionManager;
 
-    public final Flow<CAContract> flow;
+    public final Flow<CAContract> caFlow;
+    public final Flow<CAContract> postboxFlow;
 
     private DigiMeClient() {
         this.networkClients = new ConcurrentHashMap<>();
 
-        this.flow = new Flow<>(new FlowLookupInitializer<CAContract>() {
+        this.caFlow = new Flow<>(new FlowLookupInitializer<CAContract>() {
             @Override
             public CAContract create(String identifier) {
                 return new CAContract(identifier, DigiMeClient.getApplicationId());
             }
-        });
+        }, caContractIds);
+
+        this.postboxFlow = new Flow<>(new FlowLookupInitializer<CAContract>() {
+            @Override
+            public CAContract create(String identifier) {
+                return new CAContract(identifier, DigiMeClient.getApplicationId());
+            }
+        }, postboxContractIds);
     }
 
     private static Boolean clientInitialized = false;
@@ -256,38 +267,60 @@ public final class DigiMeClient {
         return this.listeners.remove(listener);
     }
 
-    public DigiMeAuthorizationManager getAuthManager() {
+    public DigiMeConsentAccessAuthManager getAuthManager() {
         if (authManager == null) {
             synchronized (DigiMeClient.class) {
                 if (authManager == null) {
-                    authManager = new DigiMeAuthorizationManager();
+                    authManager = new DigiMeConsentAccessAuthManager();
                 }
             }
         }
         return authManager;
     }
 
+    public DigiMePostboxAuthManager getPostboxAuthManager() {
+        if (postboxAuthManager == null) {
+            synchronized (DigiMeClient.class) {
+                if (postboxAuthManager == null) {
+                    postboxAuthManager = new DigiMePostboxAuthManager();
+                }
+            }
+        }
+        return postboxAuthManager;
+    }
+
     /**
      *  Public methods
      */
 
-    public DigiMeAuthorizationManager authorize(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
+    public DigiMeConsentAccessAuthManager authorize(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
         checkClientInitialized();
         SDKCallback<CASession> forwarder = new AutoSessionForwardCallback(activity, callback);
         getAuthManager().resolveAuthorizationPath(activity, forwarder, false);
         return getAuthManager();
     }
 
+    public DigiMePostboxAuthManager createPostbox(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
+        checkClientInitialized();
+        SDKCallback<CASession> forwarder = new AutoSessionForwardCallback(activity, callback);
+        getPostboxAuthManager().resolveAuthorizationPath(activity, forwarder, false);
+        return getPostboxAuthManager();
+    }
+
     @Deprecated
     public void createSession(@Nullable SDKCallback<CASession>callback) throws DigiMeException {
-        if (!flow.isInitialized()) {
-            throw new DigiMeException("No contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", CONSENT_ACCESS_CONTRACTS_PATH);
+        if (!caFlow.isInitialized()) {
+            throw new DigiMeException("No CA contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", CONSENT_ACCESS_CONTRACTS_PATH);
         }
-        if (!flow.next()) { flow.rewind().next(); }
-        createSession(flow.currentId, callback);
+        if (!caFlow.next()) { caFlow.rewind().next(); }
+        createSession(caFlow.currentId, callback);
     }
 
     public void createSession(@NonNull String contractId, @Nullable SDKCallback<CASession>callback) {
+        createSession(caFlow, contractId, callback);
+    }
+
+    private void createSession(Flow<CAContract> flow, @NonNull String contractId, @Nullable SDKCallback<CASession>callback) {
         boolean useFlow = false;
         CAContract contract;
         if (flow.isInitialized()) {
@@ -302,6 +335,18 @@ public final class DigiMeClient {
             contract = new CAContract(contractId, DigiMeClient.getApplicationId());
         }
         startSessionWithContract(contract, callback);
+    }
+
+    public void createPostboxSession(@Nullable SDKCallback<CASession>callback) throws DigiMeException {
+        if (!postboxFlow.isInitialized()) {
+            throw new DigiMeException("No Postbox contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", POSTBOX_CONTRACTS_PATH);
+        }
+        if (!postboxFlow.next()) { postboxFlow.rewind().next(); }
+        createSession(postboxFlow.currentId, callback);
+    }
+
+    private void createPostboxSession(@NonNull String contractId, @Nullable SDKCallback<CASession>callback) {
+        createSession(postboxFlow, contractId, callback);
     }
 
     public void startSessionWithContract(CAContract contract, @Nullable SDKCallback<CASession> callback) {
@@ -424,7 +469,7 @@ public final class DigiMeClient {
      *  Private helpers
      */
 
-    private void authorizeInitializedSessionWithManager(DigiMeAuthorizationManager authManager, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
+    private void authorizeInitializedSessionWithManager(DigiMeConsentAccessAuthManager authManager, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
         if (authManager == null) {
             throw new IllegalArgumentException("Authorization Manager can not be null.");
         }
@@ -463,28 +508,38 @@ public final class DigiMeClient {
             applicationName = ai.metaData.getString(APPLICATION_NAME_PATH);
         }
 
-        if (contractIds == null) {
-            Object contract = ai.metaData.get(CONSENT_ACCESS_CONTRACTS_PATH);
-            if (contract instanceof String) {
-                String cont = (String) contract;
-                contractIds = new String[]{cont};
-            } else if (contract instanceof Integer) {
-                String type = context.getResources().getResourceTypeName((int) contract);
-                if (type.equalsIgnoreCase("array")) {
-                    contractIds = context.getResources().getStringArray((int)contract);
-                } else if (type.equalsIgnoreCase("string")) {
-                    String cnt = context.getResources().getString((int)contract);
-                    contractIds = new String[]{cnt};
-                } else {
-                    throw new DigiMeException(
-                            "Allowed types for contract ID are only string-array or string. Check that you have set the correct meta-data type.");
-                }
-            }
+        if (caContractIds == null) {
+            caContractIds = extractContracts(context, ai, CONSENT_ACCESS_CONTRACTS_PATH);
+            if (caContractIds == null)
+                throw new DigiMeException(
+                    "Allowed types for contract ID are only string-array or string. Check that you have set the correct meta-data type.");
+        }
+
+        if (postboxContractIds == null) {
+            postboxContractIds = extractContracts(context, ai, POSTBOX_CONTRACTS_PATH);
         }
 
         if (loaderProvider == null) {
             loaderProvider = new KeyLoaderProvider(ai.metaData, context);
         }
+    }
+
+    @Nullable
+    private static String[] extractContracts(Context context, ApplicationInfo ai, String path) {
+        Object contract = ai.metaData.get(path);
+        if (contract instanceof String) {
+            String cont = (String) contract;
+            return new String[]{cont};
+        } else if (contract instanceof Integer) {
+            String type = context.getResources().getResourceTypeName((int) contract);
+            if (type.equalsIgnoreCase("array")) {
+                return context.getResources().getStringArray((int)contract);
+            } else if (type.equalsIgnoreCase("string")) {
+                String cnt = context.getResources().getString((int)contract);
+                return new String[]{cnt};
+            }
+        }
+        return null;
     }
 
     private boolean validateSession(SDKCallback callback) {
@@ -533,18 +588,18 @@ public final class DigiMeClient {
         private final ArrayList<String> identifiers;
         private final ConcurrentHashMap<String, T> lookup;
 
-        private Flow() {
+        private Flow(String[] ids) {
             this.lookup = new ConcurrentHashMap<>();
-            if (DigiMeClient.contractIds == null || DigiMeClient.contractIds.length == 0) {
+            if (ids == null || ids.length == 0) {
                 this.identifiers = new ArrayList<>();
             } else {
-                this.identifiers = new ArrayList<>(Arrays.asList(DigiMeClient.contractIds));
+                this.identifiers = new ArrayList<>(Arrays.asList(ids));
             }
             tryInit();
         }
 
-        private Flow(FlowLookupInitializer<T> initializer) {
-            this();
+        private Flow(FlowLookupInitializer<T> initializer, String[] ids) {
+            this(ids);
             if (this.isInitialized()) {
                 for (String id :
                         identifiers) {
