@@ -329,7 +329,7 @@ public final class DigiMeClient {
         if (useFlow) {
             contract = flow.get();
         } else {
-            if (Util.validateContractId(contractId) && DigiMeClient.debugEnabled) {
+            if (!Util.validateContractId(contractId) && DigiMeClient.debugEnabled) {
                 throw new DigiMeException("Provided contractId has invalid format.");
             }
             contract = new CAContract(contractId, DigiMeClient.getApplicationId());
@@ -510,14 +510,15 @@ public final class DigiMeClient {
 
         if (caContractIds == null) {
             caContractIds = extractContracts(context, ai, CONSENT_ACCESS_CONTRACTS_PATH);
-            if (caContractIds == null)
-                throw new DigiMeException(
-                    "Allowed types for contract ID are only string-array or string. Check that you have set the correct meta-data type.");
         }
 
         if (postboxContractIds == null) {
             postboxContractIds = extractContracts(context, ai, POSTBOX_CONTRACTS_PATH);
         }
+
+        if (caContractIds == null && postboxContractIds == null)
+            throw new DigiMeException(
+                "Allowed types for contract ID are only string-array or string. Check that you have set the correct meta-data type.");
 
         if (loaderProvider == null) {
             loaderProvider = new KeyLoaderProvider(ai.metaData, context);
