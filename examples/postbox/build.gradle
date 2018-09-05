@@ -24,8 +24,11 @@ android {
          * For further details how these are mapped to meta-data used by the SDK, look at AndroidManifest.xml at the section marked with <DIGI.ME SDK CONFIGURATION PARAMS BEGIN>
          */
 
-        resValue "string", "APP_ID", "your_real_app_id" // <- sample: "gDdQfubl66rj07webI92m4afPL9va9Z1" (32 characters hex string given by digi.me support)
-        resValue "string", "POSTBOX_CONTRACT_ID", "gzqYsbQ1V1XROWjmqiFLcH2AF1jvcKcg" // <- demo contract ID for testing purposes
+        resValue "string", "APP_ID", "fvnJtdti8kV9qIdUMiYIzOzxvb9JdmtN" // dev
+        resValue "string", "POSTBOX_CONTRACT_ID", "MyeIMsJOmOddVixk54GboFqtPWSW0uSm" // dev
+
+        //resValue "string", "APP_ID", "your_real_app_id" // prod
+        //resValue "string", "POSTBOX_CONTRACT_ID", "gzqYsbQ1V1XROWjmqiFLcH2AF1jvcKcg" // prod
     }
     buildTypes {
         debug {
