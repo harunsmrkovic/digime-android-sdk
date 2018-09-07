@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -21,9 +22,10 @@ import me.digi.sdk.core.internal.ipc.DigiMeDirectResolver;
 import me.digi.sdk.core.internal.ipc.DigiMeFirstInstallResolver;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.SessionManager;
+import me.digi.sdk.core.session.SessionResult;
 
 @SuppressWarnings("WeakerAccess")
-public abstract class DigiMeBaseAuthManager {
+public abstract class DigiMeBaseAuthManager<T extends SessionResult> {
 
     public static final String DIGI_ME_PACKAGE_ID = "me.digi.app3";
 
@@ -36,7 +38,7 @@ public abstract class DigiMeBaseAuthManager {
     protected AuthorizationResolver resolver;
 
     protected static final AtomicReference<DigiMeConsentAccessAuthManager.DigiMeAuthorizationState> authInProgress = new AtomicReference<>(DigiMeConsentAccessAuthManager.DigiMeAuthorizationState.IDLE);
-    protected SDKCallback<CASession> callback;
+    protected SDKCallback<T> callback;
 
     protected final String appId;
     protected String appName;
@@ -67,11 +69,13 @@ public abstract class DigiMeBaseAuthManager {
 
     abstract protected Intent createAppIntent(CASession intentSession);
 
+    abstract protected void handleSuccess(@Nullable Intent data);
+
     @SuppressWarnings("UnusedParameters")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == getRequestCode()) {
             if (resultCode == Activity.RESULT_OK) {
-                callback.succeeded(new SDKResponse<>(extractSession(), null));
+                handleSuccess(data);
             } else {
                 callback.failed(new AuthorizationException("Access denied", extractSession(), AuthorizationException.Reason.ACCESS_DENIED));
             }
@@ -81,7 +85,7 @@ public abstract class DigiMeBaseAuthManager {
         }
     }
 
-    public void resolveAuthorizationPath(Activity activity, SDKCallback<CASession> callback, boolean overrideSessionCreate) {
+    public <T extends SessionResult> void resolveAuthorizationPath(Activity activity, SDKCallback<T> callback, boolean overrideSessionCreate) {
         if (nativeClientAvailable(activity)) {
             resolver = new DigiMeDirectResolver();
         } else {
@@ -91,7 +95,7 @@ public abstract class DigiMeBaseAuthManager {
         resolver.resolveAuthFlow(this, activity, callback);
     }
 
-    public void beginAuthorization(Activity activity, SDKCallback<CASession> callback) {
+    public void beginAuthorization(Activity activity, SDKCallback<SessionResult> callback) {
         if (activity == null) {
             throw new IllegalArgumentException("Must set the activity to start the flow.");
         }
@@ -104,7 +108,7 @@ public abstract class DigiMeBaseAuthManager {
         }
     }
 
-    public void beginDeferredAuthorization(Activity activity, SDKCallback<CASession> callback) {
+    public void beginDeferredAuthorization(Activity activity, SDKCallback<SessionResult> callback) {
         if (activity == null) {
             throw new IllegalArgumentException("Must set the activity to start the flow.");
         }
@@ -118,7 +122,7 @@ public abstract class DigiMeBaseAuthManager {
                 return;
             }
             this.authActivity = new WeakReference<>(activity);
-            this.callback = callback;
+            this.callback = (SDKCallback<T>)callback;
             startInstallDigiMeFlow(activity);
         } else {
             callback.failed(new AuthorizationException("Activity in finished state!"));
@@ -148,7 +152,7 @@ public abstract class DigiMeBaseAuthManager {
         return verifyIntentCanBeHandled(appIntent, activity.getPackageManager());
     }
 
-    private void prepareRequest(Activity activity, SDKCallback<CASession> callback) {
+    private void prepareRequest(Activity activity, SDKCallback<SessionResult> callback) {
         CASession requestSession = extractSession();
         if (requestSession == null) {
             throw new NullPointerException("Session is null.");
@@ -159,11 +163,11 @@ public abstract class DigiMeBaseAuthManager {
         }
     }
 
-    private boolean sendRequest(CASession session, Activity activity, SDKCallback<CASession> callback) {
+    private boolean sendRequest(CASession session, Activity activity, SDKCallback<SessionResult> callback) {
         if (!markInProgress()) {
             return false;
         }
-        this.callback = callback;
+        this.callback = (SDKCallback<T>)callback;
         Intent sendIntent = createAppIntent(session);
 
         if (verifyIntentCanBeHandled(sendIntent, activity.getPackageManager())) {
@@ -175,7 +179,7 @@ public abstract class DigiMeBaseAuthManager {
         return true;
     }
 
-    private CASession extractSession() {
+    protected CASession extractSession() {
         CASession requestSession = session;
         if (requestSession == null && sManager != null) {
             requestSession = sManager.getCurrentSession();

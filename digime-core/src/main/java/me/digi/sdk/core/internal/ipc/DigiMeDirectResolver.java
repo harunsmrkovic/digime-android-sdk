@@ -12,12 +12,13 @@ import me.digi.sdk.core.DigiMeClient;
 import me.digi.sdk.core.DigiMePostboxAuthManager;
 import me.digi.sdk.core.SDKCallback;
 import me.digi.sdk.core.session.CASession;
+import me.digi.sdk.core.session.SessionResult;
 
 public class DigiMeDirectResolver implements AuthorizationResolver {
     private boolean shouldOverride = false;
 
     @Override
-    public void resolveAuthFlow(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<CASession> authCallback) {
+    public <T extends SessionResult> void resolveAuthFlow(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<T> authCallback) {
         if (!shouldOverride) {
             if (authManager instanceof DigiMeConsentAccessAuthManager)
                 DigiMeClient.getInstance().createSession(authCallback);
@@ -29,7 +30,7 @@ public class DigiMeDirectResolver implements AuthorizationResolver {
     }
 
     @Override
-    public void clientResolved(SDKCallback<CASession> authCallback) { }
+    public <T extends SessionResult> void clientResolved(SDKCallback<T> authCallback) { }
 
     @Override
     public void stop() { }

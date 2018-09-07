@@ -15,6 +15,7 @@ import me.digi.sdk.core.DigiMeConsentAccessAuthManager;
 import me.digi.sdk.core.DigiMeClient;
 import me.digi.sdk.core.SDKCallback;
 import me.digi.sdk.core.session.CASession;
+import me.digi.sdk.core.session.SessionResult;
 
 public class DigiMeFirstInstallResolver implements AuthorizationResolver {
     private static final int TIMEOUT_MINUTES = 10;
@@ -32,7 +33,7 @@ public class DigiMeFirstInstallResolver implements AuthorizationResolver {
     }
 
     @Override
-    public void resolveAuthFlow(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<CASession> authCallback) {
+    public <T extends SessionResult> void resolveAuthFlow(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<T> authCallback) {
         InstallReceiver.registerForMessages();
         authorizationManager = authManager;
         authManager.beginDeferredAuthorization(activity, authCallback);
@@ -40,7 +41,7 @@ public class DigiMeFirstInstallResolver implements AuthorizationResolver {
     }
 
     @Override
-    public void clientResolved(SDKCallback<CASession> authCallback) {
+    public <T extends SessionResult> void clientResolved(SDKCallback<T> authCallback) {
         clearTimeoutHandler();
         DigiMeClient.getInstance().createSession(authCallback);
     }

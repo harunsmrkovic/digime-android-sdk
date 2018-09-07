@@ -5,9 +5,11 @@
 package me.digi.sdk.core;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
+
 import me.digi.sdk.core.session.CASession;
 
-public class DigiMeConsentAccessAuthManager extends DigiMeBaseAuthManager {
+public class DigiMeConsentAccessAuthManager extends DigiMeBaseAuthManager<CASession> {
 
     private static final String PERMISSION_ACCESS_INTENT_ACTION = "android.intent.action.DIGI_PERMISSION_REQUEST";
     private static final String PERMISSION_ACCESS_INTENT_TYPE = "text/plain";
@@ -29,5 +31,10 @@ public class DigiMeConsentAccessAuthManager extends DigiMeBaseAuthManager {
                          .putExtra(KEY_APP_NAME, appName);
         }
         return appIntent;
+    }
+
+    @Override
+    protected void handleSuccess(@Nullable Intent data) {
+        callback.succeeded(new SDKResponse<>(extractSession(), null));
     }
 }
