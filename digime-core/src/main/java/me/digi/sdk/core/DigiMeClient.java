@@ -761,6 +761,8 @@ public final class DigiMeClient {
             }
             for (SDKListener listener : listeners) {
                 listener.authorizeSucceeded(result.body.session());
+                if (listener instanceof SDKPostboxListener && result.body instanceof CreatePostboxSession)
+                    ((SDKPostboxListener)listener).postboxCreated(((CreatePostboxSession) result.body).postboxId);
             }
         }
 
