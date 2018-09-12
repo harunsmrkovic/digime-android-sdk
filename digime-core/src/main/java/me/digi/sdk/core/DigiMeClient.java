@@ -297,14 +297,14 @@ public final class DigiMeClient {
 
     public DigiMeConsentAccessAuthManager authorize(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
         checkClientInitialized();
-        SDKCallback<CASession> forwarder = new AutoSessionForwardCallback(getAuthManager(), activity, callback);
+        SDKCallback<CASession> forwarder = new AutoSessionForwardCallback<>(getAuthManager(), activity, callback);
         getAuthManager().resolveAuthorizationPath(activity, forwarder, false);
         return getAuthManager();
     }
 
     public DigiMePostboxAuthManager createPostbox(@NonNull Activity activity, @Nullable SDKCallback<SessionResult> callback) {
         checkClientInitialized();
-        SDKCallback<CreatePostboxSession> forwarder = new AutoSessionForwardCallback(getPostboxAuthManager(), activity, callback);
+        SDKCallback<SessionResult> forwarder = new AutoSessionForwardCallback<>(getPostboxAuthManager(), activity, callback);
         getPostboxAuthManager().resolveAuthorizationPath(activity, forwarder, false);
         return getPostboxAuthManager();
     }
@@ -358,7 +358,7 @@ public final class DigiMeClient {
         if (callback instanceof AutoSessionForwardCallback) {
             dispatchCallback = (AutoSessionForwardCallback) callback;
         } else {
-            dispatchCallback = new SessionForwardCallback(callback);
+            dispatchCallback = new SessionForwardCallback<>(callback);
         }
         if (contract == null) {
             dispatchCallback.failed(new SDKValidationException("Contract is null. Session can not be initialized!"));

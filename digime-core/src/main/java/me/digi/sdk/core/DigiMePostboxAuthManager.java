@@ -4,8 +4,9 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 
 import me.digi.sdk.core.session.CASession;
+import me.digi.sdk.core.session.SessionResult;
 
-public class DigiMePostboxAuthManager extends DigiMeBaseAuthManager<CreatePostboxSession> {
+public class DigiMePostboxAuthManager extends DigiMeBaseAuthManager<SessionResult> {
 
     private static final String POSTBOX_AUTH_INTENT_ACTION = "android.intent.action.DIGI_POSTBOX_AUTH_REQUEST";
     private static final String POSTBOX_INTENT_TYPE = "text/plain";
@@ -34,6 +35,8 @@ public class DigiMePostboxAuthManager extends DigiMeBaseAuthManager<CreatePostbo
     protected void handleSuccess(@Nullable Intent data) {
         if (data == null)
             throw new DigiMeException("PostboxAuthManager expects postbox id onSuccess");
-        callback.succeeded(new SDKResponse<>(new CreatePostboxSession(extractSession(), data.getStringExtra(POSTBOX_ID_EXTRA)), null));
+
+        SessionResult sessionResult = new CreatePostboxSession(extractSession(), data.getStringExtra(POSTBOX_ID_EXTRA));
+        callback.succeeded(new SDKResponse<>(sessionResult, null));
     }
 }
