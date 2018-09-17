@@ -37,7 +37,7 @@ public abstract class DigiMeBaseAuthManager<T extends SessionResult> {
     protected WeakReference<Activity> authActivity;
     protected AuthorizationResolver resolver;
 
-    protected static final AtomicReference<DigiMeConsentAccessAuthManager.DigiMeAuthorizationState> authInProgress = new AtomicReference<>(DigiMeConsentAccessAuthManager.DigiMeAuthorizationState.IDLE);
+    protected static final AtomicReference<DigiMeAuthorizationState> authInProgress = new AtomicReference<>(DigiMeAuthorizationState.IDLE);
     protected SDKCallback<T> callback;
 
     protected final String appId;
@@ -241,7 +241,7 @@ public abstract class DigiMeBaseAuthManager<T extends SessionResult> {
         if (isInProgress()) {
             Log.d(DigiMeClient.TAG, "Authorization is already in progress.");
         } else {
-            authInProgress.set(DigiMeConsentAccessAuthManager.DigiMeAuthorizationState.IN_PROGRESS);
+            authInProgress.set(DigiMeAuthorizationState.IN_PROGRESS);
             result = true;
         }
         return result;
@@ -252,22 +252,22 @@ public abstract class DigiMeBaseAuthManager<T extends SessionResult> {
         if (isInProgress() || isDeferred()) {
             Log.d(DigiMeClient.TAG, "Authorization is already in progress.");
         } else {
-            authInProgress.set(DigiMeConsentAccessAuthManager.DigiMeAuthorizationState.DEFERRED);
+            authInProgress.set(DigiMeAuthorizationState.DEFERRED);
             result = true;
         }
         return result;
     }
 
     private void clearProgress() {
-        authInProgress.set(DigiMeConsentAccessAuthManager.DigiMeAuthorizationState.IDLE);
+        authInProgress.set(DigiMeAuthorizationState.IDLE);
     }
 
     public boolean isInProgress() {
-        return authInProgress.get() != null && authInProgress.get() == DigiMeConsentAccessAuthManager.DigiMeAuthorizationState.IN_PROGRESS;
+        return authInProgress.get() != null && authInProgress.get() == DigiMeAuthorizationState.IN_PROGRESS;
     }
 
     public boolean isDeferred() {
-        return authInProgress.get() != null && authInProgress.get() == DigiMeConsentAccessAuthManager.DigiMeAuthorizationState.DEFERRED;
+        return authInProgress.get() != null && authInProgress.get() == DigiMeAuthorizationState.DEFERRED;
     }
 
     public enum DigiMeAuthorizationState {
