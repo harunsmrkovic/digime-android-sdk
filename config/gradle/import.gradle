@@ -4,10 +4,6 @@
 
 apply from: project.file('../config/shared/shared.gradle')
 
-ext {
-    exports = [
-            globalEndpoint: "api.digi.me"
-    ]
-}
-
-exports.globalEndpoint = fetchProp(new Properties(),'../config/props/internal.properties', 'argon_endpoint', exports.globalEndpoint)
+ext.exports = [
+    globalEndpoint: fetchProp('../config/props/internal.properties', 'argon_endpoint', 'api.digi.me')
+]

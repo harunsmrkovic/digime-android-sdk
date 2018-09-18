@@ -2,13 +2,15 @@
  * Copyright (c) 2009-2018 digi.me Limited. All rights reserved.
  */
 
+apply from: project.file('../config/shared/shared.gradle')
+
 apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'maven-publish'
 
 def repositoryUrl = "https://repository.sysdigi.net/m2/"
 def repositoryKey = getRepositoryKey()
-def repositoryUsername = getPropertyFromFile("REPO_USERNAME", '../config/props/pub.properties')
-def repositoryPassword = getPropertyFromFile("REPO_PASSWORD", '../config/props/pub.properties')
+def repositoryUsername = project.ext.fetchWithThrow('../config/props/publish.properties', "REPO_USERNAME", "")
+def repositoryPassword = project.ext.fetchWithThrow('../config/props/publish.properties', "REPO_PASSWORD", "")
 
 //TODO choose repository key in artifact's module which we're going to deploy
 def getRepositoryKey() {
@@ -17,16 +19,6 @@ def getRepositoryKey() {
     } else {
         return "libs-snapshot-local"
     }
-}
-
-def getPropertyFromFile(prop, filepath) {
-    def file = project.file(filepath)
-    if (file.canRead()) {
-        def properties = new Properties()
-        properties.load(file.newDataInputStream())
-        return properties.getProperty(prop)
-    }
-    return ""
 }
 
 publishing {
