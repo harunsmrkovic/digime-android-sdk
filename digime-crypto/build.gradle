@@ -94,4 +94,5 @@ dependencies {
     androidTestImplementation "org.hamcrest:hamcrest-library:$versions.hamcrest"
 }
 
-apply from: project.file('../config/gradle/publishing.gradle')
+//TODO restore
+//apply from: project.file('../config/gradle/publishing.gradle')
