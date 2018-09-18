@@ -25,6 +25,3 @@ local.properties
 .externalNativeBuild
 /config/props/internal.properties
 /config/props/pub.properties
-#/examples/consent-access/sdkconfig.properties
-/examples/consent-access/config.internal.properties
-/examples/consent-access/sdkconfig.properties
