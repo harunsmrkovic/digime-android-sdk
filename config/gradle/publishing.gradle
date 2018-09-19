@@ -14,7 +14,7 @@ def repositoryPassword = project.ext.fetchWithThrow('../config/props/publish.pro
 
 //TODO choose repository key in artifact's module which we're going to deploy
 def getRepositoryKey() {
-    if ("api.digi.me" == project.ext.exports.globalEndpoint) {
+    if ("api.digi.me" == project.ext.exports.endpointUrl) {
         return "libs-release-local"
     } else {
         return "libs-snapshot-local"

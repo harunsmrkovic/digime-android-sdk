@@ -6,7 +6,7 @@ apply from: project.file('../config/shared/shared.gradle')
 
 //default configuration - `production` environment
 ext.exports = [
-    globalEndpoint: fetchWithThrow('config/properties/production.properties', 'argon_endpoint', "")
+    endpointUrl: fetchWithThrow('config/properties/production.properties', 'ENDPOINT_URL', "")
 ]
 
 //development configuration - `non-production` environment
@@ -18,6 +18,6 @@ def nonProductionEnvPropertiesFilePath = 'config/properties/internal.properties'
 if (file(nonProductionEnvPropertiesFilePath).exists()) {
     println "Configuring SDK to work with non production environment"
     ext.exports = [
-        globalEndpoint: fetchWithThrow(nonProductionEnvPropertiesFilePath, 'argon_endpoint', "")
+        endpointUrl: fetchWithThrow(nonProductionEnvPropertiesFilePath, 'ENDPOINT_URL', "")
     ]
 }

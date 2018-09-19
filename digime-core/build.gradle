@@ -20,12 +20,12 @@ android {
     
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_HOST",  "\"${exports.globalEndpoint}\""
+            buildConfigField "String", "BASE_HOST",  "\"${exports.endpointUrl}\""
             buildConfigField "boolean", "LOG_REQUESTS",  "true"
         }
 
         release {
-            buildConfigField "String", "BASE_HOST", "\"${exports.globalEndpoint}\""
+            buildConfigField "String", "BASE_HOST", "\"${exports.endpointUrl}\""
             buildConfigField "boolean", "LOG_REQUESTS",  "false"
         }
     }
