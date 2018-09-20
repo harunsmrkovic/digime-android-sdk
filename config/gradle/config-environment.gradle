@@ -6,8 +6,8 @@ apply from: project.file('../config/shared/shared.gradle')
 
 //default configuration - `production` environment
 ext.exports = [
-    endpointName: fetchWithThrow('config/properties/production.properties', 'ENDPOINT_NAME', ""),
-    endpointUrl: fetchWithThrow('config/properties/production.properties', 'ENDPOINT_URL', "")
+    endpointName: fetchWithThrow('../config/properties/production.properties', 'ENDPOINT_NAME', ""),
+    endpointUrl: fetchWithThrow('../config/properties/production.properties', 'ENDPOINT_URL', "")
 ]
 
 //development configuration - `non-production` environment
@@ -15,7 +15,7 @@ ext.exports = [
  * To change the environment used by SDK create a copy of `production.properties` file and rename it
  * to `internal.properties` and modify its properties accordingly
  */
-def nonProductionEnvPropertiesFilePath = 'config/properties/internal.properties'
+def nonProductionEnvPropertiesFilePath = '../config/properties/internal.properties'
 if (file(nonProductionEnvPropertiesFilePath).exists()) {
     ext.exports = [
         endpointName: fetchWithThrow(nonProductionEnvPropertiesFilePath, 'ENDPOINT_NAME', ""),

@@ -4,6 +4,7 @@
 
 apply plugin: 'com.android.library'
 apply from: project.file('../config/gradle/quality.gradle')
+apply from: project.file('../config/gradle/config-environment.gradle')
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -87,5 +88,4 @@ dependencies {
     androidTestImplementation "org.hamcrest:hamcrest-library:$versions.hamcrest"
 }
 
-//TODO restore
-//apply from: project.file('../config/gradle/publishing.gradle')
+apply from: project.file('../config/gradle/publishing.gradle')

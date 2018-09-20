@@ -9,8 +9,8 @@ apply plugin: 'digital.wup.android-maven-publish'
 
 def repositoryUrl = "https://repository.sysdigi.net/m2/"
 def repositoryKey = getRepositoryKey()
-def repositoryUsername = project.ext.fetchWithThrow('../config/props/publish.properties', "REPO_USERNAME", "")
-def repositoryPassword = project.ext.fetchWithThrow('../config/props/publish.properties', "REPO_PASSWORD", "")
+def repositoryUsername = project.ext.fetchWithThrow('../config/properties/publish.properties', "REPO_USERNAME", "")
+def repositoryPassword = project.ext.fetchWithThrow('../config/properties/publish.properties', "REPO_PASSWORD", "")
 
 //TODO choose repository key in artifact's module which we're going to deploy
 def getRepositoryKey() {
