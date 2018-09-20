@@ -9,9 +9,11 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.nio.channels.SeekableByteChannel;
+
 import me.digi.sdk.core.DigiMeClient;
 
-public class CASession implements Session{
+public class CASession implements Session, SessionResult {
 
     public static final long DEFAULT_EXPIRY = 60000;
     private static final String INVALID_SESSION_KEY = "invalid_key";
@@ -54,6 +56,11 @@ public class CASession implements Session{
 
     public long getExpiry() {
         return expiry;
+    }
+
+    @Override
+    public CASession session() {
+        return this;
     }
 
     @NonNull

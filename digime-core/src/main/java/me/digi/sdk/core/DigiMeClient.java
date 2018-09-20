@@ -35,6 +35,8 @@ import me.digi.sdk.core.provider.KeyLoaderProvider;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.CASessionManager;
 import me.digi.sdk.core.session.SessionManager;
+import me.digi.sdk.core.session.CASession;
+import me.digi.sdk.core.session.SessionResult;
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 
@@ -48,7 +50,8 @@ public final class DigiMeClient {
     private static volatile Executor coreExecutor;
     private static volatile String applicationId;
     private static volatile String applicationName;
-    private static volatile String[] contractIds;
+    private static volatile String[] caContractIds;
+    private static volatile String[] postboxContractIds;
 
     private static final boolean debugEnabled = BuildConfig.DEBUG;
 
@@ -90,27 +93,37 @@ public final class DigiMeClient {
     private static final String APPLICATION_ID_PATH = "me.digi.sdk.AppId";
     private static final String APPLICATION_NAME_PATH = "me.digi.sdk.AppName";
     private static final String CONSENT_ACCESS_CONTRACTS_PATH = "me.digi.sdk.Contracts";
+    private static final String POSTBOX_CONTRACTS_PATH = "me.digi.sdk.PostboxContracts";
 
     private static CASession defaultSession;
     private final List<SDKListener> listeners = new CopyOnWriteArrayList<>();
 
     private final ConcurrentHashMap<CASession, DigiMeAPIClient> networkClients;
     private volatile CertificatePinner certificatePinner;
-    private volatile DigiMeAuthorizationManager authManager;
+    private volatile DigiMeConsentAccessAuthManager authManager;
+    private volatile DigiMePostboxAuthManager postboxAuthManager;
 
     private SessionManager<CASession> consentAccessSessionManager;
 
-    public final Flow<CAContract> flow;
+    public final Flow<CAContract> caFlow;
+    public final Flow<CAContract> postboxFlow;
 
     private DigiMeClient() {
         this.networkClients = new ConcurrentHashMap<>();
 
-        this.flow = new Flow<>(new FlowLookupInitializer<CAContract>() {
+        this.caFlow = new Flow<>(new FlowLookupInitializer<CAContract>() {
             @Override
             public CAContract create(String identifier) {
                 return new CAContract(identifier, DigiMeClient.getApplicationId());
             }
-        });
+        }, caContractIds);
+
+        this.postboxFlow = new Flow<>(new FlowLookupInitializer<CAContract>() {
+            @Override
+            public CAContract create(String identifier) {
+                return new CAContract(identifier, DigiMeClient.getApplicationId());
+            }
+        }, postboxContractIds);
     }
 
     private static Boolean clientInitialized = false;
@@ -256,38 +269,60 @@ public final class DigiMeClient {
         return this.listeners.remove(listener);
     }
 
-    public DigiMeAuthorizationManager getAuthManager() {
+    public DigiMeConsentAccessAuthManager getAuthManager() {
         if (authManager == null) {
             synchronized (DigiMeClient.class) {
                 if (authManager == null) {
-                    authManager = new DigiMeAuthorizationManager();
+                    authManager = new DigiMeConsentAccessAuthManager();
                 }
             }
         }
         return authManager;
     }
 
+    public DigiMePostboxAuthManager getPostboxAuthManager() {
+        if (postboxAuthManager == null) {
+            synchronized (DigiMeClient.class) {
+                if (postboxAuthManager == null) {
+                    postboxAuthManager = new DigiMePostboxAuthManager();
+                }
+            }
+        }
+        return postboxAuthManager;
+    }
+
     /**
      *  Public methods
      */
 
-    public DigiMeAuthorizationManager authorize(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
+    public DigiMeConsentAccessAuthManager authorize(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
         checkClientInitialized();
-        SDKCallback<CASession> forwarder = new AutoSessionForwardCallback(activity, callback);
+        SDKCallback<CASession> forwarder = new AutoSessionForwardCallback<>(getAuthManager(), activity, callback);
         getAuthManager().resolveAuthorizationPath(activity, forwarder, false);
         return getAuthManager();
     }
 
-    @Deprecated
-    public void createSession(@Nullable SDKCallback<CASession>callback) throws DigiMeException {
-        if (!flow.isInitialized()) {
-            throw new DigiMeException("No contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", CONSENT_ACCESS_CONTRACTS_PATH);
-        }
-        if (!flow.next()) { flow.rewind().next(); }
-        createSession(flow.currentId, callback);
+    public DigiMePostboxAuthManager createPostbox(@NonNull Activity activity, @Nullable SDKCallback<SessionResult> callback) {
+        checkClientInitialized();
+        SDKCallback<SessionResult> forwarder = new AutoSessionForwardCallback<>(getPostboxAuthManager(), activity, callback);
+        getPostboxAuthManager().resolveAuthorizationPath(activity, forwarder, false);
+        return getPostboxAuthManager();
     }
 
-    public void createSession(@NonNull String contractId, @Nullable SDKCallback<CASession>callback) {
+    @Deprecated
+    public <T extends SessionResult> void createSession(@Nullable SDKCallback<T>callback) throws DigiMeException {
+        if (!caFlow.isInitialized()) {
+            throw new DigiMeException("No CA contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", CONSENT_ACCESS_CONTRACTS_PATH);
+        }
+        if (!caFlow.next()) { caFlow.rewind().next(); }
+        createSession(caFlow.currentId, callback);
+    }
+
+    public <T extends SessionResult> void createSession(@NonNull String contractId, @Nullable SDKCallback<T>callback) {
+        createSession(caFlow, contractId, callback);
+    }
+
+    private <T extends SessionResult> void createSession(Flow<CAContract> flow, @NonNull String contractId, @Nullable SDKCallback<T>callback) {
         boolean useFlow = false;
         CAContract contract;
         if (flow.isInitialized()) {
@@ -296,7 +331,7 @@ public final class DigiMeClient {
         if (useFlow) {
             contract = flow.get();
         } else {
-            if (Util.validateContractId(contractId) && DigiMeClient.debugEnabled) {
+            if (!Util.validateContractId(contractId) && DigiMeClient.debugEnabled) {
                 throw new DigiMeException("Provided contractId has invalid format.");
             }
             contract = new CAContract(contractId, DigiMeClient.getApplicationId());
@@ -304,14 +339,26 @@ public final class DigiMeClient {
         startSessionWithContract(contract, callback);
     }
 
-    public void startSessionWithContract(CAContract contract, @Nullable SDKCallback<CASession> callback) {
+    public <T extends SessionResult> void createPostboxSession(@Nullable SDKCallback<T>callback) throws DigiMeException {
+        if (!postboxFlow.isInitialized()) {
+            throw new DigiMeException("No Postbox contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", POSTBOX_CONTRACTS_PATH);
+        }
+        if (!postboxFlow.next()) { postboxFlow.rewind().next(); }
+        createSession(postboxFlow.currentId, callback);
+    }
+
+    private void createPostboxSession(@NonNull String contractId, @Nullable SDKCallback<SessionResult>callback) {
+        createSession(postboxFlow, contractId, callback);
+    }
+
+    public <T extends SessionResult> void startSessionWithContract(CAContract contract, @Nullable SDKCallback<T> callback) {
         checkClientInitialized();
         DigiMeAPIClient client = getDefaultApi();
         SessionForwardCallback dispatchCallback;
         if (callback instanceof AutoSessionForwardCallback) {
             dispatchCallback = (AutoSessionForwardCallback) callback;
         } else {
-            dispatchCallback = new SessionForwardCallback(callback);
+            dispatchCallback = new SessionForwardCallback<>(callback);
         }
         if (contract == null) {
             dispatchCallback.failed(new SDKValidationException("Contract is null. Session can not be initialized!"));
@@ -424,13 +471,13 @@ public final class DigiMeClient {
      *  Private helpers
      */
 
-    private void authorizeInitializedSessionWithManager(DigiMeAuthorizationManager authManager, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
+    private <T extends SessionResult> void authorizeInitializedSessionWithManager(DigiMeBaseAuthManager authManager, @NonNull Activity activity, @Nullable SDKCallback<T> callback) {
         if (authManager == null) {
             throw new IllegalArgumentException("Authorization Manager can not be null.");
         }
-        SDKCallback<CASession> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
+        SDKCallback<SessionResult> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
         if (!authManager.nativeClientAvailable(activity)) {
-            forwarder = new AutoSessionForwardCallback(activity, callback, true);
+            forwarder = new AutoSessionForwardCallback(authManager, activity, callback, true);
         }
         authManager.resolveAuthorizationPath(activity, forwarder, true);
     }
@@ -463,28 +510,39 @@ public final class DigiMeClient {
             applicationName = ai.metaData.getString(APPLICATION_NAME_PATH);
         }
 
-        if (contractIds == null) {
-            Object contract = ai.metaData.get(CONSENT_ACCESS_CONTRACTS_PATH);
-            if (contract instanceof String) {
-                String cont = (String) contract;
-                contractIds = new String[]{cont};
-            } else if (contract instanceof Integer) {
-                String type = context.getResources().getResourceTypeName((int) contract);
-                if (type.equalsIgnoreCase("array")) {
-                    contractIds = context.getResources().getStringArray((int)contract);
-                } else if (type.equalsIgnoreCase("string")) {
-                    String cnt = context.getResources().getString((int)contract);
-                    contractIds = new String[]{cnt};
-                } else {
-                    throw new DigiMeException(
-                            "Allowed types for contract ID are only string-array or string. Check that you have set the correct meta-data type.");
-                }
-            }
+        if (caContractIds == null) {
+            caContractIds = extractContracts(context, ai, CONSENT_ACCESS_CONTRACTS_PATH);
         }
+
+        if (postboxContractIds == null) {
+            postboxContractIds = extractContracts(context, ai, POSTBOX_CONTRACTS_PATH);
+        }
+
+        if (caContractIds == null && postboxContractIds == null)
+            throw new DigiMeException(
+                "Allowed types for contract ID are only string-array or string. Check that you have set the correct meta-data type.");
 
         if (loaderProvider == null) {
             loaderProvider = new KeyLoaderProvider(ai.metaData, context);
         }
+    }
+
+    @Nullable
+    private static String[] extractContracts(Context context, ApplicationInfo ai, String path) {
+        Object contract = ai.metaData.get(path);
+        if (contract instanceof String) {
+            String cont = (String) contract;
+            return new String[]{cont};
+        } else if (contract instanceof Integer) {
+            String type = context.getResources().getResourceTypeName((int) contract);
+            if (type.equalsIgnoreCase("array")) {
+                return context.getResources().getStringArray((int)contract);
+            } else if (type.equalsIgnoreCase("string")) {
+                String cnt = context.getResources().getString((int)contract);
+                return new String[]{cnt};
+            }
+        }
+        return null;
     }
 
     private boolean validateSession(SDKCallback callback) {
@@ -533,18 +591,18 @@ public final class DigiMeClient {
         private final ArrayList<String> identifiers;
         private final ConcurrentHashMap<String, T> lookup;
 
-        private Flow() {
+        private Flow(String[] ids) {
             this.lookup = new ConcurrentHashMap<>();
-            if (DigiMeClient.contractIds == null || DigiMeClient.contractIds.length == 0) {
+            if (ids == null || ids.length == 0) {
                 this.identifiers = new ArrayList<>();
             } else {
-                this.identifiers = new ArrayList<>(Arrays.asList(DigiMeClient.contractIds));
+                this.identifiers = new ArrayList<>(Arrays.asList(ids));
             }
             tryInit();
         }
 
-        private Flow(FlowLookupInitializer<T> initializer) {
-            this();
+        private Flow(FlowLookupInitializer<T> initializer, String[] ids) {
+            this(ids);
             if (this.isInitialized()) {
                 for (String id :
                         identifiers) {
@@ -618,21 +676,21 @@ public final class DigiMeClient {
      */
 
 
-    class SessionForwardCallback extends SDKCallback<CASession> {
-        final SDKCallback<CASession> callback;
+    class SessionForwardCallback <T extends SessionResult> extends SDKCallback<T> {
+        final SDKCallback<T> callback;
         private boolean overrideSessionCallback = false;
 
-        SessionForwardCallback(SDKCallback<CASession> callback) {
+        SessionForwardCallback(SDKCallback<T> callback) {
             this.callback = callback;
         }
-        SessionForwardCallback(SDKCallback<CASession> callback, boolean overrideSessionCallback) {
+        SessionForwardCallback(SDKCallback<T> callback, boolean overrideSessionCallback) {
             this.callback = callback;
             this.overrideSessionCallback = overrideSessionCallback;
         }
 
         @Override
-        public void succeeded(SDKResponse<CASession> result) {
-            final CASession session = result.body;
+        public void succeeded(SDKResponse<T> result) {
+            final CASession session = result.body.session();
             if (session == null) {
                 callback.failed(new SDKException("Session create returned an empty session!"));
                 return;
@@ -641,7 +699,7 @@ public final class DigiMeClient {
             sm.setCurrentSession(session);
             getInstance().getApi(session);
             if (callback != null && !overrideSessionCallback) {
-                callback.succeeded(new SDKResponse<>(session, result.response));
+                callback.succeeded(new SDKResponse<>(result.body, result.response));
             }
             for (SDKListener listener : listeners) {
                 listener.sessionCreated(session);
@@ -659,23 +717,28 @@ public final class DigiMeClient {
         }
     }
 
-    private class AutoSessionForwardCallback extends SessionForwardCallback {
+    private class AutoSessionForwardCallback<T extends SessionResult> extends SessionForwardCallback<T> {
         private final WeakReference<Activity> callActivity;
+        private final WeakReference<DigiMeBaseAuthManager> authManager;
 
-        AutoSessionForwardCallback(Activity activity, SDKCallback<CASession> callback) {
+        AutoSessionForwardCallback(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<T> callback) {
             super(callback);
-            callActivity = new WeakReference<>(activity);
+            this.callActivity = new WeakReference<>(activity);
+            this.authManager = new WeakReference<>(authManager);
         }
 
-        AutoSessionForwardCallback(Activity activity, SDKCallback<CASession> callback, boolean overrideCallback) {
+        AutoSessionForwardCallback(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<T> callback, boolean overrideCallback) {
             super(callback, overrideCallback);
-            callActivity = new WeakReference<>(activity);
+            this.callActivity = new WeakReference<>(activity);
+            this.authManager = new WeakReference<>(authManager);
         }
         @Override
-        public void succeeded(SDKResponse<CASession> result) {
+        public void succeeded(SDKResponse<T> result) {
             super.succeeded(result);
-            if (callActivity.get() != null) {
-                authorizeInitializedSessionWithManager(getAuthManager(), callActivity.get(), callback);
+            Activity activity = callActivity.get();
+            DigiMeBaseAuthManager am = authManager.get();
+            if (activity != null && am != null) {
+                authorizeInitializedSessionWithManager(am, activity, callback);
             }
         }
         @Override
@@ -684,20 +747,22 @@ public final class DigiMeClient {
         }
     }
 
-    private class AuthorizationForwardCallback extends SDKCallback<CASession> {
-        private final SDKCallback<CASession> callback;
+    private class AuthorizationForwardCallback<T extends SessionResult> extends SDKCallback<T> {
+        private final SDKCallback<T> callback;
 
-        AuthorizationForwardCallback(SDKCallback<CASession> callback) {
+        AuthorizationForwardCallback(SDKCallback<T> callback) {
             this.callback = callback;
         }
 
         @Override
-        public void succeeded(SDKResponse<CASession> result) {
+        public void succeeded(SDKResponse<T> result) {
             if (callback != null) {
                 callback.succeeded(result);
             }
             for (SDKListener listener : listeners) {
-                listener.authorizeSucceeded(result.body);
+                listener.authorizeSucceeded(result.body.session());
+                if (listener instanceof SDKPostboxListener && result.body instanceof CreatePostboxSession)
+                    ((SDKPostboxListener)listener).postboxCreated(((CreatePostboxSession) result.body).postboxId);
             }
         }
 

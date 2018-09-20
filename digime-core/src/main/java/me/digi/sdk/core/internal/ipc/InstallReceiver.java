@@ -13,7 +13,8 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-import me.digi.sdk.core.DigiMeAuthorizationManager;
+import me.digi.sdk.core.DigiMeBaseAuthManager;
+import me.digi.sdk.core.DigiMeConsentAccessAuthManager;
 import me.digi.sdk.core.DigiMeClient;
 
 
@@ -27,6 +28,8 @@ public class InstallReceiver extends BroadcastReceiver {
 
     private static final String CA_BROADCAST_RECEIVER = "me.digi.messaging.CA_RECEIVER";
     private static final String CA_BROADCAST_FIRST_DATA_PING = "me.digi.messages.data_available";
+    // TODO implement ping in digi.me app
+    private static final String CA_BROADCAST_ONBOARDED_PING = "me.digi.messages.onboarded";
 
     private InstallReceiver()
     {
@@ -81,7 +84,7 @@ public class InstallReceiver extends BroadcastReceiver {
     private void handleClientInstall(@NonNull Context context, @NonNull Intent intent) {
         if (intent.getData() == null) return;
         String installedPackage = intent.getData().getSchemeSpecificPart();
-        if (installedPackage == null || !installedPackage.equals(DigiMeAuthorizationManager.DIGI_ME_PACKAGE_ID)) return;
+        if (installedPackage == null || !installedPackage.equals(DigiMeBaseAuthManager.DIGI_ME_PACKAGE_ID)) return;
 
         PackageManager pm = context.getPackageManager();
         Intent launchIntent = pm.getLaunchIntentForPackage(installedPackage);
@@ -100,6 +103,9 @@ public class InstallReceiver extends BroadcastReceiver {
         if (intent.getBooleanExtra(CA_BROADCAST_FIRST_DATA_PING, false)) {
             Log.d(TAG, "Action received: " + intent.getAction());
             DigiMeClient.getInstance().getAuthManager().protocolResolved();
+        } else if (intent.getBooleanExtra(CA_BROADCAST_ONBOARDED_PING, false)) {
+            Log.d(TAG, "Action received: " + intent.getAction());
+            DigiMeClient.getInstance().getPostboxAuthManager().protocolResolved();
         }
     }
 }
