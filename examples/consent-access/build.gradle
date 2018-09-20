@@ -55,6 +55,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    /**
+     * replace with implementation "me.digi.sdk:digime-core:${version}" if you want to use library from local or remote repository instead
+     */
     implementation project(path: ':digime-core')
 
     implementation "com.android.support:appcompat-v7:$versions.supportLibrary"

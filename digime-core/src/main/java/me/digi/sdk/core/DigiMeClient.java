@@ -5,7 +5,6 @@
 package me.digi.sdk.core;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -210,7 +209,7 @@ public final class DigiMeClient {
                     .add(ApiConfig.get().getHost(), "sha256/dJtgu1DIYCnEB2vznevQ8hj9ADPRHzIN4pVG/xqP1DI=")
                     .add(ApiConfig.get().getHost(), "sha256/wpsB0loL9mSlGQZTWRQtWcIL0S5Wsu6rc85ToklfkDE=")
                     .add(ApiConfig.get().getHost(), "sha256/L/ZH1QCgUbk0OG8ePmvLnsTxUnjCzizynPQIw3iWxVo=")
-                    .add(ApiConfig.get().getHost(), "sha256/NwQiJdUz2GDUQloxMzERz/w+Smd6i898hjq6g2FIJbg=") //integration
+                    .add(ApiConfig.get().getHost(), "sha256/YxigD5mXO/e2a+8fJrBBd/nDqFhwWfcZynp6EatNsso=") //integration
                     .add(ApiConfig.get().getHost(), "sha256/HC6oU3LGzhkwHionuDaZacaIbjwYaMT/Qc7bxWLyy8g=") //prod 1
                     .add(ApiConfig.get().getHost(), "sha256/2qix+QNHzGWG5nhEFNIMxPZ57YbgT0liSisVLERNzt8=") //prod 2
                     .add(ApiConfig.get().getHost(), "sha256/W8QTLPG35cP39gFmUjKLLKAlHrYmGxvHf5Zf+INBZzo=") //prod 3
@@ -279,34 +278,7 @@ public final class DigiMeClient {
         return getAuthManager();
     }
 
-    public DigiMeAuthorizationManager authorizeInitializedSession(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
-        checkClientInitialized();
-        authorizeInitializedSessionWithManager(getAuthManager(), activity, callback);
-        return getAuthManager();
-    }
-
-    public DigiMeAuthorizationManager authorizeInitializedSession(@NonNull CASession session, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
-        checkClientInitialized();
-        SDKCallback<CASession> forwarder = new AuthorizationForwardCallback(callback);
-        if (!validateSession(session, forwarder)) return getAuthManager();
-
-        getSessionManager().clearCurrentSession();
-        getSessionManager().setCurrentSession(session);
-        authorizeInitializedSessionWithManager(getAuthManager(), activity, callback);
-        return getAuthManager();
-    }
-
-    public void authorizeInitializedSessionWithManager(DigiMeAuthorizationManager authManager, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
-        if (authManager == null) {
-            throw new IllegalArgumentException("Authorization Manager can not be null.");
-        }
-        SDKCallback<CASession> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
-        if (!authManager.nativeClientAvailable(activity)) {
-            forwarder = new AutoSessionForwardCallback(activity, callback, true);
-        }
-        authManager.resolveAuthorizationPath(activity, forwarder, true);
-    }
-
+    @Deprecated
     public void createSession(@Nullable SDKCallback<CASession>callback) throws DigiMeException {
         if (!flow.isInitialized()) {
             throw new DigiMeException("No contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", CONSENT_ACCESS_CONTRACTS_PATH);
@@ -451,6 +423,17 @@ public final class DigiMeClient {
     /**
      *  Private helpers
      */
+
+    private void authorizeInitializedSessionWithManager(DigiMeAuthorizationManager authManager, @NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
+        if (authManager == null) {
+            throw new IllegalArgumentException("Authorization Manager can not be null.");
+        }
+        SDKCallback<CASession> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
+        if (!authManager.nativeClientAvailable(activity)) {
+            forwarder = new AutoSessionForwardCallback(activity, callback, true);
+        }
+        authManager.resolveAuthorizationPath(activity, forwarder, true);
+    }
 
     private static void updatePropertiesFromMetadata(Context context) {
         if (context == null) {
