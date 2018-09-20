@@ -228,7 +228,7 @@ public final class DigiMeClient {
                     .add(ApiConfig.get().getHost(), "sha256/W8QTLPG35cP39gFmUjKLLKAlHrYmGxvHf5Zf+INBZzo=") //prod 3
                     .add(ApiConfig.get().getHost(), "sha256/3Q5tS8ejLixxAC+UORUXfDdXpg76r113b2/MAQoWI84=") //enc
                     .add(ApiConfig.get().getHost(), "sha256/+/QBUOjekzuaexmKgLE0F6h38yChLNA6WQWukjgeHhU=") //sandbox
-                    .add(ApiConfig.get().getHost(), "sha256/k8LKTl6OfLcT0SIjlwwRJeV1s/vvLB4wKIvk1gi0/j4=") //alpha
+                    .add(ApiConfig.get().getHost(), "sha256/f5dj/05YHJjWrNpmpHobLJSLh0EWp/TSgXHJPlYsJYY=") //alpha
                     .build();
         }
     }
