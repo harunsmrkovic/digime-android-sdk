@@ -5,7 +5,7 @@
 apply from: project.file('../config/shared/shared.gradle')
 
 apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'maven-publish'
+apply plugin: 'digital.wup.android-maven-publish'
 
 def repositoryUrl = "https://repository.sysdigi.net/m2/"
 def repositoryKey = getRepositoryKey()
@@ -24,21 +24,7 @@ def getRepositoryKey() {
 publishing {
     publications {
         aar(MavenPublication) {
-            groupId 'me.digi.sdk'
-            version = project.version
-            artifactId project.getName()
-
-            artifact("$buildDir/outputs/aar/${project.getName()}-${project.ext.globalVersion}.aar")
-
-            pom.withXml {
-                def dependencies = asNode().appendNode('dependencies')
-                configurations.getByName("releaseCompileClasspath").getResolvedConfiguration().getFirstLevelModuleDependencies().each {
-                    def dependency = dependencies.appendNode('dependency')
-                    dependency.appendNode('groupId', it.moduleGroup)
-                    dependency.appendNode('artifactId', it.moduleName)
-                    dependency.appendNode('version', it.moduleVersion)
-                }
-            }
+            from components.android
         }
     }
 }

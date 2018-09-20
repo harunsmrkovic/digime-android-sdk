@@ -19,6 +19,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$versions.androidGradlePlugin"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:$versions.buildInfoExtractor"
+        classpath 'digital.wup:android-maven-publish:3.2.0'
     }
 }
 
