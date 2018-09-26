@@ -19,11 +19,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
-import java.util.concurrent.FutureTask;
 
 import me.digi.sdk.core.config.ApiConfig;
 import me.digi.sdk.core.entities.CAAccounts;
@@ -35,9 +33,7 @@ import me.digi.sdk.core.provider.KeyLoaderProvider;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.CASessionManager;
 import me.digi.sdk.core.session.SessionManager;
-import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.SessionResult;
-import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 
 
@@ -99,7 +95,6 @@ public final class DigiMeClient {
     private final List<SDKListener> listeners = new CopyOnWriteArrayList<>();
 
     private final ConcurrentHashMap<CASession, DigiMeAPIClient> networkClients;
-    private volatile CertificatePinner certificatePinner;
     private volatile DigiMeConsentAccessAuthManager authManager;
     private volatile DigiMePostboxAuthManager postboxAuthManager;
 
@@ -147,18 +142,6 @@ public final class DigiMeClient {
         clientInitialized = true;
         getInstance().onStart();
         defaultSession = new CASession("default", 0, "default", null);
-
-        //Check if core app available
-        FutureTask<Void> backgroundStartup =
-                new FutureTask<>(new Callable<Void>() {
-                    @Override
-                    public Void call() throws Exception {
-                        getInstance().getCertificatePinner();
-
-                        return null;
-                    }
-                });
-        getCoreExecutor().execute(backgroundStartup);
     }
 
     public static Executor getCoreExecutor() {
@@ -214,25 +197,6 @@ public final class DigiMeClient {
         consentAccessSessionManager = new CASessionManager();
     }
 
-    private synchronized void createCertificatePinner() {
-        if (certificatePinner == null) {
-            this.certificatePinner = new CertificatePinner.Builder()
-                    .add(ApiConfig.get().getHost(), "sha256/wKlzaShrDcjVp9ctFYJHFSJaNXLtUYqwhQBiNn+iaHU=") //new unec
-                    .add(ApiConfig.get().getHost(), "sha256/3i4O332aSRETnPQnzdMQr3zv4ajufFW6bywiCxRLWDw=")
-                    .add(ApiConfig.get().getHost(), "sha256/dJtgu1DIYCnEB2vznevQ8hj9ADPRHzIN4pVG/xqP1DI=")
-                    .add(ApiConfig.get().getHost(), "sha256/wpsB0loL9mSlGQZTWRQtWcIL0S5Wsu6rc85ToklfkDE=")
-                    .add(ApiConfig.get().getHost(), "sha256/L/ZH1QCgUbk0OG8ePmvLnsTxUnjCzizynPQIw3iWxVo=")
-                    .add(ApiConfig.get().getHost(), "sha256/YxigD5mXO/e2a+8fJrBBd/nDqFhwWfcZynp6EatNsso=") //integration
-                    .add(ApiConfig.get().getHost(), "sha256/HC6oU3LGzhkwHionuDaZacaIbjwYaMT/Qc7bxWLyy8g=") //prod 1
-                    .add(ApiConfig.get().getHost(), "sha256/2qix+QNHzGWG5nhEFNIMxPZ57YbgT0liSisVLERNzt8=") //prod 2
-                    .add(ApiConfig.get().getHost(), "sha256/W8QTLPG35cP39gFmUjKLLKAlHrYmGxvHf5Zf+INBZzo=") //prod 3
-                    .add(ApiConfig.get().getHost(), "sha256/3Q5tS8ejLixxAC+UORUXfDdXpg76r113b2/MAQoWI84=") //enc
-                    .add(ApiConfig.get().getHost(), "sha256/+/QBUOjekzuaexmKgLE0F6h38yChLNA6WQWukjgeHhU=") //sandbox
-                    .add(ApiConfig.get().getHost(), "sha256/f5dj/05YHJjWrNpmpHobLJSLh0EWp/TSgXHJPlYsJYY=") //alpha
-                    .build();
-        }
-    }
-
     /*
      *  DigiMeClient instance methods
      */
@@ -245,14 +209,6 @@ public final class DigiMeClient {
             }
         }
         return singleton;
-    }
-
-    public CertificatePinner getCertificatePinner() {
-        checkClientInitialized();
-        if (certificatePinner == null) {
-            createCertificatePinner();
-        }
-        return certificatePinner;
     }
 
     public SessionManager<CASession> getSessionManager() {

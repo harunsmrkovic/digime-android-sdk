@@ -8,20 +8,20 @@ import android.support.annotation.VisibleForTesting;
 
 import com.google.gson.GsonBuilder;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import me.digi.sdk.core.config.ApiConfig;
 import me.digi.sdk.core.internal.network.CallConfigAdapterFactory;
-import me.digi.sdk.core.service.ConsentAccessSessionService;
-import me.digi.sdk.core.service.ConsentAccessService;
+import me.digi.sdk.core.internal.network.SslCertificatePinning;
 import me.digi.sdk.core.provider.OkHttpProvider;
-
+import me.digi.sdk.core.service.ConsentAccessService;
+import me.digi.sdk.core.service.ConsentAccessSessionService;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.CASessionDeserializer;
 import me.digi.sdk.crypto.CAKeyStore;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"unchecked", "WeakerAccess"})
 public class DigiMeAPIClient {
@@ -31,14 +31,14 @@ public class DigiMeAPIClient {
 
     public DigiMeAPIClient() {
         this(OkHttpProvider.client(
-                DigiMeClient.getInstance().getCertificatePinner(), ApiConfig.get()),
+                SslCertificatePinning.getInstance(), ApiConfig.get()),
                 ApiConfig.get());
     }
 
     public DigiMeAPIClient(OkHttpClient client) {
         this(OkHttpProvider.client(
                 client,
-                DigiMeClient.getInstance().getCertificatePinner(), ApiConfig.get()),
+                SslCertificatePinning.getInstance(), ApiConfig.get()),
                 ApiConfig.get());
     }
 
