@@ -22,10 +22,13 @@ android {
          * App ID, Contract ID, Private Key file and Private Key file password if any;
          * These are helper resource constructors which get injected into AndroidManifest.xml
          * For further details how these are mapped to meta-data used by the SDK, look at AndroidManifest.xml at the section marked with <DIGI.ME SDK CONFIGURATION PARAMS BEGIN>
+         *
+         * Note configuration for Postbox only does not require P12 key file with password
+         *
          */
 
-        resValue "string", "APP_ID", "fvnJtdti8kV9qIdUMiYIzOzxvb9JdmtN" // dev
-        resValue "string", "POSTBOX_CONTRACT_ID", "MyeIMsJOmOddVixk54GboFqtPWSW0uSm" // dev
+        resValue "string", "APP_ID", "TorHETnMcNrvutirInlMMRg0GrkPATiV" // dev
+        resValue "string", "POSTBOX_CONTRACT_ID", "mifU38LwbBez70Hi2vroOzHTVJelrXV9" // dev
 
         //resValue "string", "APP_ID", "your_real_app_id" // prod
         //resValue "string", "POSTBOX_CONTRACT_ID", "gzqYsbQ1V1XROWjmqiFLcH2AF1jvcKcg" // prod
