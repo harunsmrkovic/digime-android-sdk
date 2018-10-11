@@ -33,6 +33,7 @@ public abstract class DigiMeBaseAuthManager<T extends SessionResult> {
     protected static final String KEY_APP_ID = "KEY_APP_ID";
     protected static final String KEY_APP_NAME = "KEY_APP_NAME";
     protected static final String DEFAULT_UNKNOWN_APP_NAME = "Android SDK App";
+    protected static final String KEY_SDK_VERSION = "SDK_VERSION";
 
     protected WeakReference<Activity> authActivity;
     protected AuthorizationResolver resolver;

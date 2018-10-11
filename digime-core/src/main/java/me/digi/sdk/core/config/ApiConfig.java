@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import java.text.Normalizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import me.digi.sdk.core.BuildConfig;
 import okhttp3.HttpUrl;
@@ -43,17 +45,21 @@ public final class ApiConfig {
     }
 
     public String userAgentString(String appName, String versionCode) {
-        String ua = appName +
-                '/' + versionCode +
-                ' ' +
-                Build.MODEL + '/' + Build.VERSION.RELEASE +
-                " (" +
-                Build.MANUFACTURER + ';' +
-                Build.MODEL + ';' +
-                Build.BRAND + ';' +
-                Build.PRODUCT +
-                ')';
-        return fromUtf(Normalizer.normalize(ua, Normalizer.Form.NFD));
+        StringBuilder sb = new StringBuilder();
+        sb.append(appName);
+
+        Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)");
+        Matcher matcher = pattern.matcher(versionCode);
+        if (matcher.lookingAt()) {
+            sb.append("/")
+                .append(matcher.group());
+        }
+
+        sb.append(" (" + Build.MODEL + "; " +
+            "Android; " +
+            Build.VERSION.RELEASE + ')');
+
+        return fromUtf(Normalizer.normalize(sb.toString(), Normalizer.Form.NFD));
     }
 
     public Uri.Builder buildUrl(String... paths) {

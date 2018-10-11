@@ -26,7 +26,8 @@ public class DigiMePostboxAuthManager extends DigiMeBaseAuthManager<SessionResul
         if (intentSession != null) {
             appIntent.putExtra(KEY_SESSION_TOKEN, intentSession.getSessionKey())
                 .putExtra(KEY_APP_ID, appId)
-                .putExtra(KEY_APP_NAME, appName);
+                .putExtra(KEY_APP_NAME, appName)
+                .putExtra(KEY_SDK_VERSION, DigiMeSDKVersion.VERSION);
         }
         return appIntent;
     }

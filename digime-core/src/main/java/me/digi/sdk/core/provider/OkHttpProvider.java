@@ -31,7 +31,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class OkHttpProvider {
 
-    private static final String SDK_USER_AGENT = "DigiMeSDK";
+    private static final String SDK_USER_AGENT = "digi.me.sdk";
 
     public static OkHttpClient client(CertificatePinner certPinner, ApiConfig config) {
         return attachInterceptors(providerBuilder(certPinner), null, config)
