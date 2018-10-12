@@ -24,6 +24,11 @@ publishing {
     publications {
         aar(MavenPublication) {
             from components.android
+            version = "${VERSION_NAME}"
+            if (project.ext.exports.endpointName) {
+                version = "${VERSION_NAME}-${project.ext.exports.endpointName}"
+            }
+            println "Artifactory publication version is ${version}"
         }
     }
 }
