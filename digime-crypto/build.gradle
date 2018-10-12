@@ -13,8 +13,11 @@ android {
     defaultConfig {
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        versionName VERSION_NAME
         versionCode 1
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'proguard-rules.pro'
     }
 
@@ -51,25 +54,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 }
-
-//TODO move this to a global scope
-task updateVersion {
-    project.version = null
-    def versionClass = file('../digime-core/src/main/java/me/digi/sdk/core/DigiMeSDKVersion.java')
-    versionClass.eachLine{
-        def regex = (it =~ /(?:.*VERSION = \")(.*)(?:\".*)/)
-        if (regex.matches()) {
-            project.version = regex[0][1]
-            project.ext.globalVersion = regex[0][1]
-            return
-        }
-    }
-    if (project.version.is('unspecified')) {
-        throw new GradleScriptException('Version could not be found.', null)
-    }
-}
-
-build.dependsOn(updateVersion)
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
