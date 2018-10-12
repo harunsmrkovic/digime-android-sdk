@@ -23,5 +23,5 @@ out
 *.iml
 local.properties
 .externalNativeBuild
-/config/props/internal.properties
-/config/props/pub.properties
+/config/properties/internal.properties
+/config/properties/pub.properties
