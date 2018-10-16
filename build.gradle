@@ -57,7 +57,7 @@ def updateReadmeVersion() {
     if (ext.VERSION_NAME.contains("SNAPSHOT"))
         return
     println "Updating readme file with ${ext.VERSION_NAME}"
-    def readmeFile = file('../README.md')
+    def readmeFile = file('README.md')
     StringBuilder outContent = new StringBuilder()
     boolean shouldWrite = false
     readmeFile.eachLine {

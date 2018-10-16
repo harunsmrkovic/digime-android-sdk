@@ -26,7 +26,8 @@ publishing {
             from components.android
             version = "${VERSION_NAME}"
             if (project.ext.exports.endpointName) {
-                version = "${VERSION_NAME}-${project.ext.exports.endpointName}"
+                //TODO "SNAPSHOT" must go last
+                //version = "${VERSION_NAME}-${project.ext.exports.endpointName}"
             }
             println "Artifactory publication version is ${version}"
         }
