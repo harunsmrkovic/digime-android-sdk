@@ -13,6 +13,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import me.digi.sdk.core.config.ApiConfig;
+import me.digi.sdk.core.errorhandling.SDKException;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.crypto.CAKeyStore;
 import okhttp3.HttpUrl;

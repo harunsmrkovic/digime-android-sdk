@@ -2,7 +2,7 @@
  * Copyright (c) 2009-2018 digi.me Limited. All rights reserved.
  */
 
-package me.digi.sdk.core;
+package me.digi.sdk.core.errorhandling;
 
 public class SDKValidationException extends SDKException {
     public static final int GENERAL_VALIDATION_ERROR = 101;

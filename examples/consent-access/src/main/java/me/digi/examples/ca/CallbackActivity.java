@@ -21,7 +21,7 @@ import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.DigiMeConsentAccessAuthManager;
 import me.digi.sdk.core.DigiMeClient;
 import me.digi.sdk.core.SDKCallback;
-import me.digi.sdk.core.SDKException;
+import me.digi.sdk.core.errorhandling.SDKException;
 import me.digi.sdk.core.SDKResponse;
 import me.digi.sdk.core.entities.CAFileResponse;
 import me.digi.sdk.core.entities.CAFiles;

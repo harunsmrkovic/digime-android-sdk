@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import me.digi.sdk.core.entities.CAAccounts;
 import me.digi.sdk.core.entities.CAFileResponse;
 import me.digi.sdk.core.entities.CAFiles;
+import me.digi.sdk.core.errorhandling.SDKException;
 import me.digi.sdk.core.internal.AuthorizationException;
 import me.digi.sdk.core.session.CASession;
 

@@ -2,7 +2,7 @@
  * Copyright (c) 2009-2018 digi.me Limited. All rights reserved.
  */
 
-package me.digi.sdk.core;
+package me.digi.sdk.core.errorhandling;
 
 public class SDKException extends RuntimeException {
     private static final long serialVersionUID = -4469366624369165861L;

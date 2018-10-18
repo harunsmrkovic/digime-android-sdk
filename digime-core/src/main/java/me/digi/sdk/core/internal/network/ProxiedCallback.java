@@ -7,19 +7,14 @@ package me.digi.sdk.core.internal.network;
 import android.support.annotation.NonNull;
 
 import java.net.SocketTimeoutException;
-import java.util.Arrays;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import me.digi.sdk.core.DigiMeClient;
-import me.digi.sdk.core.SDKException;
 import me.digi.sdk.core.config.NetworkConfig;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-
-import static me.digi.sdk.core.SDKCallback.TIMEOUT_ERROR;
 
 /**
  * A proxy {@linkplain Callback} that controls enforcement of configuration rules from {@link CallConfigAdapterFactory}

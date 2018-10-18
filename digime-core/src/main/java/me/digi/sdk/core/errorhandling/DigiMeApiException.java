@@ -2,7 +2,7 @@
  * Copyright (c) 2009-2018 digi.me Limited. All rights reserved.
  */
 
-package me.digi.sdk.core;
+package me.digi.sdk.core.errorhandling;
 
 import android.text.TextUtils;
 
@@ -23,11 +23,8 @@ public class DigiMeApiException extends SDKException {
     private final ServerError concreteError;
     private final Response response;
 
-    private static final String APP_NOT_VALID_MESSAGE = "This app is no longer valid for Consent Access";
     private static final String HEADER_ERROR_CODE = "X-Error-Code";
     private static final String HEADER_ERROR_MESSAGE = "X-Error-Message";
-    private static final String HEADER_CODE_APP_NOT_VALID = "InvalidConsentAccessApplication";
-
     private static final Class[] CONCRETE_ERROR_CLASSES = {ErrorResponse.class, LegacyError.class};
 
     public DigiMeApiException(Response response) {
@@ -94,9 +91,10 @@ public class DigiMeApiException extends SDKException {
     private static String messageForCode(HttpUrl requestURL, ServerError error, int code) {
         String reason = "error code";
         if (error != null) {
-            if (error.errorCode().equalsIgnoreCase(HEADER_CODE_APP_NOT_VALID)) {
-                return APP_NOT_VALID_MESSAGE;
-            }
+            APIError apiError = APIError.errorFromCode(error.errorCode());
+            if (apiError != APIError.UNKNOWN)
+                return apiError.userMessage;
+
             if (error.message() != null) {
                 reason = error.message();
             } else if (error.errorCode() != null) {
