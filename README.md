@@ -295,7 +295,7 @@ To use a callback you pass it's reference to the request:
 ```java
 import me.digi.sdk.core.DigiMeClient;
 import me.digi.sdk.core.SDKCallback;
-import me.digi.sdk.core.SDKException;
+import me.digi.sdk.core.errorhandling.SDKException;
 import me.digi.sdk.core.SDKResponse;
 
 DigiMeClient.getInstance().getFileList(new SDKCallback<CAFiles>() {

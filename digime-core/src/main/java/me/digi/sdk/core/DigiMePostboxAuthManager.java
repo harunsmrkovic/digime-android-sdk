@@ -3,6 +3,7 @@ package me.digi.sdk.core;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
+import me.digi.sdk.core.errorhandling.DigiMeException;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.SessionResult;
 

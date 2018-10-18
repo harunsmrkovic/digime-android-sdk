@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 
 import java.net.SocketTimeoutException;
 
+import me.digi.sdk.core.errorhandling.DigiMeApiException;
+import me.digi.sdk.core.errorhandling.SDKException;
 import retrofit2.Call;
 import retrofit2.Response;
 

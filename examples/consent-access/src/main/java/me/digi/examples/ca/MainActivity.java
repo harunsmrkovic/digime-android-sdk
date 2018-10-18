@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import me.digi.sdk.core.entities.CAAccounts;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.DigiMeClient;
-import me.digi.sdk.core.SDKException;
+import me.digi.sdk.core.errorhandling.SDKException;
 import me.digi.sdk.core.SDKListener;
 import me.digi.sdk.core.entities.CAFileResponse;
 import me.digi.sdk.core.entities.CAFiles;

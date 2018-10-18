@@ -7,7 +7,7 @@ package me.digi.sdk.core.internal;
 import java.lang.ref.WeakReference;
 
 import me.digi.sdk.core.session.CASession;
-import me.digi.sdk.core.SDKException;
+import me.digi.sdk.core.errorhandling.SDKException;
 
 public class AuthorizationException extends SDKException {
     private Reason throwReason;
