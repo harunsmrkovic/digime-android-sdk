@@ -24,4 +24,4 @@ out
 local.properties
 .externalNativeBuild
 /config/properties/internal.properties
-/config/properties/pub.properties
+/config/properties/publish.properties
