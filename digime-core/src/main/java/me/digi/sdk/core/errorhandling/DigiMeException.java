@@ -7,23 +7,23 @@ package me.digi.sdk.core.errorhandling;
 @SuppressWarnings("SameParameterValue")
 public class DigiMeException extends RuntimeException {
 
-    DigiMeException() {
+    public DigiMeException() {
         super();
     }
 
-    DigiMeException(String msg) {
+    public DigiMeException(String msg) {
         super(msg);
     }
 
-    DigiMeException(String format, Object... args) {
+    public DigiMeException(String format, Object... args) {
         this(String.format(format, args));
     }
 
-    DigiMeException(String message, Throwable throwable) {
+    public DigiMeException(String message, Throwable throwable) {
         super(message, throwable);
     }
 
-    DigiMeException(Throwable throwable) {
+    public DigiMeException(Throwable throwable) {
         super(throwable);
     }
 
