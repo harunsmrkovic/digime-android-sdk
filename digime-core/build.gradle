@@ -4,7 +4,7 @@
 
 apply plugin: 'com.android.library'
 apply from: project.file('../config/gradle/quality.gradle')
-apply from: project.file('../config/gradle/import.gradle')
+apply from: project.file('../config/gradle/config-environment.gradle')
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -13,19 +13,21 @@ android {
     defaultConfig {
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
+
+        versionName VERSION_NAME
         versionCode 1
-        versionName readVersion()
+
         consumerProguardFiles 'proguard-rules.pro'
     }
     
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_HOST",  "\"${exports.globalEndpoint}\""
+            buildConfigField "String", "BASE_HOST",  "\"${exports.endpointUrl}\""
             buildConfigField "boolean", "LOG_REQUESTS",  "true"
         }
 
         release {
-            buildConfigField "String", "BASE_HOST", "\"${exports.globalEndpoint}\""
+            buildConfigField "String", "BASE_HOST", "\"${exports.endpointUrl}\""
             buildConfigField "boolean", "LOG_REQUESTS",  "false"
         }
     }
@@ -47,59 +49,7 @@ android {
             }
         }
     }
-
-    libraryVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "digime-core-${version}.aar"
-            println 'OutputFile : ' + outputFileName
-        }
-    }
 }
-
-Object readVersion() {
-    def versionClass = file('src/main/java/me/digi/sdk/core/DigiMeSDKVersion.java')
-    def outVersion = null
-    versionClass.eachLine{
-        def regex = (it =~ /(?:.*VERSION = \")(.*)(?:\".*)/)
-        if (regex.matches()) {
-            outVersion = regex[0][1]
-        }
-    }
-    return outVersion
-}
-
-task updateVersion {
-    project.version = null
-    def ver = readVersion()
-    project.version = ver
-    project.ext.globalVersion = ver
-    if (project.version.is('unspecified')) {
-        throw new GradleScriptException('Version could not be found.', null)
-    }
-}
-
-task updateReadmeVersion {
-    if (project.version.contains("SNAPSHOT"))
-        return
-    def readmeFile = file('../README.md')
-    StringBuilder outContent = new StringBuilder()
-    boolean shouldWrite = false
-    readmeFile.eachLine {
-        def regex = (it =~ /(?:.*me.digi.sdk:digime-core:)(.*)(?:\'.*)/)
-        if (regex.matches() && !project.version.equals(regex[0][1])) {
-            shouldWrite = true
-            outContent.append(it.replace(regex[0][1], project.version)).append("\n")
-        } else {
-            outContent.append(it).append("\n")
-        }
-    }
-    if (shouldWrite) {
-        readmeFile.write(outContent.toString().trim(), "UTF-8")
-    }
-}
-
-updateReadmeVersion.dependsOn(updateVersion)
-build.dependsOn(updateVersion)
 
 dependencies {
     implementation project(path: ':digime-crypto')

@@ -19,6 +19,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$versions.androidGradlePlugin"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:$versions.buildInfoExtractor"
+        classpath 'digital.wup:android-maven-publish:3.2.0'
     }
 }
 
@@ -34,6 +35,46 @@ allprojects {
         globalVersion = "unspecified"
     }
 }
+
+def projectVersion() {
+    def versionClass = file('digime-core/src/main/java/me/digi/sdk/core/DigiMeSDKVersion.java')
+    def outVersion = null
+    versionClass.eachLine{
+        def regex = (it =~ /(?:.*VERSION = \")(.*)(?:\".*)/)
+        if (regex.matches()) {
+            outVersion = regex[0][1]
+        }
+    }
+    return outVersion
+}
+
+ext.VERSION_NAME = projectVersion()
+
+println "SDK version is ${ext.VERSION_NAME}"
+
+def updateReadmeVersion() {
+    //UPDATE readme only when dev is working with new production version
+    if (ext.VERSION_NAME.contains("SNAPSHOT"))
+        return
+    println "Updating readme file with ${ext.VERSION_NAME}"
+    def readmeFile = file('README.md')
+    StringBuilder outContent = new StringBuilder()
+    boolean shouldWrite = false
+    readmeFile.eachLine {
+        def regex = (it =~ /(?:.*me.digi.sdk:digime-core:)(.*)(?:\'.*)/)
+        if (regex.matches() && !project.version.equals(regex[0][1])) {
+            shouldWrite = true
+            outContent.append(it.replace(regex[0][1], project.version)).append("\n")
+        } else {
+            outContent.append(it).append("\n")
+        }
+    }
+    if (shouldWrite) {
+        readmeFile.write(outContent.toString().trim(), "UTF-8")
+    }
+}
+
+updateReadmeVersion()
 
 task clean(type: Delete) {
     delete rootProject.buildDir

@@ -2,85 +2,45 @@
  * Copyright (c) 2009-2018 digi.me Limited. All rights reserved.
  */
 
+apply from: project.file('../config/shared/shared.gradle')
+
 apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'maven-publish'
+apply plugin: 'digital.wup.android-maven-publish'
 
-@SuppressWarnings(["GrMethodMayBeStatic", "GroovyUnusedDeclaration"])
-def isSnapshot() {
-    return project.ext.globalVersion.contains("SNAPSHOT")
-}
+def repositoryUrl = "https://repository.sysdigi.net/m2/"
+def repositoryKey = getRepositoryKey()
+def repositoryUsername = project.ext.fetchWithThrow('../config/properties/publish.properties', "REPO_USERNAME", "")
+def repositoryPassword = project.ext.fetchWithThrow('../config/properties/publish.properties', "REPO_PASSWORD", "")
 
-def repositoryKey = getDefaultRepositoryKey()
-def aUsername = getRepoUsername()
-def aPass = getRepoPassword()
-
-def getDefaultRepositoryKey() {
-    if (this.isSnapshot()) {
-        return  !getPubProperty("SNAPSHOT_KEY").isEmpty() ? getPubProperty("SNAPSHOT_KEY") : "libs-snapshot-local"
+def getRepositoryKey() {
+    if ("api.digi.me" == project.ext.exports.endpointUrl) {
+        return "libs-release-local"
     } else {
-        return  !getPubProperty("RELEASE_KEY").isEmpty() ? getPubProperty("RELEASE_KEY") : "libs-release-local"
+        return "libs-snapshot-local"
     }
-}
-
-def getLocalProperty(prop) {
-    if (project.rootProject.file('local.properties').canRead()) {
-        def properties = new Properties();
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-        return properties.getProperty(prop)
-    }
-    return ""
-}
-
-def getPubProperty(prop) {
-    if (project.file('../config/props/pub.properties').canRead()) {
-        def properties = new Properties();
-        properties.load(project.file('../config/props/pub.properties').newDataInputStream())
-        return properties.getProperty(prop)
-    }
-    return ""
-}
-
-def getRepository() {
-    return getLocalProperty("DEPLOY_URL")
-}
-
-def getRepoUsername() {
-    return System.env['DIGIME_SDK_REPO_USERNAME'] != null ? System.env['DIGIME_SDK_REPO_USERNAME'] : getLocalProperty("REPO_USERNAME")
-}
-
-def getRepoPassword() {
-    return System.env['DIGIME_SDK_REPO_PASSWORD'] != null ? System.env['DIGIME_SDK_REPO_PASSWORD'] : getLocalProperty("REPO_PASSWORD")
 }
 
 publishing {
     publications {
         aar(MavenPublication) {
-            groupId 'me.digi.sdk'
-            version = project.version
-            artifactId project.getName()
-
-            artifact("$buildDir/outputs/aar/${project.getName()}-${project.ext.globalVersion}.aar")
-
-            pom.withXml {
-                def dependencies = asNode().appendNode('dependencies')
-                configurations.getByName("releaseCompileClasspath").getResolvedConfiguration().getFirstLevelModuleDependencies().each {
-                    def dependency = dependencies.appendNode('dependency')
-                    dependency.appendNode('groupId', it.moduleGroup)
-                    dependency.appendNode('artifactId', it.moduleName)
-                    dependency.appendNode('version', it.moduleVersion)
-                }
+            from components.android
+            version = "${VERSION_NAME}"
+            if (project.ext.exports.endpointName) {
+                //TODO "SNAPSHOT" must go last
+                //version = "${VERSION_NAME}-${project.ext.exports.endpointName}"
             }
+            println "Artifactory publication version is ${version}"
         }
     }
 }
 
 artifactory {
-    contextUrl = getRepository()
+    contextUrl = repositoryUrl
     publish {
         repository {
             repoKey = repositoryKey
-            username = aUsername
-            password = aPass
+            username = repositoryUsername
+            password = repositoryPassword
         }
         defaults {
             publications('aar')

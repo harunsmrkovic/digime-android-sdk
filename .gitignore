@@ -23,7 +23,5 @@ out
 *.iml
 local.properties
 .externalNativeBuild
-/config/props/internal.properties
-#/examples/consent-access/sdkconfig.properties
-/examples/consent-access/config.internal.properties
-/examples/consent-access/sdkconfig.properties
+/config/properties/internal.properties
+/config/properties/publish.properties
