@@ -5,4 +5,5 @@
 
 <resources>
     <string name="app_name">DigiMe Core</string>
+    <string translatable="false" name="quark_callback_scheme">quark-callback</string>
 </resources>

@@ -16,4 +16,5 @@ public interface AuthorizationResolver {
     <T extends SessionResult> void clientResolved(SDKCallback<T> authCallback);
     void stop();
     void overrideSessionCreation(boolean shouldOverride);
+    boolean resolvesActivityInternally();
 }

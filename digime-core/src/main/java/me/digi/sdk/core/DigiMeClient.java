@@ -85,6 +85,8 @@ public final class DigiMeClient {
      */
     public static int maxRetryCount = 0;
 
+    public static boolean useWebAuthWhenClientUnavailable = true;
+
     private static Context appContext;
     private static final Object SYNC = new Object();
     private static KeyLoaderProvider loaderProvider;
@@ -436,7 +438,11 @@ public final class DigiMeClient {
             throw new IllegalArgumentException("Authorization Manager can not be null.");
         }
         SDKCallback<SessionResult> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
-        if (!authManager.nativeClientAvailable(activity)) {
+
+        boolean handleAuthImmediately = authManager.nativeClientAvailable(activity)
+                                        || DigiMeClient.useWebAuthWhenClientUnavailable;
+
+        if (!handleAuthImmediately) {
             forwarder = new AutoSessionForwardCallback(authManager, activity, callback, true);
         }
         authManager.resolveAuthorizationPath(activity, forwarder, true);

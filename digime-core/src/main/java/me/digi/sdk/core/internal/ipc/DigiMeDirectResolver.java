@@ -39,4 +39,9 @@ public class DigiMeDirectResolver implements AuthorizationResolver {
     public void overrideSessionCreation(boolean shouldOverride) {
         this.shouldOverride = shouldOverride;
     }
+
+    @Override
+    public boolean resolvesActivityInternally() {
+        return false;
+    }
 }
