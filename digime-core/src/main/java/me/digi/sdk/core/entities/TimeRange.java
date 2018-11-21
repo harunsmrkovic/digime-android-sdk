@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2009-2018 digi.me Limited. All rights reserved.
+ */
 package me.digi.sdk.core.entities;
 
 import android.support.annotation.NonNull;
@@ -7,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+/** Timestamps in UTC seconds */
 public class TimeRange implements Serializable {
 
     @SerializedName("from")
