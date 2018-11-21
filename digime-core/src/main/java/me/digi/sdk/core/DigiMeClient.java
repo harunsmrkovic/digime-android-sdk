@@ -308,8 +308,9 @@ public final class DigiMeClient {
             if (!Util.validateContractId(contractId) && DigiMeClient.debugEnabled) {
                 throw new DigiMeException("Provided contractId has invalid format.");
             }
-            contract = new CAContract(contractId, DigiMeClient.getApplicationId(), scope);
+            contract = new CAContract(contractId, DigiMeClient.getApplicationId());
         }
+        contract.setScope(scope);
         startSessionWithContract(contract, callback);
     }
 

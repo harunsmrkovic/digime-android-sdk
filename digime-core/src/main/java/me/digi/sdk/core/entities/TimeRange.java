@@ -43,7 +43,7 @@ public class TimeRange implements Serializable {
         return new TimeRange(null, null, String.valueOf(x)+unit.id);
     }
 
-    enum Unit {
+    public enum Unit {
         DAY("d"),
         MONTH("m"),
         YEAR("y");

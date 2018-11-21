@@ -37,23 +37,22 @@ public class CAContract implements Parcelable {
     };
 
     CAContract(String contractId, String appId) {
-        this(contractId, appId, null);
-    }
-
-    CAContract(String contractId, String appId, @Nullable DataRequest scope) {
         if (contractId == null || appId == null) {
             throw new IllegalArgumentException(
                     "Attempting to define CAContract with null ids.");
         }
         this.contractId = trim(contractId);
         this.appId = trim(appId);
-        this.scope = scope;
     }
 
     private CAContract(Parcel newParcel) {
         contractId = newParcel.readString();
         appId = newParcel.readString();
         scope = (DataRequest)newParcel.readSerializable();
+    }
+
+    public void setScope(@Nullable DataRequest scope) {
+        this.scope = scope;
     }
 
     public String getContractId() {
