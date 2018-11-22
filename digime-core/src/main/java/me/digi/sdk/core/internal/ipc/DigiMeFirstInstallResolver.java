@@ -60,9 +60,4 @@ public class DigiMeFirstInstallResolver implements AuthorizationResolver {
             mainLoopHandler.removeCallbacks(timeoutHandler);
         } catch (Exception ignored) { }
     }
-
-    @Override
-    public boolean resolvesActivityInternally() {
-        return false;
-    }
 }

@@ -20,7 +20,7 @@ import me.digi.sdk.core.internal.AuthorizationException;
 import me.digi.sdk.core.internal.ipc.AuthorizationResolver;
 import me.digi.sdk.core.internal.ipc.DigiMeDirectResolver;
 import me.digi.sdk.core.internal.ipc.DigiMeFirstInstallResolver;
-import me.digi.sdk.core.internal.ipc.DigiMeWebAuthResolver;
+import me.digi.sdk.core.internal.quark.QuarkBrowserActivity;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.SessionManager;
 import me.digi.sdk.core.session.SessionResult;
@@ -88,10 +88,8 @@ public abstract class DigiMeBaseAuthManager<T extends SessionResult> {
     }
 
     public void resolveAuthorizationPath(Activity activity, SDKCallback<T> callback, boolean overrideSessionCreate) {
-        if (nativeClientAvailable(activity)) {
+        if (nativeClientAvailable(activity) || DigiMeClient.useWebAuthWhenClientUnavailable) {
             resolver = new DigiMeDirectResolver();
-        } else if (DigiMeClient.useWebAuthWhenClientUnavailable){
-            resolver = new DigiMeWebAuthResolver();
         } else {
             resolver = new DigiMeFirstInstallResolver();
         }
@@ -173,13 +171,11 @@ public abstract class DigiMeBaseAuthManager<T extends SessionResult> {
         }
         this.callback = callback;
 
-        if (resolver.resolvesActivityInternally()) {
-            return true;
-        }
-
-        Intent sendIntent = createAppIntent(session);
-        if (verifyIntentCanBeHandled(sendIntent, activity.getPackageManager())) {
-            activity.startActivityForResult(sendIntent, getRequestCode());
+        Intent appIntent = createAppIntent(session);
+        if (verifyIntentCanBeHandled(appIntent, activity.getPackageManager())) {
+            activity.startActivityForResult(appIntent, getRequestCode());
+        } else if (DigiMeClient.useWebAuthWhenClientUnavailable) {
+            QuarkBrowserActivity.startForResult(activity, session.sessionKey, getRequestCode());
         } else {
             startInstallDigiMeFlow(activity);
             return false;

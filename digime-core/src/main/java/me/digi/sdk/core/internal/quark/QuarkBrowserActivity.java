@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import me.digi.sdk.core.BuildConfig;
 import me.digi.sdk.core.R;
 import me.digi.sdk.core.errorhandling.SDKException;
+import me.digi.sdk.core.session.CASession;
 
 public class QuarkBrowserActivity extends Activity {
 
@@ -19,6 +20,12 @@ public class QuarkBrowserActivity extends Activity {
     private static final String RESULT_CANCELLED = "CANCELLED";
     private String callbackUrl;
     private ProgressBar spinner;
+
+    public static void startForResult(Activity activity, String sessionKey, int requestCode) {
+        final Intent intent = new Intent(activity, QuarkBrowserActivity.class);
+        intent.putExtra(EXTRA_SESSION_KEY, sessionKey);
+        activity.startActivityForResult(intent, requestCode);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

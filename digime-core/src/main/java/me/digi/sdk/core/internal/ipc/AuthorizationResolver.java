@@ -8,7 +8,6 @@ import android.app.Activity;
 
 import me.digi.sdk.core.DigiMeBaseAuthManager;
 import me.digi.sdk.core.SDKCallback;
-import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.SessionResult;
 
 public interface AuthorizationResolver {
@@ -16,5 +15,4 @@ public interface AuthorizationResolver {
     <T extends SessionResult> void clientResolved(SDKCallback<T> authCallback);
     void stop();
     void overrideSessionCreation(boolean shouldOverride);
-    boolean resolvesActivityInternally();
 }
