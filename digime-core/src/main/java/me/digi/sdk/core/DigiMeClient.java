@@ -85,7 +85,7 @@ public final class DigiMeClient {
      */
     public static int maxRetryCount = 0;
 
-    public static boolean useWebAuthWhenClientUnavailable = true;
+    protected final static boolean useWebAuthWhenClientUnavailable = true;
 
     private static Context appContext;
     private static final Object SYNC = new Object();
