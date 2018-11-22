@@ -2,14 +2,12 @@ package me.digi.sdk.core.internal.ipc;
 
 import android.app.Activity;
 import android.content.Intent;
-
 import me.digi.sdk.core.DigiMeBaseAuthManager;
 import me.digi.sdk.core.DigiMeClient;
 import me.digi.sdk.core.SDKCallback;
 import me.digi.sdk.core.internal.quark.QuarkBrowserActivity;
 import me.digi.sdk.core.session.CASession;
 import me.digi.sdk.core.session.SessionResult;
-
 
 public class DigiMeWebAuthResolver implements AuthorizationResolver {
     private boolean shouldOverride = false;

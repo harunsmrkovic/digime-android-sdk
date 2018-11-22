@@ -32,9 +32,7 @@ public class QuarkBrowserActivity extends Activity {
 
         if (incomingIntent != null) {
             Uri uri = incomingIntent.getData();
-            if (uri != null && uri.getScheme().equals(getString(R.string.quark_callback_scheme))) {
-                handleQuarkCallback(uri);
-                spinner.setVisibility(View.GONE);
+            if (handleQuarkCallback(uri)) {
                 return;
             } else {
                 sessionKey = incomingIntent.getStringExtra(EXTRA_SESSION_KEY);
@@ -52,12 +50,12 @@ public class QuarkBrowserActivity extends Activity {
     @Override
     protected void onNewIntent(Intent intent) {
         handleQuarkCallback(intent.getData());
-        spinner.setVisibility(View.GONE);
     }
 
-    private void handleQuarkCallback(Uri uri) {
-        if (uri != null) {
+    private boolean handleQuarkCallback(Uri uri) {
+        if (uri != null && uri.getScheme() != null) {
             if (uri.getScheme().equals(getString(R.string.quark_callback_scheme))) {
+                spinner.setVisibility(View.GONE);
                 String result = uri.getQueryParameter("result");
                 if (result == null || result.equals(RESULT_CANCELLED))
                     onAuthCancelled();
@@ -65,8 +63,10 @@ public class QuarkBrowserActivity extends Activity {
                     setResult(RESULT_OK);
                     finish();
                 }
+                return true;
             }
         }
+        return false;
     }
 
     private void onBoardWithQuark(String sessionKey) {
