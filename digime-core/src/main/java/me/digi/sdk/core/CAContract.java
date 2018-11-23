@@ -25,6 +25,9 @@ public class CAContract implements Parcelable {
     @Nullable
     public DataRequest scope;
 
+    @SerializedName("accept")
+    public AcceptData accept;
+
     public static final Parcelable.Creator<CAContract> CREATOR
             = new Parcelable.Creator<CAContract>() {
         public CAContract createFromParcel(Parcel newParcel) {
@@ -43,12 +46,16 @@ public class CAContract implements Parcelable {
         }
         this.contractId = trim(contractId);
         this.appId = trim(appId);
+        this.accept = new AcceptData("brotli");
     }
 
     private CAContract(Parcel newParcel) {
         contractId = newParcel.readString();
         appId = newParcel.readString();
         scope = (DataRequest)newParcel.readSerializable();
+        String compression = newParcel.readString();
+        if (compression != null)
+            accept = new AcceptData(compression);
     }
 
     public void setScope(@Nullable DataRequest scope) {
@@ -81,5 +88,15 @@ public class CAContract implements Parcelable {
         out.writeString(contractId);
         out.writeString(appId);
         out.writeSerializable(scope);
+        if (accept != null) out.writeString(accept.compression);
+    }
+
+    class AcceptData {
+        @SerializedName("compression")
+        public String compression;
+
+        AcceptData(String compression) {
+            this.compression = compression;
+        }
     }
 }
