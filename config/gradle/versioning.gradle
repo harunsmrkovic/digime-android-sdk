@@ -29,6 +29,7 @@ ext.versions = [
         okhttp : '3.9.0',
         retrofit : '2.3.0',
         commonsCompress : '1.18',
+        brotli : '0.1.2',
 
         // Test
         junit : '4.12',
