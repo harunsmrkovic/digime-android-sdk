@@ -9,8 +9,7 @@ import android.support.annotation.VisibleForTesting;
 
 import me.digi.sdk.core.BuildConfig;
 import me.digi.sdk.core.DigiMeClient;
-import me.digi.sdk.core.internal.CAContentCryptoInterceptor;
-import me.digi.sdk.core.session.CASession;
+import me.digi.sdk.core.internal.CAExtractContentInterceptor;
 import me.digi.sdk.core.DigiMeSDKVersion;
 import me.digi.sdk.core.config.ApiConfig;
 
@@ -84,7 +83,7 @@ public class OkHttpProvider {
             logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
             builder.addInterceptor(logging);
         }
-        builder.addInterceptor(new CAContentCryptoInterceptor(keyStore != null ? keyStore : DigiMeClient.getDefaultKeyLoader().getStore()));
+        builder.addInterceptor(new CAExtractContentInterceptor(keyStore != null ? keyStore : DigiMeClient.getDefaultKeyLoader().getStore()));
         return setDefaultTimeout(builder).addInterceptor(new Interceptor() {
                           @Override
                           public Response intercept(@NonNull Chain chain) throws IOException {

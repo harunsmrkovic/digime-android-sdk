@@ -28,6 +28,7 @@ ext.versions = [
         gson : '2.8.2',
         okhttp : '3.9.0',
         retrofit : '2.3.0',
+        commonsCompress : '1.18',
 
         // Test
         junit : '4.12',

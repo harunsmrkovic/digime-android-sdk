@@ -37,11 +37,11 @@ public class CACryptoProvider {
         return !providerKeys.isEmpty();
     }
 
-    public String decryptStream(@NonNull InputStream fileInputStream) throws IOException, DGMCryptoFailureException {
+    public byte[] decryptStream(@NonNull InputStream fileInputStream) throws IOException, DGMCryptoFailureException {
         return decryptStream(fileInputStream, true);
     }
 
-    public String decryptStream(@NonNull InputStream fileInputStream, boolean streamBase64Encoded) throws IOException, DGMCryptoFailureException {
+    public byte[] decryptStream(@NonNull InputStream fileInputStream, boolean streamBase64Encoded) throws IOException, DGMCryptoFailureException {
         byte[] encryptedDSK = new byte[ENCRYPTED_DSK_LENGTH];
         byte[] DIV = new byte[DIV_LENGTH];
 
@@ -81,7 +81,7 @@ public class CACryptoProvider {
             }
         }
 
-        return ByteUtils.bytesToString(readAndVerify(dataAndHash));
+        return readAndVerify(dataAndHash);
     }
 
     private byte[] readAndVerify(InputStream dataAndHash) throws DGMCryptoFailureException, IOException {
