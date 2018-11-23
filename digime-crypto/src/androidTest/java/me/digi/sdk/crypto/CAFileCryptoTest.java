@@ -84,7 +84,7 @@ public class CAFileCryptoTest {
     public void encryptedCAFileTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("ca_file_encryption_v2.valid");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(TEST_PRIVATE_KEY));
-        String decrypted = provider.decryptStream(testInput, false);
+        String decrypted = ByteUtils.bytesToString(provider.decryptStream(testInput, false));
         assertNotNull(decrypted);
         Gson gson = new Gson();
         TestJFSFile content = gson.fromJson(decrypted, TestJFSFile.class);
@@ -99,7 +99,7 @@ public class CAFileCryptoTest {
     public void encryptedCAFileInvalidHashTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("ca_file_encryption_v2.invalid_hash");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(TEST_PRIVATE_KEY));
-        String decrypted = provider.decryptStream(testInput, false);
+        String decrypted = ByteUtils.bytesToString(provider.decryptStream(testInput, false));
         assertNull(decrypted);
     }
 
@@ -107,7 +107,7 @@ public class CAFileCryptoTest {
     public void encryptedCAFileInvalidDSKTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("ca_file_encryption_v2.invalid_dsk");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(TEST_PRIVATE_KEY));
-        String decrypted = provider.decryptStream(testInput, false);
+        String decrypted = ByteUtils.bytesToString(provider.decryptStream(testInput, false));
         assertNotNull(decrypted);
     }
 
@@ -115,7 +115,7 @@ public class CAFileCryptoTest {
     public void encryptedCAFileNullContentTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("ca_file_encryption_v2.valid_but_null");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(TEST_PRIVATE_KEY));
-        String decrypted = provider.decryptStream(testInput, false);
+        String decrypted = ByteUtils.bytesToString(provider.decryptStream(testInput, false));
         assertThat(decrypted, isEmptyString());
     }
 
@@ -123,7 +123,7 @@ public class CAFileCryptoTest {
     public void encryptedBase64StreamTest() throws Exception{
         InputStream testInput = testContext.getAssets().open("base64_encoded.valid");
         CACryptoProvider provider = new CACryptoProvider(new CAKeyStore(DEC_KEY));
-        String decrypted = provider.decryptStream(testInput);
+        String decrypted = ByteUtils.bytesToString(provider.decryptStream(testInput));
         assertNotNull(decrypted);
         Gson gson = new Gson();
         Type type = new TypeToken<List<CATestContent>>(){}.getType();
@@ -145,7 +145,7 @@ public class CAFileCryptoTest {
         assertNotNull(ret);
 
         String fileContent = (String) ret.get("fileContent");
-        String decrypted = provider.decryptStream(new ByteArrayInputStream(fileContent.getBytes("UTF-8")));
+        String decrypted = ByteUtils.bytesToString(provider.decryptStream(new ByteArrayInputStream(fileContent.getBytes("UTF-8"))));
         assertNotNull(decrypted);
         Type type = new TypeToken<List<CATestContent>>(){}.getType();
         List<CATestContent> content = gson.fromJson(decrypted, type);
