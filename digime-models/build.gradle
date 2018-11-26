@@ -1,0 +1,20 @@
+/*
+ * Copyright (c) 2009-2018 digi.me Limited. All rights reserved.
+ */
+
+apply plugin: 'java-library'
+apply plugin: "kotlin"
+
+dependencies {
+    implementation "com.squareup.moshi:moshi-kotlin:$versions.moshi"
+    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:$versions.kotlin")
+
+    testImplementation "junit:junit:$versions.junit"
+    testImplementation "org.skyscreamer:jsonassert:$versions.jsonAssert"
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
