@@ -122,7 +122,7 @@ class JFSAccountSpec : ModelTest<JFSAccount>(JFSAccount::class.java, object : Mo
             try {
                 JFSAccount.obscuredAccountId("a".repeat(i))
                 Assert.fail("Expected StringIndexOutOfBoundsException but didn't raise expection")
-            } catch (_: StringIndexOutOfBoundsException) {
+            } catch (e: StringIndexOutOfBoundsException) {
             } catch (e: Exception) {
                 Assert.fail("Expected StringIndexOutOfBoundsException but got $e")
             }

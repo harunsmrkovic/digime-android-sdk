@@ -17,7 +17,7 @@ interface ModelParam<T> {
 }
 
 @Ignore
-open class ModelTest<T>(val clazz: Class<T>, private val modelParam: ModelParam<T>) {
+open class ModelTest<T>(val clazz: Class<T>, val modelParam: ModelParam<T>) {
     private val moshi: Moshi =
             Moshi.Builder()
                     .add(KotlinJsonAdapterFactory())
