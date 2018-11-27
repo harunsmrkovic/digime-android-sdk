@@ -105,10 +105,8 @@ public class CAExtractContentInterceptor implements Interceptor {
     }
 
     private Response buildNewResponse(Response originalResponse, String newBody) {
-        String wantedContentType = originalResponse.header("Content-Type");
-        if (TextUtils.isEmpty(wantedContentType)) {
-            wantedContentType = "application/json";
-        }
+        String wantedContentType = originalResponse.header("Content-Type", "application/json");
+
         return originalResponse.newBuilder()
             .body(ResponseBody.create(MediaType.parse(wantedContentType), newBody))
             .build();
