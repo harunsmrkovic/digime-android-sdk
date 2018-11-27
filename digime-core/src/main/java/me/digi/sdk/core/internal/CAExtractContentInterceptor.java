@@ -102,7 +102,7 @@ public class CAExtractContentInterceptor implements Interceptor {
             if (!stripFileContent)
                 newBody = updateAndReturnJson(CONTENT_KEY, decryptedAndDecompressed, parsedMap);
             else
-                newBody = gson.toJson(decryptedAndDecompressed, JsonElement.class);
+                newBody = decryptedAndDecompressed;
         } catch (Exception ex) {
             throw new DigiMeException("Failed to create new response body with processed content", ex);
         }
