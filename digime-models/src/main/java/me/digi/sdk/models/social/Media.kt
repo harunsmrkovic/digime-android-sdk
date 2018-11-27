@@ -3,6 +3,7 @@ package me.digi.sdk.models.social
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
 import com.squareup.moshi.ToJson
+import me.digi.sdk.models.MediaResource
 
 data class Media(
         @Json(name = "baseid")

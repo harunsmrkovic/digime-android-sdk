@@ -1,7 +1,5 @@
-package me.digi.sdk.models.social
+package me.digi.sdk.models
 
-import me.digi.sdk.models.ModelParam
-import me.digi.sdk.models.ModelTest
 import org.junit.Assert
 import org.junit.Test
 

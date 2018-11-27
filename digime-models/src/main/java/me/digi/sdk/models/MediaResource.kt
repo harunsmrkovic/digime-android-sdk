@@ -1,4 +1,4 @@
-package me.digi.sdk.models.social
+package me.digi.sdk.models
 
 import com.squareup.moshi.Json
 import kotlin.math.sign

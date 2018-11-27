@@ -1,5 +1,7 @@
 package me.digi.sdk.models.social
 
+import me.digi.sdk.models.AspectRatio
+import me.digi.sdk.models.MediaResource
 import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 import org.junit.Assert
