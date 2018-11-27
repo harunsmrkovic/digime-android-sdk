@@ -99,7 +99,7 @@ public class CAExtractContentInterceptor implements Interceptor {
             else
                 newBody = gson.toJson(decryptedAndDecoded, JsonElement.class);
         } catch (Exception ex) {
-            return response;
+            throw new DigiMeException("Failed to create new response body with processed content", ex);
         }
         return buildNewResponse(response, newBody);
     }
