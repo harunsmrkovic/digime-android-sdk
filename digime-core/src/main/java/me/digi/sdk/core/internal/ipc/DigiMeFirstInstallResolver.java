@@ -43,7 +43,7 @@ public class DigiMeFirstInstallResolver implements AuthorizationResolver {
     @Override
     public <T extends SessionResult> void clientResolved(SDKCallback<T> authCallback) {
         clearTimeoutHandler();
-        DigiMeClient.getInstance().createSession(authCallback);
+        DigiMeClient.getInstance().createSession(authCallback, authorizationManager.getScope());
     }
 
     @Override
