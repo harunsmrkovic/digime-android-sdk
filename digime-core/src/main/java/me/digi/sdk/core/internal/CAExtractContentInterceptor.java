@@ -6,7 +6,9 @@ package me.digi.sdk.core.internal;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -44,6 +46,9 @@ public class CAExtractContentInterceptor implements Interceptor {
     private static final String CONTENT_KEY = "fileContent";
     private static final String COMPRESSION_KEY = "compression";
 
+    @VisibleForTesting
+    public CAExtractContentInterceptor(){}
+
     public CAExtractContentInterceptor(CAKeyStore providerKeys) {
         cryptoInitialized = !providerKeys.isEmpty();
         cryptoProvider = new CACryptoProvider(providerKeys);
@@ -76,28 +81,28 @@ public class CAExtractContentInterceptor implements Interceptor {
             }
         }
 
-        String decryptedAndDecoded = null;
+        String decryptedAndDecompressed = null;
         if (hasCompressedContent(parsedMap)) {
             if (decrypted == null)
-                decryptedAndDecoded = decode(parsedMap);
+                decryptedAndDecompressed = decompress(parsedMap);
             else {
                 //noinspection ConstantConditions
-                decryptedAndDecoded = decodeBytes(compressedWith(parsedMap), decrypted);
+                decryptedAndDecompressed = decompress(compressedWith(parsedMap), decrypted);
             }
         } else if (decrypted != null) {
-            decryptedAndDecoded = ByteUtils.bytesToString(decrypted);
+            decryptedAndDecompressed = ByteUtils.bytesToString(decrypted);
         }
 
-        if (TextUtils.isEmpty(decryptedAndDecoded))
+        if (TextUtils.isEmpty(decryptedAndDecompressed))
             return response;
 
         String newBody = null;
         boolean stripFileContent = EncryptedPaths.isAccountsPath(response.request().url());
         try {
             if (!stripFileContent)
-                newBody = updateAndReturnJson(CONTENT_KEY, decryptedAndDecoded, parsedMap);
+                newBody = updateAndReturnJson(CONTENT_KEY, decryptedAndDecompressed, parsedMap);
             else
-                newBody = gson.toJson(decryptedAndDecoded, JsonElement.class);
+                newBody = gson.toJson(decryptedAndDecompressed, JsonElement.class);
         } catch (Exception ex) {
             throw new DigiMeException("Failed to create new response body with processed content", ex);
         }
@@ -154,19 +159,19 @@ public class CAExtractContentInterceptor implements Interceptor {
             return null;
     }
 
-    private String decode(LinkedTreeMap<String, Object> parsedMap) {
-        String decoded;
+    private String decompress(LinkedTreeMap<String, Object> parsedMap) {
+        String decompressed;
         try {
             String fileContent = (String) parsedMap.get(CONTENT_KEY);
             String compressedWith = compressedWith(parsedMap);
             if (TextUtils.isEmpty(compressedWith))
-                decoded = fileContent;
+                decompressed = fileContent;
             else
-                decoded = decodeBytes(compressedWith, fileContent.getBytes("UTF-8"));
+                decompressed = decompress(compressedWith, fileContent);
         } catch (IOException e) {
             throw new DigiMeException("Problem decoding: "+e);
         }
-        return decoded;
+        return decompressed;
     }
 
     private String updateAndReturnJson(String key, String newValue, LinkedTreeMap<String, Object> parsedMap) {
@@ -184,14 +189,20 @@ public class CAExtractContentInterceptor implements Interceptor {
         }
     }
 
-    private String decodeBytes(String compressedWith, byte[] compressedContent) throws IOException {
+    private String decompress(String compressedWith, String compressedContent) throws IOException {
+        return decompress(compressedWith, Base64.decode(compressedContent.getBytes("UTF-8"), Base64.DEFAULT));
+    }
+
+    @VisibleForTesting
+    public String decompress(String compressedWith, byte[] compressedContent) throws IOException {
         if (!compressedWith.equals("brotli"))
             throw new DigiMeException("Unsupported compression algorithm: "+compressedWith);
 
-        return decodeBrotli(compressedContent);
+        return decompressBrotli(compressedContent);
     }
 
-    private String decodeBrotli(byte[] compressedContent) throws IOException {
+    @VisibleForTesting
+    public String decompressBrotli(byte[] compressedContent) throws IOException {
         BrotliCompressorInputStream stream = new BrotliCompressorInputStream(new ByteArrayInputStream(compressedContent));
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
