@@ -5,6 +5,8 @@ import com.squareup.moshi.JsonEncodingException
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import me.digi.sdk.models.government.VehicleTest
+import me.digi.sdk.models.social.Media
+import me.digi.sdk.models.social.Post
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
@@ -18,12 +20,14 @@ interface ModelParam<T> {
 }
 
 @Ignore
-open class ModelTest<T>(val clazz: Class<T>, val modelParam: ModelParam<T>) {
+open class ModelTest<T>(private val clazz: Class<T>, val modelParam: ModelParam<T>) {
     private val moshi: Moshi =
             Moshi.Builder()
                     .add(KotlinJsonAdapterFactory())
                     .add(JFSAccount.Companion.AccountType.Companion)
+                    .add(Media.Companion.MediaType.Companion)
                     .add(VehicleTest.Companion.TestResult.Companion)
+                    .add(Post.Companion.PostType.Companion)
                     .build()
 
     //ToJson

@@ -7,7 +7,6 @@ apply plugin: "kotlin"
 
 dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$versions.moshi"
-    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
 
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$versions.kotlin")
