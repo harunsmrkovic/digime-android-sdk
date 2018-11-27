@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 import me.digi.sdk.core.entities.DataRequest;
 
 public class CAContract implements Parcelable {
@@ -53,9 +55,7 @@ public class CAContract implements Parcelable {
         contractId = newParcel.readString();
         appId = newParcel.readString();
         scope = (DataRequest)newParcel.readSerializable();
-        String compression = newParcel.readString();
-        if (compression != null)
-            accept = new AcceptData(compression);
+        accept = (AcceptData)newParcel.readSerializable();
     }
 
     public void setScope(@Nullable DataRequest scope) {
@@ -88,10 +88,10 @@ public class CAContract implements Parcelable {
         out.writeString(contractId);
         out.writeString(appId);
         out.writeSerializable(scope);
-        if (accept != null) out.writeString(accept.compression);
+        out.writeSerializable(accept);
     }
 
-    class AcceptData {
+    class AcceptData implements Serializable {
         @SerializedName("compression")
         public String compression;
 
