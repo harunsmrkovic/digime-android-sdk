@@ -23,12 +23,10 @@ public class DeCompressionTest {
     private static final String brotliCompressedData2 = "G3YJAMTKpr6+mX3LIOSun0tPBdKKLIkgjymDLulMXA7oGcas0Maalo61bQ7NOo+zqMt4TLBNES20BCjGbK7ps/VMDARRb2tJS/2HuG9ngYQIeMDBYBQpyMc/KDoqX6i6GhAtUe0PVhP91JYOFnzPhbWF+V2yxiiykFGvNxiL8TDinHMG5b1tzjgD/YHlSdGHh4Suysw1hTVg0I0jp9XR0Q8kZvEmPQWDLcnRjzOQEPw13VN39zG759P+ZdJsP2cf4tC5PO4C5db+Q3xfH67PRvvb2tJdNX1NL/Wtm65ELhZR1LvJuY/TUXY1BQPTuavSWzKKLLnCQkZiKIb9UY8bwNRYvWv/MOQfQkPOhsTZxUW8YCfJYnIOhv3hz2FLbSGRE9VehmFV27LjdGBrp/9oQMhyvYlDVbuL33mepNcivGyUJkeuKm0Tphu6zfLDLKdjxetlPi5/NSVXU7QMZUUW8vGZQVfGQv6B7DdBIlkvTk+Xm2TdmS/izc1ifnIZX8yvZ2kCBl0ZV75DPv7B/3iyBSRyolqGYX4cBlXzHma5a8LSZA2BQVfGQuKcc845Hw5ED0zxEhN51va5ZXgFiy408SMAeimz1VM2pHNXvqN9Vo2tEZ1A75PEfeHkP/aelJ3fjQEs7TPDW0rZcv1O0LKhSuu4x6yQ6Yzr+jTb2f0uO737/RgkdXB639nUn3WRUmSaMH+J3XEv6vM0iTSe3E4XcXzvnQt8fX0F5bEISpcH79Vn2NjooEuFH8XRh813WTWFv44ajUVv5Koxwsq0TMaYzCjv/BHDcct6W5Hej+5H0Q3XDI30XZyUqs5/jurb+dGeoDuT54/Ahk8xWXg8t88MJpiOvqbK9Zmsgw6ZdwYywg/HW5+rxkBiLnjUjyJQBIUhxHOoYKCfeg1UMwRMZX8KsxlSFDKqPVbBGXLlc0iIbjbWvWw44JGyfa4iY7JsrEfKmIE2gwgMvTAASQxcYUEZugJ6SLEMsNuUyo1wovGjNhhnff0e7/WH/e5oNI7YxBpHl7Ut";
 
     private CAExtractContentInterceptor extractContentInterceptor;
-    private Gson gson;
 
     @Before
     public void startUp() {
         extractContentInterceptor = new CAExtractContentInterceptor();
-        gson = new Gson();
     }
 
     @Test
