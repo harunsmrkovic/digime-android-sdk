@@ -9,21 +9,17 @@ import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.util.Base64;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.stream.JsonReader;
-
 import org.apache.commons.compress.compressors.brotli.BrotliCompressorInputStream;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-
 import me.digi.sdk.core.config.ApiConfig;
 import me.digi.sdk.core.entities.ErrorResponse;
 import me.digi.sdk.core.errorhandling.DigiMeException;
