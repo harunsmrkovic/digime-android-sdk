@@ -1,14 +1,10 @@
 package me.digi.sdk.core;
 
-
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.io.IOException;
-
 import me.digi.sdk.core.internal.CAExtractContentInterceptor;
-
 import static org.junit.Assert.assertEquals;
 
 // Note you can't use the android.util.Base64 in a regular JUnit test
