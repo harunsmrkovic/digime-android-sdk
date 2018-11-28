@@ -442,6 +442,12 @@ public final class DigiMeClient {
         return networkClients.put(session, apiClient);
     }
 
+    public DigiMeConsentAccessAuthManager authorizeInitializedSession(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
+        checkClientInitialized();
+        this.authorizeInitializedSessionWithManager(this.getAuthManager(), activity, callback);
+        return this.getAuthManager();
+    }
+
     /**
      *  Private helpers
      */
