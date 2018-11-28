@@ -1,8 +1,6 @@
 package me.digi.sdk.core;
 
 
-import com.google.gson.Gson;
-
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,5 +39,4 @@ public class DeCompressionTest {
     private String removeNewLinesAndSpaces(String input) {
         return input.replaceAll(System.getProperty("line.separator"), "").replaceAll(" ", "");
     }
-
 }
