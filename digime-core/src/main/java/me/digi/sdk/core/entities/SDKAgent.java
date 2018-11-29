@@ -7,15 +7,11 @@ import android.os.Build;
 
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import java.io.Serializable;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import me.digi.sdk.core.DigiMeSDKVersion;
-import me.digi.sdk.core.errorhandling.DigiMeException;
+import me.digi.sdk.core.config.ApiConfig;
 
-
-public class SDKAgent implements Serializable {
+// Validation spec: https://digi-me.atlassian.net/wiki/spaces/ENG/pages/394002569/CA+SDK+Compatibility
+public class SDKAgent {
 
     @SerializedName("name")
     public final String platform;
@@ -25,24 +21,19 @@ public class SDKAgent implements Serializable {
 
     // anything else that may be useful
     @SerializedName("meta")
-    public String metaJson;
+    public JsonObject meta;
 
     public SDKAgent() {
         platform = "android";
-        version = parseVersion(DigiMeSDKVersion.VERSION);
+        version = ApiConfig.parseVersion(DigiMeSDKVersion.VERSION);
+        meta = createMeta();
+    }
+
+    private static JsonObject createMeta() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("device", Build.MODEL);
         jsonObject.addProperty("osVersion", Build.VERSION.RELEASE);
-        metaJson = jsonObject.toString();
-    }
-
-    private String parseVersion(String versionCode) {
-        Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)");
-        Matcher matcher = pattern.matcher(versionCode);
-        if (matcher.lookingAt())
-            return matcher.group();
-        else
-            throw new DigiMeException("Failed to parse valid version String from: "+versionCode);
+        return jsonObject;
     }
 
 }
