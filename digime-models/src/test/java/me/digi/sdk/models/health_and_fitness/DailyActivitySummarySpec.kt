@@ -1,6 +1,9 @@
 package me.digi.sdk.models.health_and_fitness
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.health_and_fitness.TDistance
+import me.digi.sdk.models.objects.health_and_fitness.TGoals
+import me.digi.sdk.models.objects.health_and_fitness.THeartRateZone
 
 class DailyActivitySummarySpec : ModelTest<DailyActivitySummary>(DailyActivitySummary::class.java) {
     override val emptyTest: DailyActivitySummary? = DailyActivitySummary(
@@ -52,26 +55,11 @@ class DailyActivitySummarySpec : ModelTest<DailyActivitySummary>(DailyActivitySu
                                     13,
                                     14.5f,
                                     listOf(
-                                            Distance(
-                                                    "dummyActivity",
-                                                    1.5f
-                                            )
+                                            TDistance.obj
                                     ),
-                                    Goals(
-                                            1.5f,
-                                            2.5f,
-                                            3.5f,
-                                            4,
-                                            5
-                                    ),
+                                    TGoals.obj,
                                     listOf(
-                                            HeartRateZone(
-                                                    1.5f,
-                                                    2.5f,
-                                                    3.5f,
-                                                    "dummyName",
-                                                    4.5f
-                                            )
+                                            THeartRateZone.obj
                                     ),
                                     15,
                                     16.5f,
@@ -98,26 +86,11 @@ class DailyActivitySummarySpec : ModelTest<DailyActivitySummary>(DailyActivitySu
                                     "steps":13,
                                     "restingheartrate":14.5,
                                     "distances":[
-                                        {
-                                            "activity":"dummyActivity",
-                                            "distance":1.5
-                                        }
+                                        ${TDistance.json}
                                     ],
-                                    "goals":{
-                                        "activeminutes":1.5,
-                                        "caloriesout":2.5,
-                                        "distance":3.5,
-                                        "floors":4,
-                                        "steps":5
-                                    },
+                                    "goals":${TGoals.json},
                                     "heartratezones":[
-                                        {
-                                            "max":1.5,
-                                            "min":2.5,
-                                            "minutes":3.5,
-                                            "name":"dummyName",
-                                            "caloriesout":4.5
-                                        }
+                                        ${THeartRateZone.json}
                                     ],
                                     "duration":15,
                                     "heartrate":16.5,

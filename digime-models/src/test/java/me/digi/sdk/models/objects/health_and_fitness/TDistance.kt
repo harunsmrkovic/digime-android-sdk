@@ -1,0 +1,17 @@
+package me.digi.sdk.models.objects.health_and_fitness
+
+import me.digi.sdk.models.health_and_fitness.Distance
+import me.digi.sdk.models.objects.ModelTestObject
+
+object TDistance : ModelTestObject<Distance>(
+        Distance(
+                "dummyActivity",
+                1.5f
+        ),
+        """
+        {
+            "activity":"dummyActivity",
+            "distance":1.5
+        }
+        """.trimIndent()
+)

@@ -1,6 +1,7 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TCoding
 
 class CodingSpec : ModelTest<Coding>(Coding::class.java) {
     override val emptyTest: Coding? = Coding(
@@ -13,20 +14,8 @@ class CodingSpec : ModelTest<Coding>(Coding::class.java) {
     override val jsonObjectTests: List<Pair<Coding?, String>> =
             listOf(
                     Pair(
-                            Coding(
-                                    "dummyCode",
-                                    "dummyDisplay",
-                                    "dummySystem",
-                                    "dummyVersion"
-                            ),
-                            """
-                                {
-                                    "code": "dummyCode",
-                                    "display": "dummyDisplay",
-                                    "system": "dummySystem",
-                                    "version": "dummyVersion"
-                                }
-                            """.trimIndent()
+                            TCoding.obj,
+                            TCoding.json
                     )
             )
 }

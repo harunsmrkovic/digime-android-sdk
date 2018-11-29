@@ -1,6 +1,8 @@
 package me.digi.sdk.models.health_and_fitness
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.health_and_fitness.TSleepPhase
+import me.digi.sdk.models.objects.health_and_fitness.TSleepSummary
 
 class DaySummarySleepSpec : ModelTest<DaySummarySleep>(DaySummarySleep::class.java) {
     override val emptyTest: DaySummarySleep? = DaySummarySleep(
@@ -43,21 +45,9 @@ class DaySummarySleepSpec : ModelTest<DaySummarySleep>(DaySummarySleep::class.ja
                                     6,
                                     true,
                                     listOf(
-                                            SleepPhase(
-                                                    1,
-                                                    "dummyLevel",
-                                                    2
-                                            )
+                                            TSleepPhase.obj
                                     ),
-                                    SleepSummary(
-                                            SleepPhaseSummary(1, 2, 3),
-                                            SleepPhaseSummary(4, 5, 6),
-                                            SleepPhaseSummary(7, 8, 9),
-                                            SleepPhaseSummary(10, 11, 12),
-                                            SleepPhaseSummary(13, 14, 15),
-                                            SleepPhaseSummary(16, 17, 18),
-                                            SleepPhaseSummary(19, 20, 21)
-                                    ),
+                                    TSleepSummary.obj,
                                     7,
                                     8,
                                     9,
@@ -81,49 +71,9 @@ class DaySummarySleepSpec : ModelTest<DaySummarySleep>(DaySummarySleep::class.ja
                                     "infocode":6,
                                     "ismainsleep":true,
                                     "levels":[
-                                        {
-                                            "createddate":1,
-                                            "level":"dummyLevel",
-                                            "seconds":2
-                                        }
+                                        ${TSleepPhase.json}
                                     ],
-                                    "summary":{
-                                        "asleep":{
-                                            "count":1,
-                                            "minutes":2,
-                                            "thirtydayavgminutes":3
-                                        },
-                                        "restless":{
-                                            "count":4,
-                                            "minutes":5,
-                                            "thirtydayavgminutes":6
-                                        },
-                                        "awake":{
-                                            "count":7,
-                                            "minutes":8,
-                                            "thirtydayavgminutes":9
-                                        },
-                                        "deep":{
-                                            "count":10,
-                                            "minutes":11,
-                                            "thirtydayavgminutes":12
-                                        },
-                                        "light":{
-                                            "count":13,
-                                            "minutes":14,
-                                            "thirtydayavgminutes":15
-                                        },
-                                        "rem":{
-                                            "count":16,
-                                            "minutes":17,
-                                            "thirtydayavgminutes":18
-                                        },
-                                        "wake":{
-                                            "count":19,
-                                            "minutes":20,
-                                            "thirtydayavgminutes":21
-                                        }
-                                    },
+                                    "summary":${TSleepSummary.json},
                                     "minutesafterwakeup":7,
                                     "minutesasleep":8,
                                     "minutesawake":9,

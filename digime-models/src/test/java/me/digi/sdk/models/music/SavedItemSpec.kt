@@ -1,9 +1,8 @@
 package me.digi.sdk.models.music
 
-import me.digi.sdk.models.AspectRatio
-import me.digi.sdk.models.MediaResource
-
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.music.TAlbum
+import me.digi.sdk.models.objects.music.TTrack
 
 class SavedAlbumSpec : ModelTest<SavedAlbum>(SavedAlbum::class.java) {
     override val emptyTest: SavedAlbum? = SavedAlbum(
@@ -20,104 +19,14 @@ class SavedAlbumSpec : ModelTest<SavedAlbum>(SavedAlbum::class.java) {
                                     "dummyaccountentityid",
                                     "dummyentityid",
                                     1,
-                                    Album(
-                                            "dummyAccountEntityId",
-                                            "dummyEntityId",
-                                            "dummyId",
-                                            "dummyLink",
-                                            "dummyName",
-                                            "dummyType",
-                                            listOf(
-                                                    Artist(
-                                                            "dummyAccountEntityId",
-                                                            "dummyEntityId",
-                                                            "dummyId",
-                                                            "dummyName",
-                                                            setOf(
-                                                                    MediaResource(
-                                                                            AspectRatio(1.5, "dummyActual", "dummyClosest"),
-                                                                            1,
-                                                                            2,
-                                                                            "application/dummyType",
-                                                                            "dummyResize",
-                                                                            3,
-                                                                            "dummyUrl"
-                                                                    )
-                                                            )
-                                                    )
-                                            ),
-                                            setOf(
-                                                    MediaResource(
-                                                            AspectRatio(1.5, "dummyActual", "dummyClosest"),
-                                                            1,
-                                                            2,
-                                                            "application/dummyType",
-                                                            "dummyResize",
-                                                            3,
-                                                            "dummyUrl"
-                                                    )
-                                            ),
-                                            1,
-                                            2,
-                                            listOf("dummyGenre1", "dummyGenre2"),
-                                            emptyList()
-                                    )
+                                    TAlbum.obj
                             ),
                             """
                                 {
                                     "accountentityid":"dummyaccountentityid",
                                     "entityid":"dummyentityid",
                                     "createddate":1,
-                                    "album":{
-                                        "accountentityid":"dummyAccountEntityId",
-                                        "entityid":"dummyEntityId",
-                                        "id":"dummyId",
-                                        "link":"dummyLink",
-                                        "name":"dummyName",
-                                        "type":"dummyType",
-                                        "artists":[
-                                            {
-                                                "accountentityid":"dummyAccountEntityId",
-                                                "entityid":"dummyEntityId",
-                                                "id":"dummyId",
-                                                "name":"dummyName",
-                                                "resources":[
-                                                    {
-                                                        "aspectratio":{
-                                                            "accuracy":1.5,
-                                                            "actual":"dummyActual",
-                                                            "closest":"dummyClosest"
-                                                        },
-                                                        "height":1,
-                                                        "width":2,
-                                                        "mimetype":"application/dummyType",
-                                                        "resize":"dummyResize",
-                                                        "type":3,
-                                                        "url":"dummyUrl"
-                                                    }
-                                                ]
-                                            }
-                                        ],
-                                        "resources":[
-                                            {
-                                                "aspectratio":{
-                                                    "accuracy":1.5,
-                                                    "actual":"dummyActual",
-                                                    "closest":"dummyClosest"
-                                                },
-                                                "height":1,
-                                                "width":2,
-                                                "mimetype":"application/dummyType",
-                                                "resize":"dummyResize",
-                                                "type":3,
-                                                "url":"dummyUrl"
-                                            }
-                                        ],
-                                        "releasedate":1,
-                                        "popularity":2,
-                                        "genres":["dummyGenre1","dummyGenre2"],
-                                        "tracks":[]
-                                    }
+                                    "album":${TAlbum.json}
                                 }
                             """.trimIndent()
                     )
@@ -139,170 +48,14 @@ class SavedTrackSpec : ModelTest<SavedTrack>(SavedTrack::class.java) {
                                     "dummyaccountentityid",
                                     "dummyentityid",
                                     1,
-                                    Track(
-                                            "dummyaccountentityid",
-                                            "dummyentityid",
-                                            "dummyid",
-                                            "dummyname",
-                                            1,
-                                            2,
-                                            3,
-                                            "dummylink",
-                                            listOf(
-                                                    Artist(
-                                                            "dummyAccountEntityId",
-                                                            "dummyEntityId",
-                                                            "dummyId",
-                                                            "dummyName",
-                                                            setOf(
-                                                                    MediaResource(
-                                                                            AspectRatio(1.5, "dummyActual", "dummyClosest"),
-                                                                            1,
-                                                                            2,
-                                                                            "application/dummyType",
-                                                                            "dummyResize",
-                                                                            3,
-                                                                            "dummyUrl"
-                                                                    )
-                                                            )
-                                                    )
-                                            ),
-                                            true,
-                                            Album(
-                                                    "dummyAccountEntityId",
-                                                    "dummyEntityId",
-                                                    "dummyId",
-                                                    "dummyLink",
-                                                    "dummyName",
-                                                    "dummyType",
-                                                    listOf(
-                                                            Artist(
-                                                                    "dummyAccountEntityId",
-                                                                    "dummyEntityId",
-                                                                    "dummyId",
-                                                                    "dummyName",
-                                                                    setOf(
-                                                                            MediaResource(
-                                                                                    AspectRatio(1.5, "dummyActual", "dummyClosest"),
-                                                                                    1,
-                                                                                    2,
-                                                                                    "application/dummyType",
-                                                                                    "dummyResize",
-                                                                                    3,
-                                                                                    "dummyUrl"
-                                                                            )
-                                                                    )
-                                                            )
-                                                    ),
-                                                    setOf(
-                                                            MediaResource(
-                                                                    AspectRatio(1.5, "dummyActual", "dummyClosest"),
-                                                                    1,
-                                                                    2,
-                                                                    "application/dummyType",
-                                                                    "dummyResize",
-                                                                    3,
-                                                                    "dummyUrl"
-                                                            )
-                                                    ),
-                                                    1,
-                                                    2,
-                                                    listOf("dummyGenre1", "dummyGenre2"),
-                                                    emptyList()
-                                            ),
-                                            4
-                                    )
+                                    TTrack.obj
                             ),
                             """
                                 {
                                     "accountentityid":"dummyaccountentityid",
                                     "entityid":"dummyentityid",
                                     "createddate":1,
-                                    "track":{
-                                        "accountentityid":"dummyaccountentityid",
-                                        "entityid":"dummyentityid",
-                                        "id":"dummyid",
-                                        "name":"dummyname",
-                                        "duration":1,
-                                        "discnumber":2,
-                                        "number":3,
-                                        "link":"dummylink",
-                                        "artists":[
-                                            {
-                                                "accountentityid":"dummyAccountEntityId",
-                                                "entityid":"dummyEntityId",
-                                                "id":"dummyId",
-                                                "name":"dummyName",
-                                                "resources":[
-                                                    {
-                                                        "aspectratio":{
-                                                            "accuracy":1.5,
-                                                            "actual":"dummyActual",
-                                                            "closest":"dummyClosest"
-                                                        },
-                                                        "height":1,
-                                                        "width":2,
-                                                        "mimetype":"application/dummyType",
-                                                        "resize":"dummyResize",
-                                                        "type":3,
-                                                        "url":"dummyUrl"
-                                                    }
-                                                ]
-                                            }
-                                        ],
-                                        "explicit":true,
-                                        "album":{
-                                            "accountentityid":"dummyAccountEntityId",
-                                            "entityid":"dummyEntityId",
-                                            "id":"dummyId",
-                                            "link":"dummyLink",
-                                            "name":"dummyName",
-                                            "type":"dummyType",
-                                            "artists":[
-                                                {
-                                                    "accountentityid":"dummyAccountEntityId",
-                                                    "entityid":"dummyEntityId",
-                                                    "id":"dummyId",
-                                                    "name":"dummyName",
-                                                    "resources":[
-                                                        {
-                                                            "aspectratio":{
-                                                                "accuracy":1.5,
-                                                                "actual":"dummyActual",
-                                                                "closest":"dummyClosest"
-                                                            },
-                                                            "height":1,
-                                                            "width":2,
-                                                            "mimetype":"application/dummyType",
-                                                            "resize":"dummyResize",
-                                                            "type":3,
-                                                            "url":"dummyUrl"
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "resources":[
-                                                {
-                                                    "aspectratio":{
-                                                        "accuracy":1.5,
-                                                        "actual":"dummyActual",
-                                                        "closest":"dummyClosest"
-                                                    },
-                                                    "height":1,
-                                                    "width":2,
-                                                    "mimetype":"application/dummyType",
-                                                    "resize":"dummyResize",
-                                                    "type":3,
-                                                    "url":"dummyUrl"
-                                                }
-                                            ],
-                                            "releasedate":1,
-                                            "popularity":2,
-                                            "genres":["dummyGenre1","dummyGenre2"],
-                                            "tracks":[]
-                                        },
-                                        "popularity":4
-                                    }
+                                    "track":${TTrack.json}
                                 }
                             """.trimIndent()
                     )

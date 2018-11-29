@@ -1,6 +1,7 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TCodeableConcept
 
 class CodeableConceptSpec : ModelTest<CodeableConcept>(CodeableConcept::class.java) {
     override val emptyTest: CodeableConcept? = CodeableConcept(
@@ -11,30 +12,8 @@ class CodeableConceptSpec : ModelTest<CodeableConcept>(CodeableConcept::class.ja
     override val jsonObjectTests: List<Pair<CodeableConcept?, String>> =
             listOf(
                     Pair(
-                            CodeableConcept(
-                                    listOf(
-                                            Coding(
-                                                    "dummyCode",
-                                                    "dummyDisplay",
-                                                    "dummySystem",
-                                                    "dummyVersion"
-                                            )
-                                    ),
-                                    "dummyText"
-                            ),
-                            """
-                                {
-                                    "coding":[
-                                        {
-                                            "code": "dummyCode",
-                                            "display": "dummyDisplay",
-                                            "system": "dummySystem",
-                                            "version": "dummyVersion"
-                                        }
-                                    ],
-                                    "text":"dummyText"
-                                }
-                            """.trimIndent()
+                            TCodeableConcept.obj,
+                            TCodeableConcept.json
                     )
             )
 }

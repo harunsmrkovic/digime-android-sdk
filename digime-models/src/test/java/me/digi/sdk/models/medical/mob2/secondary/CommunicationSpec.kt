@@ -1,6 +1,7 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TCommunication
 
 class CommunicationSpec : ModelTest<Communication>(Communication::class.java) {
     override val emptyTest: Communication? = Communication(
@@ -11,36 +12,8 @@ class CommunicationSpec : ModelTest<Communication>(Communication::class.java) {
     override val jsonObjectTests: List<Pair<Communication?, String>> =
             listOf(
                     Pair(
-                            Communication(
-                                    CodeableConcept(
-                                            listOf(
-                                                    Coding(
-                                                            "dummyCode",
-                                                            "dummyDisplay",
-                                                            "dummySystem",
-                                                            "dummyVersion"
-                                                    )
-                                            ),
-                                            "dummyText"
-                                    ),
-                                    true
-                            ),
-                            """
-                                {
-                                    "language":{
-                                        "coding":[
-                                            {
-                                                "code": "dummyCode",
-                                                "display": "dummyDisplay",
-                                                "system": "dummySystem",
-                                                "version": "dummyVersion"
-                                            }
-                                        ],
-                                        "text":"dummyText"
-                                    },
-                                    "preferred":true
-                                }
-                            """.trimIndent()
+                            TCommunication.obj,
+                            TCommunication.json
                     )
             )
 }

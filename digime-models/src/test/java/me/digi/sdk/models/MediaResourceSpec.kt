@@ -1,5 +1,7 @@
 package me.digi.sdk.models
 
+import me.digi.sdk.models.objects.TAspectRatio
+import me.digi.sdk.models.objects.TMediaResource
 import org.junit.Assert
 import org.junit.Test
 
@@ -13,18 +15,8 @@ class AspectRatioSpec : ModelTest<AspectRatio>(AspectRatio::class.java) {
     override val jsonObjectTests: List<Pair<AspectRatio?, String>> =
             listOf(
                     Pair(
-                            AspectRatio(
-                                    1.5,
-                                    "dummyActual",
-                                    "dummyClosest"
-                            ),
-                            """
-                                {
-                                    "accuracy":1.5,
-                                    "actual":"dummyActual",
-                                    "closest":"dummyClosest"
-                                }
-                            """.trimIndent()
+                            TAspectRatio.obj,
+                            TAspectRatio.json
                     ),
                     Pair(
                             AspectRatio(
@@ -57,30 +49,8 @@ class MediaResourceSpec : ModelTest<MediaResource>(MediaResource::class.java) {
     override val jsonObjectTests: List<Pair<MediaResource?, String>> =
             listOf(
                     Pair(
-                            MediaResource(
-                                    AspectRatio(1.5, "dummyActual", "dummyClosest"),
-                                    1,
-                                    2,
-                                    "application/dummyType",
-                                    "dummyResize",
-                                    3,
-                                    "dummyUrl"
-                            ),
-                            """
-                                {
-                                    "aspectratio":{
-                                        "accuracy":1.5,
-                                        "actual":"dummyActual",
-                                        "closest":"dummyClosest"
-                                    },
-                                    "height":1,
-                                    "width":2,
-                                    "mimetype":"application/dummyType",
-                                    "resize":"dummyResize",
-                                    "type":3,
-                                    "url":"dummyUrl"
-                                }
-                            """.trimIndent()
+                            TMediaResource.obj,
+                            TMediaResource.json
                     )
             )
 

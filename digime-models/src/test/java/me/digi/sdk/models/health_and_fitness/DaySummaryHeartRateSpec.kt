@@ -1,6 +1,7 @@
 package me.digi.sdk.models.health_and_fitness
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.health_and_fitness.THeartRateZone
 
 class DaySummaryHeartRateSpec : ModelTest<DaySummaryHeartRate>(DaySummaryHeartRate::class.java) {
     override val emptyTest: DaySummaryHeartRate? = DaySummaryHeartRate(
@@ -14,26 +15,14 @@ class DaySummaryHeartRateSpec : ModelTest<DaySummaryHeartRate>(DaySummaryHeartRa
                             DaySummaryHeartRate(
                                     1.5f,
                                     listOf(
-                                            HeartRateZone(
-                                                    1.5f,
-                                                    2.5f,
-                                                    3.5f,
-                                                    "dummyName",
-                                                    4.5f
-                                            )
+                                            THeartRateZone.obj
                                     )
                             ),
                             """
                                 {
                                     "restingheartrate":1.5,
                                     "heartratezones":[
-                                        {
-                                            "max":1.5,
-                                            "min":2.5,
-                                            "minutes":3.5,
-                                            "name":"dummyName",
-                                            "caloriesout":4.5
-                                        }
+                                        ${THeartRateZone.json}
                                     ]
                                 }
                             """.trimIndent()

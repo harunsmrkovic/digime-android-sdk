@@ -1,6 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TPeriod
+import me.digi.sdk.models.objects.medical.mob2.secondary.TQuantity
 
 class DispenseRequestSpec : ModelTest<DispenseRequest>(DispenseRequest::class.java) {
     override val emptyTest: DispenseRequest? = DispenseRequest(
@@ -14,37 +16,17 @@ class DispenseRequestSpec : ModelTest<DispenseRequest>(DispenseRequest::class.ja
             listOf(
                     Pair(
                             DispenseRequest(
-                                    Period(1, 2),
+                                    TPeriod.obj,
                                     1,
-                                    Quantity(
-                                            1,
-                                            "dummyUnit",
-                                            "dummySystem",
-                                            "dummyCode"
-                                    ),
-                                    Quantity(
-                                            2,
-                                            "dummyUnit",
-                                            "dummySystem",
-                                            "dummyCode"
-                                    )
+                                    TQuantity.obj,
+                                    TQuantity.obj
                             ),
                             """
                                 {
-                                    "validityperiod":{"start":1, "end":2},
+                                    "validityperiod":${TPeriod.json},
                                     "numberofrepeatsallowed":1,
-                                    "quantity":{
-                                        "value":1,
-                                        "unit":"dummyUnit",
-                                        "system":"dummySystem",
-                                        "code":"dummyCode"
-                                    },
-                                    "expectedsupplyduration":{
-                                        "value":2,
-                                        "unit":"dummyUnit",
-                                        "system":"dummySystem",
-                                        "code":"dummyCode"
-                                    }
+                                    "quantity":${TQuantity.json},
+                                    "expectedsupplyduration":${TQuantity.json}
                                 }
                             """.trimIndent()
                     )

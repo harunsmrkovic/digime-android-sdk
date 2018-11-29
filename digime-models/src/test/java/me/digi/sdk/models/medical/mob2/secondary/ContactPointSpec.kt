@@ -1,6 +1,7 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TContactPoint
 
 class ContactPointSpec : ModelTest<ContactPoint>(ContactPoint::class.java) {
     override val emptyTest: ContactPoint? = ContactPoint(
@@ -14,22 +15,8 @@ class ContactPointSpec : ModelTest<ContactPoint>(ContactPoint::class.java) {
     override val jsonObjectTests: List<Pair<ContactPoint?, String>> =
             listOf(
                     Pair(
-                            ContactPoint(
-                                    "dummySystem",
-                                    "dummyValue",
-                                    "dummyUse",
-                                    1,
-                                    Period(1, 2)
-                            ),
-                            """
-                                {
-                                    "system":"dummySystem",
-                                    "value":"dummyValue",
-                                    "use":"dummyUse",
-                                    "rank":1,
-                                    "period":{"start":1, "end":2}
-                                }
-                            """.trimIndent()
+                            TContactPoint.obj,
+                            TContactPoint.json
                     )
             )
 }

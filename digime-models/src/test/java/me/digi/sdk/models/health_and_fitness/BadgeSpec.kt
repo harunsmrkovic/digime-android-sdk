@@ -1,9 +1,7 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.AspectRatio
-import me.digi.sdk.models.MediaResource
-
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.TMediaResource
 
 class BadgeSpec : ModelTest<Badge>(Badge::class.java) {
     override val emptyTest: Badge? = Badge(
@@ -47,15 +45,7 @@ class BadgeSpec : ModelTest<Badge>(Badge::class.java) {
                                     "dummymobileDescription",
                                     "dummyShareText",
                                     setOf(
-                                            MediaResource(
-                                                    AspectRatio(1.5, "dummyActual", "dummyClosest"),
-                                                    1,
-                                                    2,
-                                                    "application/dummyType",
-                                                    "dummyResize",
-                                                    3,
-                                                    "dummyUrl"
-                                            )
+                                            TMediaResource.obj
                                     ),
                                     "dummyGradientEndColor",
                                     "dummyGradientStartColor"
@@ -78,19 +68,7 @@ class BadgeSpec : ModelTest<Badge>(Badge::class.java) {
                                     "mobiledescription":"dummymobileDescription",
                                     "sharetext":"dummyShareText",
                                     "resources":[
-                                        {
-                                            "aspectratio":{
-                                                "accuracy":1.5,
-                                                "actual":"dummyActual",
-                                                "closest":"dummyClosest"
-                                            },
-                                            "height":1,
-                                            "width":2,
-                                            "mimetype":"application/dummyType",
-                                            "resize":"dummyResize",
-                                            "type":3,
-                                            "url":"dummyUrl"
-                                        }
+                                        ${TMediaResource.json}
                                     ],
                                     "gradientendcolor":"dummyGradientEndColor",
                                     "gradientstartcolor":"dummyGradientStartColor"

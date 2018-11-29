@@ -1,6 +1,7 @@
 package me.digi.sdk.models.health_and_fitness
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.health_and_fitness.*
 
 class ActivitySpec : ModelTest<Activity>(Activity::class.java) {
     override val emptyTest: Activity? = Activity(
@@ -54,43 +55,21 @@ class ActivitySpec : ModelTest<Activity>(Activity::class.java) {
                                     2,
                                     3,
                                     listOf(
-                                            Level(
-                                                    "dummyName",
-                                                    1.5f
-                                            )
+                                            TLevel.obj
                                     ),
                                     4.5f,
                                     5.5f,
                                     6.5f,
-                                    Duration(
-                                            1,
-                                            2,
-                                            3
-                                    ),
+                                    TDuration.obj,
                                     7.5f,
                                     8.5f,
                                     9,
                                     listOf(
-                                            HeartRateZone(
-                                                    1.5f,
-                                                    2.5f,
-                                                    3.5f,
-                                                    "dummyName",
-                                                    4.5f
-                                            )
+                                            THeartRateZone.obj
                                     ),
                                     "dummyLogType",
-                                    ManualValues(
-                                            true,
-                                            true,
-                                            true
-                                    ),
-                                    Source(
-                                            "dummyId",
-                                            "dummyName",
-                                            "dummyType",
-                                            "dummyUrl"
-                                    ),
+                                    TManualValues.obj,
+                                    TSource.obj,
                                     10.5f,
                                     11.5f,
                                     12.5f,
@@ -118,43 +97,21 @@ class ActivitySpec : ModelTest<Activity>(Activity::class.java) {
                                     "originalstartdate":2,
                                     "updateddate":3,
                                     "activitylevel":[
-                                        {
-                                            "name":"dummyName",
-                                            "minutes":1.5
-                                        }
+                                        ${TLevel.json}
                                     ],
                                     "averageheartrate":4.5,
                                     "calories":5.5,
                                     "distance":6.5,
-                                    "durations":{
-                                        "active":1,
-                                        "original":2,
-                                        "total":3
-                                    },
+                                    "durations":${TDuration.json},
                                     "elevationgain":7.5,
                                     "speed":8.5,
                                     "steps":9,
                                     "heartratezones":[
-                                        {
-                                            "max":1.5,
-                                            "min":2.5,
-                                            "minutes":3.5,
-                                            "name":"dummyName",
-                                            "caloriesout":4.5
-                                        }
+                                        ${THeartRateZone.json}
                                     ],
                                     "logtype":"dummyLogType",
-                                    "manualvaluesspecified":{
-                                        "calories":true,
-                                        "distance":true,
-                                        "steps":true
-                                    },
-                                    "source":{
-                                        "id":"dummyId",
-                                        "name":"dummyName",
-                                        "type":"dummyType",
-                                        "url":"dummyUrl"
-                                    },
+                                    "manualvaluesspecified":${TManualValues.json},
+                                    "source":${TSource.json},
                                     "bikecadence":10.5,
                                     "duration":11.5,
                                     "maxbikecadence":12.5,

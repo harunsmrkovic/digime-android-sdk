@@ -1,6 +1,7 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TQuantity
 
 class RatioSpec : ModelTest<Ratio>(Ratio::class.java) {
     override val emptyTest: Ratio? = Ratio(
@@ -12,33 +13,13 @@ class RatioSpec : ModelTest<Ratio>(Ratio::class.java) {
             listOf(
                     Pair(
                             Ratio(
-                                    Quantity(
-                                            1,
-                                            "dummyUnit",
-                                            "dummySystem",
-                                            "dummyCode"
-                                    ),
-                                    Quantity(
-                                            2,
-                                            "dummyUnit",
-                                            "dummySystem",
-                                            "dummyCode"
-                                    )
+                                    TQuantity.obj,
+                                    TQuantity.obj
                             ),
                             """
                                 {
-                                    "numerator":{
-                                        "value":1,
-                                        "unit":"dummyUnit",
-                                        "system":"dummySystem",
-                                        "code":"dummyCode"
-                                    },
-                                    "denominator":{
-                                        "value":2,
-                                        "unit":"dummyUnit",
-                                        "system":"dummySystem",
-                                        "code":"dummyCode"
-                                    }
+                                    "numerator":${TQuantity.json},
+                                    "denominator":${TQuantity.json}
                                 }
                             """.trimIndent()
                     )

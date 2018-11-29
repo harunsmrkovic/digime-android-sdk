@@ -1,6 +1,7 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TIdentifier
 
 class IdentifierSpec : ModelTest<Identifier>(Identifier::class.java) {
     override val emptyTest: Identifier? = Identifier(
@@ -15,78 +16,8 @@ class IdentifierSpec : ModelTest<Identifier>(Identifier::class.java) {
     override val jsonObjectTests: List<Pair<Identifier?, String>> =
             listOf(
                     Pair(
-                            Identifier(
-                                    "dummyUse",
-                                    CodeableConcept(
-                                            listOf(
-                                                    Coding(
-                                                            "dummyCode",
-                                                            "dummyDisplay",
-                                                            "dummySystem",
-                                                            "dummyVersion"
-                                                    )
-                                            ),
-                                            "dummyText"
-                                    ),
-                                    "dummySystem",
-                                    "dummyValue",
-                                    Period(1, 2),
-                                    Organization(
-                                            "dummyId",
-                                            emptyList(),
-                                            true,
-                                            listOf(
-                                                    CodeableConcept(
-                                                            listOf(
-                                                                    Coding(
-                                                                            "dummyCode",
-                                                                            "dummyDisplay",
-                                                                            "dummySystem",
-                                                                            "dummyVersion"
-                                                                    )
-                                                            ),
-                                                            "dummyText"
-                                                    )
-                                            )
-                                    )
-                            ),
-                            """
-                                {
-                                    "use":"dummyUse",
-                                    "type":{
-                                        "coding":[
-                                            {
-                                                "code": "dummyCode",
-                                                "display": "dummyDisplay",
-                                                "system": "dummySystem",
-                                                "version": "dummyVersion"
-                                            }
-                                        ],
-                                        "text":"dummyText"
-                                    },
-                                    "system":"dummySystem",
-                                    "value":"dummyValue",
-                                    "period":{"start":1, "end":2},
-                                    "assigner":{
-                                        "id":"dummyId",
-                                        "identifier":[],
-                                        "active":true,
-                                        "type":[
-                                            {
-                                                "coding":[
-                                                    {
-                                                        "code": "dummyCode",
-                                                        "display": "dummyDisplay",
-                                                        "system": "dummySystem",
-                                                        "version": "dummyVersion"
-                                                    }
-                                                ],
-                                                "text":"dummyText"
-                                            }
-                                        ]
-                                    }
-                                }
-                            """.trimIndent()
+                            TIdentifier.obj,
+                            TIdentifier.json
                     )
             )
 }

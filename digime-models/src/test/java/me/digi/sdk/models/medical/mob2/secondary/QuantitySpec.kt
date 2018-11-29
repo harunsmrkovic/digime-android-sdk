@@ -1,6 +1,7 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TQuantity
 
 class QuantitySpec : ModelTest<Quantity>(Quantity::class.java) {
     override val emptyTest: Quantity? = Quantity(
@@ -13,20 +14,8 @@ class QuantitySpec : ModelTest<Quantity>(Quantity::class.java) {
     override val jsonObjectTests: List<Pair<Quantity?, String>> =
             listOf(
                     Pair(
-                            Quantity(
-                                    1,
-                                    "dummyUnit",
-                                    "dummySystem",
-                                    "dummyCode"
-                            ),
-                            """
-                                {
-                                    "value":1,
-                                    "unit":"dummyUnit",
-                                    "system":"dummySystem",
-                                    "code":"dummyCode"
-                                }
-                            """.trimIndent()
+                            TQuantity.obj,
+                            TQuantity.json
                     )
             )
 }

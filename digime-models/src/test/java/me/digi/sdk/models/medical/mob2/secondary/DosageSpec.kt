@@ -1,6 +1,9 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TCodeableConcept
+import me.digi.sdk.models.objects.medical.mob2.secondary.TQuantity
+import me.digi.sdk.models.objects.medical.mob2.secondary.TTiming
 
 class DosageSpec : ModelTest<Dosage>(Dosage::class.java) {
     override val emptyTest: Dosage? = Dosage(
@@ -20,129 +23,23 @@ class DosageSpec : ModelTest<Dosage>(Dosage::class.java) {
                             Dosage(
                                     1,
                                     "dummyText",
-                                    Timing(
-                                            Repeat(
-                                                    1,
-                                                    2,
-                                                    "dummyPeriodUnit",
-                                                    Period(1, 2)
-                                            ),
-                                            CodeableConcept(
-                                                    listOf(
-                                                            Coding(
-                                                                    "dummyCode",
-                                                                    "dummyDisplay",
-                                                                    "dummySystem",
-                                                                    "dummyVersion"
-                                                            )
-                                                    ),
-                                                    "dummyText"
-                                            )
-                                    ),
+                                    TTiming.obj,
                                     true,
-                                    CodeableConcept(
-                                            listOf(
-                                                    Coding(
-                                                            "dummyCode",
-                                                            "dummyDisplay",
-                                                            "dummySystem",
-                                                            "dummyVersion"
-                                                    )
-                                            ),
-                                            "dummyText1"
-                                    ),
-                                    CodeableConcept(
-                                            listOf(
-                                                    Coding(
-                                                            "dummyCode",
-                                                            "dummyDisplay",
-                                                            "dummySystem",
-                                                            "dummyVersion"
-                                                    )
-                                            ),
-                                            "dummyText2"
-                                    ),
-                                    CodeableConcept(
-                                            listOf(
-                                                    Coding(
-                                                            "dummyCode",
-                                                            "dummyDisplay",
-                                                            "dummySystem",
-                                                            "dummyVersion"
-                                                    )
-                                            ),
-                                            "dummyText3"
-                                    ),
-                                    Quantity(
-                                            1,
-                                            "dummyUnit",
-                                            "dummySystem",
-                                            "dummyCode"
-                                    )
+                                    TCodeableConcept.obj,
+                                    TCodeableConcept.obj,
+                                    TCodeableConcept.obj,
+                                    TQuantity.obj
                             ),
                             """
                                 {
                                     "sequence":1,
                                     "text":"dummyText",
-                                    "timing":{
-                                        "repeat":{
-                                            "frequency":1,
-                                            "period":2,
-                                            "periodunit":"dummyPeriodUnit",
-                                            "boundsperiod":{"start":1, "end":2}
-                                        },
-                                        "code":{
-                                            "coding":[
-                                                {
-                                                    "code": "dummyCode",
-                                                    "display": "dummyDisplay",
-                                                    "system": "dummySystem",
-                                                    "version": "dummyVersion"
-                                                }
-                                            ],
-                                            "text":"dummyText"
-                                        }
-                                    },
+                                    "timing":${TTiming.json},
                                     "asneededboolean":true,
-                                    "site":{
-                                        "coding":[
-                                            {
-                                                "code": "dummyCode",
-                                                "display": "dummyDisplay",
-                                                "system": "dummySystem",
-                                                "version": "dummyVersion"
-                                            }
-                                        ],
-                                        "text":"dummyText1"
-                                    },
-                                    "route":{
-                                        "coding":[
-                                            {
-                                                "code": "dummyCode",
-                                                "display": "dummyDisplay",
-                                                "system": "dummySystem",
-                                                "version": "dummyVersion"
-                                            }
-                                        ],
-                                        "text":"dummyText2"
-                                    },
-                                    "method":{
-                                        "coding":[
-                                            {
-                                                "code": "dummyCode",
-                                                "display": "dummyDisplay",
-                                                "system": "dummySystem",
-                                                "version": "dummyVersion"
-                                            }
-                                        ],
-                                        "text":"dummyText3"
-                                    },
-                                    "dosequantity":{
-                                        "value":1,
-                                        "unit":"dummyUnit",
-                                        "system":"dummySystem",
-                                        "code":"dummyCode"
-                                    }
+                                    "site":${TCodeableConcept.json},
+                                    "route":${TCodeableConcept.json},
+                                    "method":${TCodeableConcept.json},
+                                    "dosequantity":${TQuantity.json}
                                 }
                             """.trimIndent()
                     )

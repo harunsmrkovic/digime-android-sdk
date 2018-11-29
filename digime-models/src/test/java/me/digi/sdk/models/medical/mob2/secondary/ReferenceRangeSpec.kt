@@ -1,6 +1,9 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.medical.mob2.secondary.TCodeableConcept
+import me.digi.sdk.models.objects.medical.mob2.secondary.TQuantity
+import me.digi.sdk.models.objects.medical.mob2.secondary.TRange
 
 class ReferenceRangeSpec : ModelTest<ReferenceRange>(ReferenceRange::class.java) {
     override val emptyTest: ReferenceRange? = ReferenceRange(
@@ -16,110 +19,24 @@ class ReferenceRangeSpec : ModelTest<ReferenceRange>(ReferenceRange::class.java)
             listOf(
                     Pair(
                             ReferenceRange(
-                                    Quantity(
-                                            1,
-                                            "dummyUnit",
-                                            "dummySystem",
-                                            "dummyCode"
-                                    ),
-                                    Quantity(
-                                            2,
-                                            "dummyUnit",
-                                            "dummySystem",
-                                            "dummyCode"
-                                    ),
-                                    CodeableConcept(
-                                            listOf(
-                                                    Coding(
-                                                            "dummyCode",
-                                                            "dummyDisplay",
-                                                            "dummySystem",
-                                                            "dummyVersion"
-                                                    )
-                                            ),
-                                            "dummyText1"
-                                    ),
+                                    TQuantity.obj,
+                                    TQuantity.obj,
+                                    TCodeableConcept.obj,
                                     listOf(
-                                            CodeableConcept(
-                                                    listOf(
-                                                            Coding(
-                                                                    "dummyCode",
-                                                                    "dummyDisplay",
-                                                                    "dummySystem",
-                                                                    "dummyVersion"
-                                                            )
-                                                    ),
-                                                    "dummyText2"
-                                            )
+                                            TCodeableConcept.obj
                                     ),
-                                    Range(
-                                            Quantity(
-                                                    1,
-                                                    "dummyUnit",
-                                                    "dummySystem",
-                                                    "dummyCode"
-                                            ),
-                                            Quantity(
-                                                    2,
-                                                    "dummyUnit",
-                                                    "dummySystem",
-                                                    "dummyCode"
-                                            )
-                                    ),
+                                    TRange.obj,
                                     "dummyText"
                             ),
                             """
                                 {
-                                    "low":{
-                                        "value":1,
-                                        "unit":"dummyUnit",
-                                        "system":"dummySystem",
-                                        "code":"dummyCode"
-                                    },
-                                    "high":{
-                                        "value":2,
-                                        "unit":"dummyUnit",
-                                        "system":"dummySystem",
-                                        "code":"dummyCode"
-                                    },
-                                    "type":{
-                                        "coding":[
-                                            {
-                                                "code": "dummyCode",
-                                                "display": "dummyDisplay",
-                                                "system": "dummySystem",
-                                                "version": "dummyVersion"
-                                            }
-                                        ],
-                                        "text":"dummyText1"
-                                    },
+                                    "low":${TQuantity.json},
+                                    "high":${TQuantity.json},
+                                    "type":${TCodeableConcept.json},
                                     "appliesto":[
-                                        {
-                                            "coding":[
-                                                {
-                                                    "code": "dummyCode",
-                                                    "display": "dummyDisplay",
-                                                    "system": "dummySystem",
-                                                    "version": "dummyVersion"
-                                                }
-                                            ],
-                                            "text":"dummyText2"
-                                        }
+                                        ${TCodeableConcept.json}
                                     ],
-                                    "age":{
-                                        "low":{
-                                            "value":1,
-                                            "unit":"dummyUnit",
-                                            "system":"dummySystem",
-                                            "code":"dummyCode"
-                                        },
-                                        "high":{
-                                            "value":2,
-                                            "unit":"dummyUnit",
-                                            "system":"dummySystem",
-                                            "code":"dummyCode"
-                                        }
-                                    },
+                                    "age":${TRange.json},
                                     "text":"dummyText"
                                 }
                             """.trimIndent()

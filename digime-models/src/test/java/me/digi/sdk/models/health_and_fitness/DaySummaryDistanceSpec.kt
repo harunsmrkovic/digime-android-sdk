@@ -1,6 +1,7 @@
 package me.digi.sdk.models.health_and_fitness
 
 import me.digi.sdk.models.ModelTest
+import me.digi.sdk.models.objects.health_and_fitness.TDistance
 
 class DaySummaryDistanceSpec : ModelTest<DaySummaryDistance>(DaySummaryDistance::class.java) {
     override val emptyTest: DaySummaryDistance? = DaySummaryDistance(
@@ -15,10 +16,7 @@ class DaySummaryDistanceSpec : ModelTest<DaySummaryDistance>(DaySummaryDistance:
                             DaySummaryDistance(
                                     1.5f,
                                     listOf(
-                                            Distance(
-                                                    "dummyActivity",
-                                                    1.5f
-                                            )
+                                            TDistance.obj
                                     ),
                                     2.5f
                             ),
@@ -26,10 +24,7 @@ class DaySummaryDistanceSpec : ModelTest<DaySummaryDistance>(DaySummaryDistance:
                                 {
                                     "totalDistance":1.5,
                                     "distances":[
-                                        {
-                                            "activity":"dummyActivity",
-                                            "distance":1.5
-                                        }
+                                        ${TDistance.json}
                                     ],
                                     "goal":2.5
                                 }
