@@ -1,9 +1,8 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class GoalsSpec : ModelTest<Goals>(Goals::class.java, object : ModelParam<Goals> {
+class GoalsSpec : ModelTest<Goals>(Goals::class.java) {
     override val emptyTest: Goals? = Goals(
             null,
             null,
@@ -33,17 +32,9 @@ class GoalsSpec : ModelTest<Goals>(Goals::class.java, object : ModelParam<Goals>
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<Goals?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class DistanceSpec : ModelTest<Distance>(Distance::class.java, object : ModelParam<Distance> {
+class DistanceSpec : ModelTest<Distance>(Distance::class.java) {
     override val emptyTest: Distance? = Distance(
             null,
             null
@@ -64,17 +55,9 @@ class DistanceSpec : ModelTest<Distance>(Distance::class.java, object : ModelPar
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<Distance?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class SleepPhaseSpec : ModelTest<SleepPhase>(SleepPhase::class.java, object : ModelParam<SleepPhase> {
+class SleepPhaseSpec : ModelTest<SleepPhase>(SleepPhase::class.java) {
     override val emptyTest: SleepPhase? = SleepPhase(
             null,
             null,
@@ -98,17 +81,9 @@ class SleepPhaseSpec : ModelTest<SleepPhase>(SleepPhase::class.java, object : Mo
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<SleepPhase?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class SleepSummarySpec : ModelTest<SleepSummary>(SleepSummary::class.java, object : ModelParam<SleepSummary> {
+class SleepSummarySpec : ModelTest<SleepSummary>(SleepSummary::class.java) {
     override val emptyTest: SleepSummary? = SleepSummary(
             null,
             null,
@@ -172,17 +147,9 @@ class SleepSummarySpec : ModelTest<SleepSummary>(SleepSummary::class.java, objec
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<SleepSummary?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class SleepPhaseSummarySpec : ModelTest<SleepPhaseSummary>(SleepPhaseSummary::class.java, object : ModelParam<SleepPhaseSummary> {
+class SleepPhaseSummarySpec : ModelTest<SleepPhaseSummary>(SleepPhaseSummary::class.java) {
     override val emptyTest: SleepPhaseSummary? = SleepPhaseSummary(
             null,
             null,
@@ -206,21 +173,11 @@ class SleepPhaseSummarySpec : ModelTest<SleepPhaseSummary>(SleepPhaseSummary::cl
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<SleepPhaseSummary?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}
 
 data class SleepDataTypeDummy(val type: SleepDataType)
 
-class SleepDataTypeSpec : ModelTest<SleepDataTypeDummy>(SleepDataTypeDummy::class.java, object : ModelParam<SleepDataTypeDummy> {
-    override val jsonTests: List<Pair<SleepDataTypeDummy?, String>> = emptyList()
-
+class SleepDataTypeSpec : ModelTest<SleepDataTypeDummy>(SleepDataTypeDummy::class.java) {
     override val emptyTest: SleepDataTypeDummy? = null
 
     override val jsonObjectTests: List<Pair<SleepDataTypeDummy?, String>> =
@@ -242,5 +199,5 @@ class SleepDataTypeSpec : ModelTest<SleepDataTypeDummy>(SleepDataTypeDummy::clas
                             """{"type":1}""".trimIndent()
                     )
             )
-})
+}
 

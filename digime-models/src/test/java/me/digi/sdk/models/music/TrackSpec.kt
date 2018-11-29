@@ -2,12 +2,12 @@ package me.digi.sdk.models.music
 
 import me.digi.sdk.models.AspectRatio
 import me.digi.sdk.models.MediaResource
-import me.digi.sdk.models.ModelParam
+
 import me.digi.sdk.models.ModelTest
 import org.junit.Assert
 import org.junit.Test
 
-class TrackSpec : ModelTest<Track>(Track::class.java, object : ModelParam<Track> {
+class TrackSpec : ModelTest<Track>(Track::class.java) {
     override val emptyTest: Track? = Track(
             null,
             null,
@@ -189,17 +189,9 @@ class TrackSpec : ModelTest<Track>(Track::class.java, object : ModelParam<Track>
                     )
             )
 
-    override val jsonTests: List<Pair<Track?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-}) {
     @Test
     fun `when album is null, isSimplifiedTrack should be true`() {
-        Assert.assertTrue(modelParam.emptyTest!!.copy(album = null).isSimplifiedTrack)
+        Assert.assertTrue(emptyTest!!.copy(album = null).isSimplifiedTrack)
     }
 
     @Test
@@ -218,6 +210,6 @@ class TrackSpec : ModelTest<Track>(Track::class.java, object : ModelParam<Track>
                 null,
                 null
         )
-        Assert.assertFalse(modelParam.emptyTest!!.copy(album = album).isSimplifiedTrack)
+        Assert.assertFalse(emptyTest!!.copy(album = album).isSimplifiedTrack)
     }
 }

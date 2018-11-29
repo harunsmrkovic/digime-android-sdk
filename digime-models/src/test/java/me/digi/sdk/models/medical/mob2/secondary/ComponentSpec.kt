@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class ComponentSpec : ModelTest<Component>(Component::class.java, object : ModelParam<Component> {
+class ComponentSpec : ModelTest<Component>(Component::class.java) {
     override val emptyTest: Component? = Component(
             null,
             null
@@ -54,12 +53,4 @@ class ComponentSpec : ModelTest<Component>(Component::class.java, object : Model
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Component?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

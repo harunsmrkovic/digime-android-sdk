@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class QualificationSpec : ModelTest<Qualification>(Qualification::class.java, object : ModelParam<Qualification> {
+class QualificationSpec : ModelTest<Qualification>(Qualification::class.java) {
     override val emptyTest: Qualification? = Qualification(
             null,
             null,
@@ -228,12 +227,4 @@ class QualificationSpec : ModelTest<Qualification>(Qualification::class.java, ob
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Qualification?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

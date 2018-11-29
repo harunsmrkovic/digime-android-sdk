@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class QuantitySpec : ModelTest<Quantity>(Quantity::class.java, object : ModelParam<Quantity> {
+class QuantitySpec : ModelTest<Quantity>(Quantity::class.java) {
     override val emptyTest: Quantity? = Quantity(
             null,
             null,
@@ -30,12 +29,4 @@ class QuantitySpec : ModelTest<Quantity>(Quantity::class.java, object : ModelPar
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Quantity?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

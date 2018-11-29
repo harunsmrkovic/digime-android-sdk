@@ -2,10 +2,9 @@ package me.digi.sdk.models
 
 import org.junit.Assert
 import org.junit.Test
-//TODO add more cases.
-class JFSAccountSpec : ModelTest<JFSAccount>(JFSAccount::class.java, object : ModelParam<JFSAccount> {
-    override val jsonTests: List<Pair<JFSAccount?, String>> = emptyList()
 
+//TODO add more cases.
+class JFSAccountSpec : ModelTest<JFSAccount>(JFSAccount::class.java) {
     override val emptyTest: JFSAccount? = JFSAccount(
             null,
             0,
@@ -91,7 +90,7 @@ class JFSAccountSpec : ModelTest<JFSAccount>(JFSAccount::class.java, object : Mo
                             """.trimIndent()
                     )
             )
-}) {
+
     @Test
     fun `when obscuredAccountId receives a string with greater than 10 characters should return the correct value`() {
         val accountId = "a".repeat(11)
@@ -140,7 +139,7 @@ class JFSAccountSpec : ModelTest<JFSAccount>(JFSAccount::class.java, object : Mo
 
 data class AccountTypeDummy(val type: JFSAccount.Companion.AccountType)
 
-class AccountTypeSpec : ModelTest<AccountTypeDummy>(AccountTypeDummy::class.java, object : ModelParam<AccountTypeDummy> {
+class AccountTypeSpec : ModelTest<AccountTypeDummy>(AccountTypeDummy::class.java) {
     override val emptyTest: AccountTypeDummy? = null
 
     override val jsonObjectTests: List<Pair<AccountTypeDummy?, String>> =
@@ -186,4 +185,4 @@ class AccountTypeSpec : ModelTest<AccountTypeDummy>(AccountTypeDummy::class.java
                             """{"type":99}""".trimIndent()
                     )
             )
-})
+}

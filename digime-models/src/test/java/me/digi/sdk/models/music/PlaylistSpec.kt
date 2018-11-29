@@ -2,10 +2,10 @@ package me.digi.sdk.models.music
 
 import me.digi.sdk.models.AspectRatio
 import me.digi.sdk.models.MediaResource
-import me.digi.sdk.models.ModelParam
+
 import me.digi.sdk.models.ModelTest
 
-class PlaylistSpec : ModelTest<Playlist>(Playlist::class.java, object : ModelParam<Playlist> {
+class PlaylistSpec : ModelTest<Playlist>(Playlist::class.java) {
     override val emptyTest: Playlist? = Playlist(
             null,
             null,
@@ -330,12 +330,4 @@ class PlaylistSpec : ModelTest<Playlist>(Playlist::class.java, object : ModelPar
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Playlist?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

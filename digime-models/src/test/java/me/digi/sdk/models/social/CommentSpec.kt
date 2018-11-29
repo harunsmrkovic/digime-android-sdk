@@ -1,9 +1,8 @@
 package me.digi.sdk.models.social
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class CommentSpec : ModelTest<Comment>(Comment::class.java, object : ModelParam<Comment> {
+class CommentSpec : ModelTest<Comment>(Comment::class.java) {
     override val emptyTest: Comment? = Comment(
             null,
             null,
@@ -78,12 +77,4 @@ class CommentSpec : ModelTest<Comment>(Comment::class.java, object : ModelParam<
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Comment?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

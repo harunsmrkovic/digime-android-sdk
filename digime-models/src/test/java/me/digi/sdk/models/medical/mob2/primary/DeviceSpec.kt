@@ -1,10 +1,9 @@
 package me.digi.sdk.models.medical.mob2.primary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.medical.mob2.secondary.*
 
-class DeviceSpec : ModelTest<Device>(Device::class.java, object : ModelParam<Device> {
+class DeviceSpec : ModelTest<Device>(Device::class.java) {
     override val emptyTest: Device? = Device(
             null,
             null,
@@ -150,12 +149,4 @@ class DeviceSpec : ModelTest<Device>(Device::class.java, object : ModelParam<Dev
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Device?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class CodeableConceptSpec : ModelTest<CodeableConcept>(CodeableConcept::class.java, object : ModelParam<CodeableConcept> {
+class CodeableConceptSpec : ModelTest<CodeableConcept>(CodeableConcept::class.java) {
     override val emptyTest: CodeableConcept? = CodeableConcept(
             null,
             null
@@ -38,12 +37,4 @@ class CodeableConceptSpec : ModelTest<CodeableConcept>(CodeableConcept::class.ja
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<CodeableConcept?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

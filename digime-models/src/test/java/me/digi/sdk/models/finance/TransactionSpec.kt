@@ -1,11 +1,10 @@
 package me.digi.sdk.models.finance
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 import org.junit.Assert
 import org.junit.Test
 
-class TransactionSpec : ModelTest<Transaction>(Transaction::class.java, object : ModelParam<Transaction> {
+class TransactionSpec : ModelTest<Transaction>(Transaction::class.java) {
     override val emptyTest: Transaction? = Transaction(
             null,
             null,
@@ -114,28 +113,20 @@ class TransactionSpec : ModelTest<Transaction>(Transaction::class.java, object :
                     )
             )
 
-    override val jsonTests: List<Pair<Transaction?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-}) {
     @Test
     fun `when baseType is null, isCredit should be false`() {
-        Assert.assertFalse(modelParam.emptyTest!!.copy(baseType = null).isCredit)
+        Assert.assertFalse(emptyTest!!.copy(baseType = null).isCredit)
     }
 
     @Test
     fun `when baseType is not 'credit', isCredit should be false`() {
-        Assert.assertFalse(modelParam.emptyTest!!.copy(baseType = "dummyType").isCredit)
+        Assert.assertFalse(emptyTest!!.copy(baseType = "dummyType").isCredit)
     }
 
     @Test
     fun `when baseType is 'credit', isCredit should be true`() {
-        Assert.assertTrue(modelParam.emptyTest!!.copy(baseType = "credit").isCredit)
-        Assert.assertTrue(modelParam.emptyTest!!.copy(baseType = "Credit").isCredit)
-        Assert.assertTrue(modelParam.emptyTest!!.copy(baseType = "CREDIT").isCredit)
+        Assert.assertTrue(emptyTest!!.copy(baseType = "credit").isCredit)
+        Assert.assertTrue(emptyTest!!.copy(baseType = "Credit").isCredit)
+        Assert.assertTrue(emptyTest!!.copy(baseType = "CREDIT").isCredit)
     }
 }

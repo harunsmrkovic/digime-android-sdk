@@ -12,19 +12,15 @@ import me.digi.sdk.models.health_and_fitness.WeightUnit
 import me.digi.sdk.models.social.Media
 import me.digi.sdk.models.social.Post
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.io.EOFException
 
-interface ModelParam<T> {
-    val emptyTest: T?
-    val jsonObjectTests: List<Pair<T?, String>>
-    val jsonTests: List<Pair<T?, String>>
-}
+abstract class ModelTest<T>(private val clazz: Class<T>) {
+    abstract val emptyTest: T?
+    abstract val jsonObjectTests: List<Pair<T?, String>>
+    open val jsonTests: List<Pair<T?, String>> = emptyList()
 
-@Ignore
-open class ModelTest<T>(private val clazz: Class<T>, val modelParam: ModelParam<T>) {
     private val moshi: Moshi =
             Moshi.Builder()
                     .add(KotlinJsonAdapterFactory())
@@ -61,27 +57,27 @@ open class ModelTest<T>(private val clazz: Class<T>, val modelParam: ModelParam<
 
     @Test(expected = EOFException::class)
     fun `when json is empty string should throw EOFException`() =
-            testExceptionToJson(modelParam.emptyTest, "")
+            testExceptionToJson(emptyTest, "")
 
     @Test
     fun `when json is empty should return object with default values`() =
-            testOrExceptionToJson(modelParam.emptyTest, "{}")
+            testOrExceptionToJson(emptyTest, "{}")
 
     @Test(expected = JsonEncodingException::class)
     fun `when json is malformed should throw JsonEncodingException`() =
-            testExceptionToJson(modelParam.emptyTest, "{'dummy: 'Value}")
+            testExceptionToJson(emptyTest, "{'dummyKey: 'Value}")
 
     @Test
     fun `when json is wrong should throw JsonDataException or return object with default values`() =
-            testOrExceptionToJson(modelParam.emptyTest, """{"dummyKey":1}""")
+            testOrExceptionToJson(emptyTest, """{"dummyKey":1}""")
 
     @Test
     fun `when json is properly should return object with json values`() =
-            (modelParam.jsonObjectTests + modelParam.jsonTests)
+            (jsonObjectTests + jsonTests)
                     .forEach { testOrExceptionToJson(it.first, it.second) }
 
     @Test
     fun `when object is parsed should return json with object values`() =
-            modelParam.jsonObjectTests
+            jsonObjectTests
                     .forEach { testCase -> testCase.first?.let { testToObject(testCase.second, it) } }
 }

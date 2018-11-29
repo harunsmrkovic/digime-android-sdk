@@ -2,10 +2,10 @@ package me.digi.sdk.models.music
 
 import me.digi.sdk.models.AspectRatio
 import me.digi.sdk.models.MediaResource
-import me.digi.sdk.models.ModelParam
+
 import me.digi.sdk.models.ModelTest
 
-class SavedAlbumSpec : ModelTest<SavedAlbum>(SavedAlbum::class.java, object : ModelParam<SavedAlbum> {
+class SavedAlbumSpec : ModelTest<SavedAlbum>(SavedAlbum::class.java) {
     override val emptyTest: SavedAlbum? = SavedAlbum(
             null,
             null,
@@ -122,17 +122,9 @@ class SavedAlbumSpec : ModelTest<SavedAlbum>(SavedAlbum::class.java, object : Mo
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<SavedAlbum?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class SavedTrackSpec : ModelTest<SavedTrack>(SavedTrack::class.java, object : ModelParam<SavedTrack> {
+class SavedTrackSpec : ModelTest<SavedTrack>(SavedTrack::class.java) {
     override val emptyTest: SavedTrack? = SavedTrack(
             null,
             null,
@@ -315,12 +307,4 @@ class SavedTrackSpec : ModelTest<SavedTrack>(SavedTrack::class.java, object : Mo
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<SavedTrack?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

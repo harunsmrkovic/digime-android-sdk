@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class RatioSpec : ModelTest<Ratio>(Ratio::class.java, object : ModelParam<Ratio> {
+class RatioSpec : ModelTest<Ratio>(Ratio::class.java) {
     override val emptyTest: Ratio? = Ratio(
             null,
             null
@@ -44,12 +43,4 @@ class RatioSpec : ModelTest<Ratio>(Ratio::class.java, object : ModelParam<Ratio>
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Ratio?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

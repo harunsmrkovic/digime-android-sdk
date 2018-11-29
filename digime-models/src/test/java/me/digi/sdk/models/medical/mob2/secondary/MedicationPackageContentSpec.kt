@@ -1,10 +1,9 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.medical.mob2.primary.Medication
 
-class MedicationPackageContentSpec : ModelTest<MedicationPackageContent>(MedicationPackageContent::class.java, object : ModelParam<MedicationPackageContent> {
+class MedicationPackageContentSpec : ModelTest<MedicationPackageContent>(MedicationPackageContent::class.java) {
     override val emptyTest: MedicationPackageContent? = MedicationPackageContent(
             null,
             null,
@@ -196,12 +195,4 @@ class MedicationPackageContentSpec : ModelTest<MedicationPackageContent>(Medicat
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<MedicationPackageContent?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

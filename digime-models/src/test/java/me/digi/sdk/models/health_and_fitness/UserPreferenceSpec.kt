@@ -1,13 +1,10 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
 data class WaterUnitDummy(val unit: WaterUnit)
 
-class WaterUnitSpec : ModelTest<WaterUnitDummy>(WaterUnitDummy::class.java, object : ModelParam<WaterUnitDummy> {
-    override val jsonTests: List<Pair<WaterUnitDummy?, String>> = emptyList()
-
+class WaterUnitSpec : ModelTest<WaterUnitDummy>(WaterUnitDummy::class.java) {
     override val emptyTest: WaterUnitDummy? = null
 
     override val jsonObjectTests: List<Pair<WaterUnitDummy?, String>> =
@@ -29,13 +26,11 @@ class WaterUnitSpec : ModelTest<WaterUnitDummy>(WaterUnitDummy::class.java, obje
                             """{"unit":99}""".trimIndent()
                     )
             )
-})
+}
 
 data class LengthUnitDummy(val unit: LengthUnit)
 
-class LengthUnitSpec : ModelTest<LengthUnitDummy>(LengthUnitDummy::class.java, object : ModelParam<LengthUnitDummy> {
-    override val jsonTests: List<Pair<LengthUnitDummy?, String>> = emptyList()
-
+class LengthUnitSpec : ModelTest<LengthUnitDummy>(LengthUnitDummy::class.java) {
     override val emptyTest: LengthUnitDummy? = null
 
     override val jsonObjectTests: List<Pair<LengthUnitDummy?, String>> =
@@ -57,13 +52,11 @@ class LengthUnitSpec : ModelTest<LengthUnitDummy>(LengthUnitDummy::class.java, o
                             """{"unit":99}""".trimIndent()
                     )
             )
-})
+}
 
 data class DistanceUnitDummy(val unit: DistanceUnit)
 
-class DistanceUnitSpec : ModelTest<DistanceUnitDummy>(DistanceUnitDummy::class.java, object : ModelParam<DistanceUnitDummy> {
-    override val jsonTests: List<Pair<DistanceUnitDummy?, String>> = emptyList()
-
+class DistanceUnitSpec : ModelTest<DistanceUnitDummy>(DistanceUnitDummy::class.java) {
     override val emptyTest: DistanceUnitDummy? = null
 
     override val jsonObjectTests: List<Pair<DistanceUnitDummy?, String>> =
@@ -85,13 +78,11 @@ class DistanceUnitSpec : ModelTest<DistanceUnitDummy>(DistanceUnitDummy::class.j
                             """{"unit":99}""".trimIndent()
                     )
             )
-})
+}
 
 data class WeightUnitDummy(val unit: WeightUnit)
 
-class WeightUnitSpec : ModelTest<WeightUnitDummy>(WeightUnitDummy::class.java, object : ModelParam<WeightUnitDummy> {
-    override val jsonTests: List<Pair<WeightUnitDummy?, String>> = emptyList()
-
+class WeightUnitSpec : ModelTest<WeightUnitDummy>(WeightUnitDummy::class.java) {
     override val emptyTest: WeightUnitDummy? = null
 
     override val jsonObjectTests: List<Pair<WeightUnitDummy?, String>> =
@@ -117,5 +108,5 @@ class WeightUnitSpec : ModelTest<WeightUnitDummy>(WeightUnitDummy::class.java, o
                             """{"unit":99}""".trimIndent()
                     )
             )
-})
+}
 

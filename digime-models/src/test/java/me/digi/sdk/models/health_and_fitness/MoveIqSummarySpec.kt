@@ -1,9 +1,8 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class MoveIqSummarySpec : ModelTest<MoveIqSummary>(MoveIqSummary::class.java, object : ModelParam<MoveIqSummary> {
+class MoveIqSummarySpec : ModelTest<MoveIqSummary>(MoveIqSummary::class.java) {
     override val emptyTest: MoveIqSummary? = MoveIqSummary(
             null,
             null,
@@ -42,12 +41,4 @@ class MoveIqSummarySpec : ModelTest<MoveIqSummary>(MoveIqSummary::class.java, ob
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<MoveIqSummary?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

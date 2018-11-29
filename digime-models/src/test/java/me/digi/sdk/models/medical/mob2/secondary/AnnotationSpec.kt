@@ -1,11 +1,10 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.medical.mob2.primary.Device
 import me.digi.sdk.models.medical.mob2.primary.Patient
 
-class AnnotationSpec : ModelTest<Annotation>(Annotation::class.java, object : ModelParam<Annotation> {
+class AnnotationSpec : ModelTest<Annotation>(Annotation::class.java) {
     override val emptyTest: Annotation? = Annotation(
             null,
             null,
@@ -1086,12 +1085,4 @@ class AnnotationSpec : ModelTest<Annotation>(Annotation::class.java, object : Mo
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Annotation?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

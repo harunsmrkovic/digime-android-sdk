@@ -2,14 +2,14 @@ package me.digi.sdk.models.social
 
 import me.digi.sdk.models.AspectRatio
 import me.digi.sdk.models.MediaResource
-import me.digi.sdk.models.ModelParam
+
 import me.digi.sdk.models.ModelTest
 import org.junit.Assert
 import org.junit.Test
 
 data class MediaTypeDummy(val type: Media.Companion.MediaType)
 
-class MediaTypeSpec : ModelTest<MediaTypeDummy>(MediaTypeDummy::class.java, object : ModelParam<MediaTypeDummy> {
+class MediaTypeSpec : ModelTest<MediaTypeDummy>(MediaTypeDummy::class.java) {
     override val emptyTest: MediaTypeDummy? = null
 
     override val jsonObjectTests: List<Pair<MediaTypeDummy?, String>> =
@@ -35,7 +35,7 @@ class MediaTypeSpec : ModelTest<MediaTypeDummy>(MediaTypeDummy::class.java, obje
                             """{"type":99}""".trimIndent()
                     )
             )
-}) {
+
     @Test
     fun `when forId receives a known id should return the correct value`() {
         listOf(
@@ -54,7 +54,7 @@ class MediaTypeSpec : ModelTest<MediaTypeDummy>(MediaTypeDummy::class.java, obje
     }
 }
 
-class MediaSpec : ModelTest<Media>(Media::class.java, object : ModelParam<Media> {
+class MediaSpec : ModelTest<Media>(Media::class.java) {
     override val emptyTest: Media? = Media(
             null,
             null,
@@ -372,12 +372,4 @@ class MediaSpec : ModelTest<Media>(Media::class.java, object : ModelParam<Media>
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Media?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

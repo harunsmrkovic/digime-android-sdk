@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class RangeSpec : ModelTest<Range>(Range::class.java, object : ModelParam<Range> {
+class RangeSpec : ModelTest<Range>(Range::class.java) {
     override val emptyTest: Range? = Range(
             null,
             null
@@ -44,12 +43,4 @@ class RangeSpec : ModelTest<Range>(Range::class.java, object : ModelParam<Range>
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Range?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

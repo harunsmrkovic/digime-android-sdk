@@ -3,7 +3,7 @@ package me.digi.sdk.models
 import org.junit.Assert
 import org.junit.Test
 
-class AspectRatioSpec : ModelTest<AspectRatio>(AspectRatio::class.java, object : ModelParam<AspectRatio> {
+class AspectRatioSpec : ModelTest<AspectRatio>(AspectRatio::class.java) {
     override val emptyTest: AspectRatio? = AspectRatio(
             0.0,
             null,
@@ -41,17 +41,9 @@ class AspectRatioSpec : ModelTest<AspectRatio>(AspectRatio::class.java, object :
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<AspectRatio?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class MediaResourceSpec : ModelTest<MediaResource>(MediaResource::class.java, object : ModelParam<MediaResource> {
+class MediaResourceSpec : ModelTest<MediaResource>(MediaResource::class.java) {
     override val emptyTest: MediaResource? = MediaResource(
             null,
             0,
@@ -92,14 +84,6 @@ class MediaResourceSpec : ModelTest<MediaResource>(MediaResource::class.java, ob
                     )
             )
 
-    override val jsonTests: List<Pair<MediaResource?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-}) {
     @Test
     fun `when comparing two objects should compare using the resolution`() {
         val generateMediaResource: (Int) -> MediaResource = { size ->

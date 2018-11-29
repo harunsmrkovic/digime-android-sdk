@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class CodingSpec : ModelTest<Coding>(Coding::class.java, object : ModelParam<Coding> {
+class CodingSpec : ModelTest<Coding>(Coding::class.java) {
     override val emptyTest: Coding? = Coding(
             null,
             null,
@@ -30,12 +29,4 @@ class CodingSpec : ModelTest<Coding>(Coding::class.java, object : ModelParam<Cod
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Coding?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

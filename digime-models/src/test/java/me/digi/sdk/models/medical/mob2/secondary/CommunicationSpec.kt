@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class CommunicationSpec : ModelTest<Communication>(Communication::class.java, object : ModelParam<Communication> {
+class CommunicationSpec : ModelTest<Communication>(Communication::class.java) {
     override val emptyTest: Communication? = Communication(
             null,
             null
@@ -44,12 +43,4 @@ class CommunicationSpec : ModelTest<Communication>(Communication::class.java, ob
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Communication?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

@@ -2,10 +2,10 @@ package me.digi.sdk.models.health_and_fitness
 
 import me.digi.sdk.models.AspectRatio
 import me.digi.sdk.models.MediaResource
-import me.digi.sdk.models.ModelParam
+
 import me.digi.sdk.models.ModelTest
 
-class BadgeSpec : ModelTest<Badge>(Badge::class.java, object : ModelParam<Badge> {
+class BadgeSpec : ModelTest<Badge>(Badge::class.java) {
     override val emptyTest: Badge? = Badge(
             null,
             null,
@@ -98,12 +98,4 @@ class BadgeSpec : ModelTest<Badge>(Badge::class.java, object : ModelParam<Badge>
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Badge?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

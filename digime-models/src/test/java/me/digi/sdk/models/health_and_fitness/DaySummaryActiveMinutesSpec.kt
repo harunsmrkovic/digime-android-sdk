@@ -1,11 +1,10 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 import org.junit.Assert
 import org.junit.Test
 
-class DaySummaryActiveMinutesSpec : ModelTest<DaySummaryActiveMinutes>(DaySummaryActiveMinutes::class.java, object : ModelParam<DaySummaryActiveMinutes> {
+class DaySummaryActiveMinutesSpec : ModelTest<DaySummaryActiveMinutes>(DaySummaryActiveMinutes::class.java) {
     override val emptyTest: DaySummaryActiveMinutes? = DaySummaryActiveMinutes(
             null,
             null,
@@ -54,21 +53,12 @@ class DaySummaryActiveMinutesSpec : ModelTest<DaySummaryActiveMinutes>(DaySummar
                     )
             )
 
-    override val jsonTests: List<Pair<DaySummaryActiveMinutes?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-}) {
     @Test
     fun `when fairlyActiveMinutes and veryActiveMinutes are null, activeMinutes should be null`() {
         val fairlyActiveMinutes = null
         val veryActiveMinutes = null
         Assert.assertNull(
-                modelParam
-                        .emptyTest!!
+                emptyTest!!
                         .copy(fairlyActiveMinutes = fairlyActiveMinutes, veryActiveMinutes = veryActiveMinutes)
                         .activeMinutes
         )
@@ -80,8 +70,8 @@ class DaySummaryActiveMinutesSpec : ModelTest<DaySummaryActiveMinutes>(DaySummar
         val veryActiveMinutes = 1f
         Assert.assertEquals(
                 veryActiveMinutes,
-                modelParam
-                        .emptyTest!!
+
+                emptyTest!!
                         .copy(fairlyActiveMinutes = fairlyActiveMinutes, veryActiveMinutes = veryActiveMinutes)
                         .activeMinutes
         )
@@ -93,8 +83,7 @@ class DaySummaryActiveMinutesSpec : ModelTest<DaySummaryActiveMinutes>(DaySummar
         val veryActiveMinutes = null
         Assert.assertEquals(
                 fairlyActiveMinutes,
-                modelParam
-                        .emptyTest!!
+                emptyTest!!
                         .copy(fairlyActiveMinutes = fairlyActiveMinutes, veryActiveMinutes = veryActiveMinutes)
                         .activeMinutes
         )
@@ -106,8 +95,7 @@ class DaySummaryActiveMinutesSpec : ModelTest<DaySummaryActiveMinutes>(DaySummar
         val veryActiveMinutes = 1f
         Assert.assertEquals(
                 fairlyActiveMinutes + veryActiveMinutes,
-                modelParam
-                        .emptyTest!!
+                emptyTest!!
                         .copy(fairlyActiveMinutes = fairlyActiveMinutes, veryActiveMinutes = veryActiveMinutes)
                         .activeMinutes
         )

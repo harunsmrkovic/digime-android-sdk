@@ -3,9 +3,7 @@ package me.digi.sdk.models
 import org.junit.Assert
 import org.junit.Test
 
-class JFSAccountSyncConfigSpec : ModelTest<JFSAccountSyncConfig>(JFSAccountSyncConfig::class.java, object : ModelParam<JFSAccountSyncConfig> {
-    override val jsonTests: List<Pair<JFSAccountSyncConfig?, String>> = emptyList()
-
+class JFSAccountSyncConfigSpec : ModelTest<JFSAccountSyncConfig>(JFSAccountSyncConfig::class.java) {
     override val emptyTest: JFSAccountSyncConfig? = null
 
     override val jsonObjectTests: List<Pair<JFSAccountSyncConfig?, String>> =
@@ -27,13 +25,11 @@ class JFSAccountSyncConfigSpec : ModelTest<JFSAccountSyncConfig>(JFSAccountSyncC
                             """{"type": "dummy"}"""
                     )
             )
-})
+}
 
 data class SyncTypeDummy(val type: SyncType)
 
-class SyncTypeSpec : ModelTest<SyncTypeDummy>(SyncTypeDummy::class.java, object : ModelParam<SyncTypeDummy> {
-    override val jsonTests: List<Pair<SyncTypeDummy?, String>> = emptyList()
-
+class SyncTypeSpec : ModelTest<SyncTypeDummy>(SyncTypeDummy::class.java) {
     override val emptyTest: SyncTypeDummy? = null
 
     override val jsonObjectTests: List<Pair<SyncTypeDummy?, String>> =
@@ -55,7 +51,7 @@ class SyncTypeSpec : ModelTest<SyncTypeDummy>(SyncTypeDummy::class.java, object 
                             """{"type":"wrong"}""".trimIndent()
                     )
             )
-}) {
+
     @Test
     fun `when getTypeById receives a known id should return the correct value`() {
         listOf(

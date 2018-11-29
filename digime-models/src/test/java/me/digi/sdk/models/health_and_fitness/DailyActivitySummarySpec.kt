@@ -1,9 +1,8 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class DailyActivitySummarySpec : ModelTest<DailyActivitySummary>(DailyActivitySummary::class.java, object : ModelParam<DailyActivitySummary> {
+class DailyActivitySummarySpec : ModelTest<DailyActivitySummary>(DailyActivitySummary::class.java) {
     override val emptyTest: DailyActivitySummary? = DailyActivitySummary(
             null,
             null,
@@ -128,12 +127,4 @@ class DailyActivitySummarySpec : ModelTest<DailyActivitySummary>(DailyActivitySu
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<DailyActivitySummary?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

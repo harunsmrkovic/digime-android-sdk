@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class OrganizationSpec : ModelTest<Organization>(Organization::class.java, object : ModelParam<Organization> {
+class OrganizationSpec : ModelTest<Organization>(Organization::class.java) {
     override val emptyTest: Organization? = Organization(
             null,
             null,
@@ -126,12 +125,4 @@ class OrganizationSpec : ModelTest<Organization>(Organization::class.java, objec
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Organization?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

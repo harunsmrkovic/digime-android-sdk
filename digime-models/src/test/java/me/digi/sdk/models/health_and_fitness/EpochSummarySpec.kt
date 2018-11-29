@@ -1,9 +1,8 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class EpochSummarySpec : ModelTest<EpochSummary>(EpochSummary::class.java, object : ModelParam<EpochSummary> {
+class EpochSummarySpec : ModelTest<EpochSummary>(EpochSummary::class.java) {
     override val emptyTest: EpochSummary? = EpochSummary(
             null,
             null,
@@ -60,12 +59,4 @@ class EpochSummarySpec : ModelTest<EpochSummary>(EpochSummary::class.java, objec
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<EpochSummary?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

@@ -1,9 +1,8 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class LevelSpec : ModelTest<Level>(Level::class.java, object : ModelParam<Level> {
+class LevelSpec : ModelTest<Level>(Level::class.java) {
     override val emptyTest: Level? = Level(
             null,
             null
@@ -24,17 +23,9 @@ class LevelSpec : ModelTest<Level>(Level::class.java, object : ModelParam<Level>
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<Level?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class ManualValuesSpec : ModelTest<ManualValues>(ManualValues::class.java, object : ModelParam<ManualValues> {
+class ManualValuesSpec : ModelTest<ManualValues>(ManualValues::class.java) {
     override val emptyTest: ManualValues? = ManualValues(
             null,
             null,
@@ -58,17 +49,9 @@ class ManualValuesSpec : ModelTest<ManualValues>(ManualValues::class.java, objec
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<ManualValues?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class SourceSpec : ModelTest<Source>(Source::class.java, object : ModelParam<Source> {
+class SourceSpec : ModelTest<Source>(Source::class.java) {
     override val emptyTest: Source? = Source(
             null,
             null,
@@ -95,17 +78,9 @@ class SourceSpec : ModelTest<Source>(Source::class.java, object : ModelParam<Sou
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<Source?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class DurationSpec : ModelTest<Duration>(Duration::class.java, object : ModelParam<Duration> {
+class DurationSpec : ModelTest<Duration>(Duration::class.java) {
     override val emptyTest: Duration? = Duration(
             null,
             null,
@@ -129,17 +104,9 @@ class DurationSpec : ModelTest<Duration>(Duration::class.java, object : ModelPar
                             """.trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<Duration?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
-
-class HeartRateZoneSpec : ModelTest<HeartRateZone>(HeartRateZone::class.java, object : ModelParam<HeartRateZone> {
+class HeartRateZoneSpec : ModelTest<HeartRateZone>(HeartRateZone::class.java) {
     override val emptyTest: HeartRateZone? = HeartRateZone(
             null,
             null,
@@ -169,12 +136,4 @@ class HeartRateZoneSpec : ModelTest<HeartRateZone>(HeartRateZone::class.java, ob
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<HeartRateZone?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

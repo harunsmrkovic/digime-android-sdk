@@ -1,9 +1,8 @@
 package me.digi.sdk.models.finance
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class AmountSpec : ModelTest<Amount>(Amount::class.java, object : ModelParam<Amount> {
+class AmountSpec : ModelTest<Amount>(Amount::class.java) {
     override val emptyTest: Amount? = Amount(null, null)
 
     override val jsonObjectTests: List<Pair<Amount?, String>> =
@@ -25,12 +24,4 @@ class AmountSpec : ModelTest<Amount>(Amount::class.java, object : ModelParam<Amo
                             """{"amount": 1.5}"""
                     )
             )
-
-    override val jsonTests: List<Pair<Amount?, String>> =
-            listOf(
-                    Pair(
-                            Amount(null, null),
-                            """{"type": "dummy"}"""
-                    )
-            )
-})
+}

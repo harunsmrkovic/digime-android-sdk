@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class AddressSpec : ModelTest<Address>(Address::class.java, object : ModelParam<Address> {
+class AddressSpec : ModelTest<Address>(Address::class.java) {
     override val emptyTest: Address? = Address(
             null,
             null,
@@ -48,12 +47,4 @@ class AddressSpec : ModelTest<Address>(Address::class.java, object : ModelParam<
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Address?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

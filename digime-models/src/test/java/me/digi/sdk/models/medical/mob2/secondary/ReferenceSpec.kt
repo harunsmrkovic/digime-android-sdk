@@ -1,11 +1,10 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.medical.mob2.primary.Device
 import me.digi.sdk.models.medical.mob2.primary.Patient
 
-class ReferenceSpec : ModelTest<Reference>(Reference::class.java, object : ModelParam<Reference> {
+class ReferenceSpec : ModelTest<Reference>(Reference::class.java) {
     override val emptyTest: Reference? = Reference(
             null,
             null,
@@ -1079,12 +1078,4 @@ class ReferenceSpec : ModelTest<Reference>(Reference::class.java, object : Model
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Reference?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

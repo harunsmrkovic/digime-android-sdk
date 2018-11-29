@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class ReferenceRangeSpec : ModelTest<ReferenceRange>(ReferenceRange::class.java, object : ModelParam<ReferenceRange> {
+class ReferenceRangeSpec : ModelTest<ReferenceRange>(ReferenceRange::class.java) {
     override val emptyTest: ReferenceRange? = ReferenceRange(
             null,
             null,
@@ -126,12 +125,4 @@ class ReferenceRangeSpec : ModelTest<ReferenceRange>(ReferenceRange::class.java,
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<ReferenceRange?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

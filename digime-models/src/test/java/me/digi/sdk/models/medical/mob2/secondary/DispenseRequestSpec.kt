@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class DispenseRequestSpec : ModelTest<DispenseRequest>(DispenseRequest::class.java, object : ModelParam<DispenseRequest> {
+class DispenseRequestSpec : ModelTest<DispenseRequest>(DispenseRequest::class.java) {
     override val emptyTest: DispenseRequest? = DispenseRequest(
             null,
             null,
@@ -50,12 +49,4 @@ class DispenseRequestSpec : ModelTest<DispenseRequest>(DispenseRequest::class.ja
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<DispenseRequest?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

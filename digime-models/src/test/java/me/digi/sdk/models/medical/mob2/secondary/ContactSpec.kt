@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class ContactSpec : ModelTest<Contact>(Contact::class.java, object : ModelParam<Contact> {
+class ContactSpec : ModelTest<Contact>(Contact::class.java) {
     override val emptyTest: Contact? = Contact(
             null,
             null,
@@ -223,12 +222,4 @@ class ContactSpec : ModelTest<Contact>(Contact::class.java, object : ModelParam<
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Contact?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

@@ -1,9 +1,8 @@
 package me.digi.sdk.models.social
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class AlbumSpec : ModelTest<Album>(Album::class.java, object : ModelParam<Album> {
+class AlbumSpec : ModelTest<Album>(Album::class.java) {
     override val emptyTest: Album? = Album(
             null,
             null,
@@ -72,12 +71,4 @@ class AlbumSpec : ModelTest<Album>(Album::class.java, object : ModelParam<Album>
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Album?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

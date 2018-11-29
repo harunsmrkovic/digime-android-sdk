@@ -1,9 +1,8 @@
 package me.digi.sdk.models.government
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class VehicleTestSpec : ModelTest<VehicleTest>(VehicleTest::class.java, object : ModelParam<VehicleTest> {
+class VehicleTestSpec : ModelTest<VehicleTest>(VehicleTest::class.java) {
     override val emptyTest: VehicleTest? = VehicleTest(
             null,
             emptyList(),
@@ -76,19 +75,11 @@ class VehicleTestSpec : ModelTest<VehicleTest>(VehicleTest::class.java, object :
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<VehicleTest?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}
 
 data class TestResultDummy(val testResult: VehicleTest.Companion.TestResult)
 
-class TestResultSpec : ModelTest<TestResultDummy>(TestResultDummy::class.java, object : ModelParam<TestResultDummy> {
+class TestResultSpec : ModelTest<TestResultDummy>(TestResultDummy::class.java) {
     override val emptyTest: TestResultDummy? = null
 
     override val jsonObjectTests: List<Pair<TestResultDummy?, String>> =
@@ -118,4 +109,4 @@ class TestResultSpec : ModelTest<TestResultDummy>(TestResultDummy::class.java, o
                             """{"testResult":99}""".trimIndent()
                     )
             )
-})
+}

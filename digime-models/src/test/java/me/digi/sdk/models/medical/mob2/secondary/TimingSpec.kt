@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class TimingSpec : ModelTest<Timing>(Timing::class.java, object : ModelParam<Timing> {
+class TimingSpec : ModelTest<Timing>(Timing::class.java) {
     override val emptyTest: Timing? = Timing(
             null,
             null
@@ -54,12 +53,4 @@ class TimingSpec : ModelTest<Timing>(Timing::class.java, object : ModelParam<Tim
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Timing?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

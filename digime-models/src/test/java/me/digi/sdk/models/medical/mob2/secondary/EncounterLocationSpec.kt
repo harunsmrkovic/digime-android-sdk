@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class EncounterLocationSpec : ModelTest<EncounterLocation>(EncounterLocation::class.java, object : ModelParam<EncounterLocation> {
+class EncounterLocationSpec : ModelTest<EncounterLocation>(EncounterLocation::class.java) {
     override val emptyTest: EncounterLocation? = EncounterLocation(
             null,
             null,
@@ -159,12 +158,4 @@ class EncounterLocationSpec : ModelTest<EncounterLocation>(EncounterLocation::cl
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<EncounterLocation?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

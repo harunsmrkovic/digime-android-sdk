@@ -1,9 +1,8 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class StressSummarySpec : ModelTest<StressSummary>(StressSummary::class.java, object : ModelParam<StressSummary> {
+class StressSummarySpec : ModelTest<StressSummary>(StressSummary::class.java) {
     override val emptyTest: StressSummary? = StressSummary(
             null,
             null,
@@ -36,12 +35,4 @@ class StressSummarySpec : ModelTest<StressSummary>(StressSummary::class.java, ob
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<StressSummary?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

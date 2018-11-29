@@ -1,11 +1,10 @@
 package me.digi.sdk.models.social
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
 data class PostTypeDummy(val type: Post.Companion.PostType?)
 
-class PostTypeSpec : ModelTest<PostTypeDummy>(PostTypeDummy::class.java, object : ModelParam<PostTypeDummy> {
+class PostTypeSpec : ModelTest<PostTypeDummy>(PostTypeDummy::class.java) {
     override val emptyTest: PostTypeDummy? = PostTypeDummy(null)
 
     override val jsonObjectTests: List<Pair<PostTypeDummy?, String>> =
@@ -131,17 +130,9 @@ class PostTypeSpec : ModelTest<PostTypeDummy>(PostTypeDummy::class.java, object 
                             """{"type":"wrong"}""".trimIndent()
                     )
             )
+}
 
-    override val jsonTests: List<Pair<PostTypeDummy?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"type":99}""".trimIndent()
-                    )
-            )
-})
-
-class PostSpec : ModelTest<Post>(Post::class.java, object : ModelParam<Post> {
+class PostSpec : ModelTest<Post>(Post::class.java) {
     override val emptyTest: Post? = Post(
             null,
             null,
@@ -219,12 +210,4 @@ class PostSpec : ModelTest<Post>(Post::class.java, object : ModelParam<Post> {
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Post?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

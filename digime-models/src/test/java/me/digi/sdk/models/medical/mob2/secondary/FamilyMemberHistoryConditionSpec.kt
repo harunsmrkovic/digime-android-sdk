@@ -1,11 +1,10 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.medical.mob2.primary.Device
 import me.digi.sdk.models.medical.mob2.primary.Patient
 
-class FamilyMemberHistoryConditionSpec : ModelTest<FamilyMemberHistoryCondition>(FamilyMemberHistoryCondition::class.java, object : ModelParam<FamilyMemberHistoryCondition> {
+class FamilyMemberHistoryConditionSpec : ModelTest<FamilyMemberHistoryCondition>(FamilyMemberHistoryCondition::class.java) {
     override val emptyTest: FamilyMemberHistoryCondition? = FamilyMemberHistoryCondition(
             null,
             null,
@@ -1137,12 +1136,4 @@ class FamilyMemberHistoryConditionSpec : ModelTest<FamilyMemberHistoryCondition>
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<FamilyMemberHistoryCondition?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

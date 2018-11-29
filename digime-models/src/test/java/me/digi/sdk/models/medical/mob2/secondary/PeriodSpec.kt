@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class PeriodSpec : ModelTest<Period>(Period::class.java, object : ModelParam<Period> {
+class PeriodSpec : ModelTest<Period>(Period::class.java) {
     override val emptyTest: Period? = Period(
             null,
             null
@@ -24,12 +23,4 @@ class PeriodSpec : ModelTest<Period>(Period::class.java, object : ModelParam<Per
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<Period?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

@@ -1,9 +1,8 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class HumanNameSpec : ModelTest<HumanName>(HumanName::class.java, object : ModelParam<HumanName> {
+class HumanNameSpec : ModelTest<HumanName>(HumanName::class.java) {
     override val emptyTest: HumanName? = HumanName(
             null,
             null,
@@ -39,12 +38,4 @@ class HumanNameSpec : ModelTest<HumanName>(HumanName::class.java, object : Model
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<HumanName?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}

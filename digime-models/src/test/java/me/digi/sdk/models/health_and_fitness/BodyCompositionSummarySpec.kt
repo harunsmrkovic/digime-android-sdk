@@ -1,9 +1,8 @@
 package me.digi.sdk.models.health_and_fitness
 
-import me.digi.sdk.models.ModelParam
 import me.digi.sdk.models.ModelTest
 
-class BodyCompositionSummarySpec : ModelTest<BodyCompositionSummary>(BodyCompositionSummary::class.java, object : ModelParam<BodyCompositionSummary> {
+class BodyCompositionSummarySpec : ModelTest<BodyCompositionSummary>(BodyCompositionSummary::class.java) {
     override val emptyTest: BodyCompositionSummary? = BodyCompositionSummary(
             null,
             null,
@@ -45,12 +44,4 @@ class BodyCompositionSummarySpec : ModelTest<BodyCompositionSummary>(BodyComposi
                             """.trimIndent()
                     )
             )
-
-    override val jsonTests: List<Pair<BodyCompositionSummary?, String>> =
-            listOf(
-                    Pair(
-                            emptyTest,
-                            """{"dummyType": "dummy"}"""
-                    )
-            )
-})
+}
