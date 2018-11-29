@@ -4,6 +4,10 @@ import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.ToJson
+import me.digi.sdk.models.health_and_fitness.DistanceUnit
+import me.digi.sdk.models.health_and_fitness.LengthUnit
+import me.digi.sdk.models.health_and_fitness.WaterUnit
+import me.digi.sdk.models.health_and_fitness.WeightUnit
 
 /**
  * POJO used to parse account from "map.json" ([JFSMap]) file
@@ -87,18 +91,17 @@ data class JFSAccount(
         val accountType: AccountType = AccountType.USER,
 
         //for finance (see Confluence if other fields needed)
-        //TODO These models are in the health_and_fitness
-//        @Json(name = "distancepreference")
-//        val distanceUnits: DistanceUnit?,
-//
-//        @Json(name = "waterpreference")
-//        val waterUnits: WaterUnit?,
-//
-//        @Json(name = "weightpreference")
-//        val weightUnits: WeightUnit?,
-//
-//        @Json(name = "lengthpreference")
-//        val lengthUnits: LengthUnit?,
+        @Json(name = "distancepreference")
+        val distanceUnits: DistanceUnit?,
+
+        @Json(name = "waterpreference")
+        val waterUnits: WaterUnit?,
+
+        @Json(name = "weightpreference")
+        val weightUnits: WeightUnit?,
+
+        @Json(name = "lengthpreference")
+        val lengthUnits: LengthUnit?,
 
         //for music
         @Json(name = "displayname")

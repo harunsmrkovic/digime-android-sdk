@@ -185,7 +185,7 @@ class PlayHistorySpec : ModelTest<PlayHistory>(PlayHistory::class.java, object :
                                         "popularity":4
                                     }
                                 }
-                            """.trimIndent() //TODO Album
+                            """.trimIndent()
                     )
             )
 

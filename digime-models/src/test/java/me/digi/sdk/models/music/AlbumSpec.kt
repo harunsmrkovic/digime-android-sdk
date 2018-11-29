@@ -277,7 +277,7 @@ class AlbumSpec : ModelTest<Album>(Album::class.java, object : ModelParam<Album>
                                         }
                                     ]
                                 }
-                            """.trimIndent() //TODO Album
+                            """.trimIndent()
                     )
             )
 

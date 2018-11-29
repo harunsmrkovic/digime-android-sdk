@@ -185,7 +185,7 @@ class TrackSpec : ModelTest<Track>(Track::class.java, object : ModelParam<Track>
                                     },
                                     "popularity":4
                                 }
-                            """.trimIndent() //TODO Album
+                            """.trimIndent()
                     )
             )
 

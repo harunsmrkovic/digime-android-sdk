@@ -229,7 +229,7 @@ class PlaylistTrackSpec : ModelTest<PlaylistTrack>(PlaylistTrack::class.java, ob
                                         "popularity":4
                                     }
                                 }
-                            """.trimIndent() //TODO Album
+                            """.trimIndent()
                     )
             )
 

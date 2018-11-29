@@ -2,7 +2,7 @@ package me.digi.sdk.models
 
 import org.junit.Assert
 import org.junit.Test
-
+//TODO add more cases.
 class JFSAccountSpec : ModelTest<JFSAccount>(JFSAccount::class.java, object : ModelParam<JFSAccount> {
     override val jsonTests: List<Pair<JFSAccount?, String>> = emptyList()
 
@@ -29,6 +29,10 @@ class JFSAccountSpec : ModelTest<JFSAccount>(JFSAccount::class.java, object : Mo
             null,
             null,
             JFSAccount.Companion.AccountType.USER,
+            null,
+            null,
+            null,
+            null,
             null,
             null,
             null,
@@ -61,6 +65,10 @@ class JFSAccountSpec : ModelTest<JFSAccount>(JFSAccount::class.java, object : Mo
                                     null,
                                     null,
                                     JFSAccount.Companion.AccountType.USER,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
                                     null,
                                     null,
                                     null,

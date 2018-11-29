@@ -119,7 +119,7 @@ class SavedAlbumSpec : ModelTest<SavedAlbum>(SavedAlbum::class.java, object : Mo
                                         "tracks":[]
                                     }
                                 }
-                            """.trimIndent() //TODO Album
+                            """.trimIndent()
                     )
             )
 
@@ -312,7 +312,7 @@ class SavedTrackSpec : ModelTest<SavedTrack>(SavedTrack::class.java, object : Mo
                                         "popularity":4
                                     }
                                 }
-                            """.trimIndent() //TODO Album
+                            """.trimIndent()
                     )
             )
 
