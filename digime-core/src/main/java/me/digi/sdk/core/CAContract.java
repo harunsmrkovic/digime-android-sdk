@@ -14,6 +14,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 import me.digi.sdk.core.entities.DataRequest;
+import me.digi.sdk.core.entities.SDKAgent;
 
 public class CAContract implements Parcelable {
 
@@ -29,6 +30,9 @@ public class CAContract implements Parcelable {
 
     @SerializedName("accept")
     public AcceptData accept;
+
+    @SerializedName("sdkAgent")
+    public SDKAgent sdkAgent = new SDKAgent();
 
     public static final Parcelable.Creator<CAContract> CREATOR
             = new Parcelable.Creator<CAContract>() {
