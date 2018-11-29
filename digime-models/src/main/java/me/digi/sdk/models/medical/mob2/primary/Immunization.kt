@@ -2,6 +2,7 @@ package me.digi.sdk.models.medical.mob2.primary
 
 import com.squareup.moshi.Json
 import me.digi.sdk.models.ItemDetails
+import me.digi.sdk.models.medical.mob2.secondary.Annotation
 import me.digi.sdk.models.medical.mob2.secondary.CodeableConcept
 import me.digi.sdk.models.medical.mob2.secondary.Identifier
 

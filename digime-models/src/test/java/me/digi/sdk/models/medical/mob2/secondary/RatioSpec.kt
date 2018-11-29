@@ -1,7 +1,7 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
-import me.digi.sdk.models.objects.medical.mob2.secondary.TQuantity
+import me.digi.sdk.models.objects.medical.mob2.secondary.TRatio
 
 class RatioSpec : ModelTest<Ratio>(Ratio::class.java) {
     override val emptyTest: Ratio? = Ratio(
@@ -12,16 +12,8 @@ class RatioSpec : ModelTest<Ratio>(Ratio::class.java) {
     override val jsonObjectTests: List<Pair<Ratio?, String>> =
             listOf(
                     Pair(
-                            Ratio(
-                                    TQuantity.obj,
-                                    TQuantity.obj
-                            ),
-                            """
-                                {
-                                    "numerator":${TQuantity.json},
-                                    "denominator":${TQuantity.json}
-                                }
-                            """.trimIndent()
+                            TRatio.obj,
+                            TRatio.json
                     )
             )
 }

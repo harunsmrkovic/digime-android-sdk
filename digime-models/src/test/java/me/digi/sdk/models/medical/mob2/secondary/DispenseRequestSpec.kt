@@ -1,8 +1,7 @@
 package me.digi.sdk.models.medical.mob2.secondary
 
 import me.digi.sdk.models.ModelTest
-import me.digi.sdk.models.objects.medical.mob2.secondary.TPeriod
-import me.digi.sdk.models.objects.medical.mob2.secondary.TQuantity
+import me.digi.sdk.models.objects.medical.mob2.secondary.TDispenseRequest
 
 class DispenseRequestSpec : ModelTest<DispenseRequest>(DispenseRequest::class.java) {
     override val emptyTest: DispenseRequest? = DispenseRequest(
@@ -15,20 +14,8 @@ class DispenseRequestSpec : ModelTest<DispenseRequest>(DispenseRequest::class.ja
     override val jsonObjectTests: List<Pair<DispenseRequest?, String>> =
             listOf(
                     Pair(
-                            DispenseRequest(
-                                    TPeriod.obj,
-                                    1,
-                                    TQuantity.obj,
-                                    TQuantity.obj
-                            ),
-                            """
-                                {
-                                    "validityperiod":${TPeriod.json},
-                                    "numberofrepeatsallowed":1,
-                                    "quantity":${TQuantity.json},
-                                    "expectedsupplyduration":${TQuantity.json}
-                                }
-                            """.trimIndent()
+                            TDispenseRequest.obj,
+                            TDispenseRequest.json
                     )
             )
 }

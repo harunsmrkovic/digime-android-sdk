@@ -1,10 +1,8 @@
 package me.digi.sdk.models.medical.mob2.primary
 
 import com.squareup.moshi.Json
-import me.digi.sdk.models.medical.mob2.secondary.CodeableConcept
-import me.digi.sdk.models.medical.mob2.secondary.Dosage
-import me.digi.sdk.models.medical.mob2.secondary.Identifier
-import me.digi.sdk.models.medical.mob2.secondary.Performer
+import me.digi.sdk.models.medical.mob2.secondary.*
+import me.digi.sdk.models.medical.mob2.secondary.Annotation
 
 data class MedicationDispense(
         @Json(name = "entityid")

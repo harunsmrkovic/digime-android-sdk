@@ -2,10 +2,8 @@ package me.digi.sdk.models.medical.mob2.primary
 
 import com.squareup.moshi.Json
 import me.digi.sdk.models.ItemDetails
-import me.digi.sdk.models.medical.mob2.secondary.CodeableConcept
-import me.digi.sdk.models.medical.mob2.secondary.Identifier
-import me.digi.sdk.models.medical.mob2.secondary.Reaction
-import me.digi.sdk.models.medical.mob2.secondary.Reference
+import me.digi.sdk.models.medical.mob2.secondary.*
+import me.digi.sdk.models.medical.mob2.secondary.Annotation
 
 data class AllergyIntolerance(
         @Json(name = "entityid")
