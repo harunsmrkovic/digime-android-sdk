@@ -4,13 +4,6 @@ import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import me.digi.sdk.models.government.VehicleTest
-import me.digi.sdk.models.health_and_fitness.DistanceUnit
-import me.digi.sdk.models.health_and_fitness.LengthUnit
-import me.digi.sdk.models.health_and_fitness.WaterUnit
-import me.digi.sdk.models.health_and_fitness.WeightUnit
-import me.digi.sdk.models.social.Media
-import me.digi.sdk.models.social.Post
 import org.junit.Assert
 import org.junit.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -24,14 +17,7 @@ abstract class ModelTest<T>(private val clazz: Class<T>) {
     private val moshi: Moshi =
             Moshi.Builder()
                     .add(KotlinJsonAdapterFactory())
-                    .add(JFSAccount.Companion.AccountType.Companion)
-                    .add(Media.Companion.MediaType.Companion)
-                    .add(VehicleTest.Companion.TestResult.Companion)
-                    .add(Post.Companion.PostType.Companion)
-                    .add(WaterUnit.Companion)
-                    .add(LengthUnit.Companion)
-                    .add(DistanceUnit.Companion)
-                    .add(WeightUnit.Companion)
+                    .addDigimeModelsAdapters()
                     .build()
 
     //ToJson
