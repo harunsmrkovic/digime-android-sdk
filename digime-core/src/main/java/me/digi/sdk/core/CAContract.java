@@ -36,7 +36,7 @@ public class CAContract implements Parcelable {
         }
     };
 
-    CAContract(String contractId, String appId) {
+    public CAContract(String contractId, String appId) {
         if (contractId == null || appId == null) {
             throw new IllegalArgumentException(
                     "Attempting to define CAContract with null ids.");
