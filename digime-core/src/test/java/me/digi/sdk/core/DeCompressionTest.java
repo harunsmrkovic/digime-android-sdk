@@ -33,6 +33,6 @@ public class DeCompressionTest {
     }
 
     private String removeNewLinesAndSpaces(String input) {
-        return input.replaceAll(System.getProperty("line.separator"), "").replaceAll(" ", "");
+        return input.replace("\n", "").replace("\r", "").replace(" ", "");
     }
 }
