@@ -42,9 +42,6 @@ public class CAExtractContentInterceptor implements Interceptor {
     private static final String CONTENT_KEY = "fileContent";
     private static final String COMPRESSION_KEY = "compression";
 
-    @VisibleForTesting
-    public CAExtractContentInterceptor(){}
-
     public CAExtractContentInterceptor(CAKeyStore providerKeys) {
         cryptoInitialized = !providerKeys.isEmpty();
         cryptoProvider = new CACryptoProvider(providerKeys);
@@ -93,7 +90,7 @@ public class CAExtractContentInterceptor implements Interceptor {
             return response;
 
         String newBody = null;
-        boolean stripFileContent = EncryptedPaths.isAccountsPath(response.request().url());
+        boolean stripFileContent = EncryptedPaths.isAccountsPath(chain.request().url());
         try {
             if (!stripFileContent)
                 newBody = updateAndReturnJson(CONTENT_KEY, decryptedAndDecompressed, parsedMap);
