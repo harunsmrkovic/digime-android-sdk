@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import me.digi.sdk.core.MockEntities.MockChain;
 import me.digi.sdk.core.internal.CAExtractContentInterceptor;
+import me.digi.sdk.core.internal.Util;
 import me.digi.sdk.core.provider.KeyLoaderProvider;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -48,14 +49,12 @@ public class ExtractFileContentTest {
     private static final String brotliCompressedData1 = "G78BAMT3m9N3m/D/RZfY6DngXIlyG687QD74/wvcDnLKslNbYGWBZTkW2Jdu8xFED79NcfxV1W5jAMA3HADozvoXMjTcUw4iE/9x0L1Ud8pBnh+EUZykGe0g75Eph5t8YOO+GvpFLqIXyuFX/swX4fv9Ikw5vCj04yAIEi/zRxXcSyXvPTpOvq+qlvXcishVum37S8eUg7a8CIQXYWmtFomNB0yN8zBV3nmTH7wGzcQIwIEe73qBKAqjNF3oheed0ey/MQ4=";
     private static final String brotliCompressedData2 = "G3YJAMTKpr6+mX3LIOSun0tPBdKKLIkgjymDLulMXA7oGcas0Maalo61bQ7NOo+zqMt4TLBNES20BCjGbK7ps/VMDARRb2tJS/2HuG9ngYQIeMDBYBQpyMc/KDoqX6i6GhAtUe0PVhP91JYOFnzPhbWF+V2yxiiykFGvNxiL8TDinHMG5b1tzjgD/YHlSdGHh4Suysw1hTVg0I0jp9XR0Q8kZvEmPQWDLcnRjzOQEPw13VN39zG759P+ZdJsP2cf4tC5PO4C5db+Q3xfH67PRvvb2tJdNX1NL/Wtm65ELhZR1LvJuY/TUXY1BQPTuavSWzKKLLnCQkZiKIb9UY8bwNRYvWv/MOQfQkPOhsTZxUW8YCfJYnIOhv3hz2FLbSGRE9VehmFV27LjdGBrp/9oQMhyvYlDVbuL33mepNcivGyUJkeuKm0Tphu6zfLDLKdjxetlPi5/NSVXU7QMZUUW8vGZQVfGQv6B7DdBIlkvTk+Xm2TdmS/izc1ifnIZX8yvZ2kCBl0ZV75DPv7B/3iyBSRyolqGYX4cBlXzHma5a8LSZA2BQVfGQuKcc845Hw5ED0zxEhN51va5ZXgFiy408SMAeimz1VM2pHNXvqN9Vo2tEZ1A75PEfeHkP/aelJ3fjQEs7TPDW0rZcv1O0LKhSuu4x6yQ6Yzr+jTb2f0uO737/RgkdXB639nUn3WRUmSaMH+J3XEv6vM0iTSe3E4XcXzvnQt8fX0F5bEISpcH79Vn2NjooEuFH8XRh813WTWFv44ajUVv5Koxwsq0TMaYzCjv/BHDcct6W5Hej+5H0Q3XDI30XZyUqs5/jurb+dGeoDuT54/Ahk8xWXg8t88MJpiOvqbK9Zmsgw6ZdwYywg/HW5+rxkBiLnjUjyJQBIUhxHOoYKCfeg1UMwRMZX8KsxlSFDKqPVbBGXLlc0iIbjbWvWw44JGyfa4iY7JsrEfKmIE2gwgMvTAASQxcYUEZugJ6SLEMsNuUyo1wovGjNhhnff0e7/WH/e5oNI7YxBpHl7Ut";
 
-    private Context context;
     private CAExtractContentInterceptor extractContentInterceptor;
-    private KeyLoaderProvider keyLoader;
 
     @Before
     public void setUp() {
-        context = InstrumentationRegistry.getContext();
-        keyLoader = new KeyLoaderProvider();
+        Context context = InstrumentationRegistry.getContext();
+        KeyLoaderProvider keyLoader = new KeyLoaderProvider();
         keyLoader.getStore().addPKCS12KeyFromAssets(context, TEST_PRIVATE_KEY_FILE_NAME, null, TEST_PRIVATE_KEY_PASSWORD, null);
         extractContentInterceptor = new CAExtractContentInterceptor(keyLoader.getStore());
     }
@@ -65,7 +64,7 @@ public class ExtractFileContentTest {
         Interceptor.Chain chain = new MockChain(GET_FILE_REQUEST_URL, responseFromBody(rawResponseBody));
         String fileContent = fileContentFromChain(chain);
 
-        assertEquals(removeNewLinesAndSpaces(fileContent), removeNewLinesAndSpaces(expectedFileContent));
+        assertEquals(Util.removeNewLinesAndSpaces(fileContent), Util.removeNewLinesAndSpaces(expectedFileContent));
     }
 
     @Test
@@ -73,7 +72,7 @@ public class ExtractFileContentTest {
         Interceptor.Chain chain = new MockChain(GET_FILE_REQUEST_URL, responseFromBody(rawResponseBody_noCompression));
         String fileContent = fileContentFromChain(chain);
 
-        assertEquals(removeNewLinesAndSpaces(fileContent), removeNewLinesAndSpaces(expectedFileContent));
+        assertEquals(Util.removeNewLinesAndSpaces(fileContent), Util.removeNewLinesAndSpaces(expectedFileContent));
     }
 
     private String fileContentFromChain(Interceptor.Chain chain) throws IOException {
@@ -97,12 +96,8 @@ public class ExtractFileContentTest {
         String decompressed1 = extractContentInterceptor.decompressBrotli(Base64.decode(brotliCompressedData1.getBytes("UTF-8"), Base64.DEFAULT));
         String decompressed2 = extractContentInterceptor.decompressBrotli(Base64.decode(brotliCompressedData2.getBytes("UTF-8"), Base64.DEFAULT));
 
-        assertEquals(removeNewLinesAndSpaces(decompressed1), removeNewLinesAndSpaces(sampleData1));
-        assertEquals(removeNewLinesAndSpaces(decompressed2), removeNewLinesAndSpaces(sampleData2));
-    }
-
-    private String removeNewLinesAndSpaces(String input) {
-        return input.replace("\n", "").replace("\r", "").replace(" ", "");
+        assertEquals(Util.removeNewLinesAndSpaces(decompressed1), Util.removeNewLinesAndSpaces(sampleData1));
+        assertEquals(Util.removeNewLinesAndSpaces(decompressed2), Util.removeNewLinesAndSpaces(sampleData2));
     }
 
 }
