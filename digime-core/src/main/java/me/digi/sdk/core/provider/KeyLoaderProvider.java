@@ -6,6 +6,7 @@ package me.digi.sdk.core.provider;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -38,7 +39,8 @@ public class KeyLoaderProvider {
 
     private CAKeyStore defaultStore;
 
-    private KeyLoaderProvider() {
+    @VisibleForTesting
+    public KeyLoaderProvider() {
         defaultStore = new CAKeyStore(DEC_KEY);
     }
 

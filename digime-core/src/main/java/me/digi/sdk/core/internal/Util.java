@@ -59,4 +59,8 @@ public final class Util {
         return contractId.matches("^[a-zA-Z0-9_]+$") && contractId.length() > 5 && contractId.length() < 64;
     }
 
+    public static String removeNewLinesAndSpaces(String input) {
+        return input.replaceAll("[\n\r ]", "");
+    }
+
 }
