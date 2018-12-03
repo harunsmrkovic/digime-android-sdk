@@ -82,15 +82,18 @@ public class CallbackActivity extends AppCompatActivity {
         DigiMeClient.getInstance().getFileList(new SDKCallback<CAFiles>() {
             @Override
             public void succeeded(SDKResponse<CAFiles> result) {
-                requestAccounts();
                 CAFiles files = result.body;
-                getFileContent(files.fileIds);
+                if (files.fileIds != null) {
+                    requestAccounts();
+                    getFileContent(files.fileIds);
+                } else {
+                    writeStatus("Get file list returned no files");
+                }
             }
 
             @Override
             public void failed(SDKException exception)  {
                 writeStatus("Failed to fetch list" + exception.getMessage());
-
             }
         });
     }
