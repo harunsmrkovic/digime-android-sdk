@@ -31,7 +31,6 @@ public class CallbackActivity extends AppCompatActivity {
 
     private static final String TAG = "DemoCallbackActivity";
     private SDKCallback<CASession> cb;
-    private DigiMeConsentAccessAuthManager authManager;
     private TextView statusText;
     private TextView accountInfo;
 
@@ -67,15 +66,12 @@ public class CallbackActivity extends AppCompatActivity {
 
         statusText = findViewById(R.id.callback_status);
         accountInfo = findViewById(R.id.account_info);
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (authManager != null) {
-            authManager.onActivityResult(requestCode, resultCode, data);
-        }
+        DigiMeClient.getInstance().getAuthManager().onActivityResult(requestCode, resultCode, data);
     }
 
     public void requestFileList() {
@@ -87,7 +83,7 @@ public class CallbackActivity extends AppCompatActivity {
                     requestAccounts();
                     getFileContent(files.fileIds);
                 } else {
-                    writeStatus("Get file list returned no files");
+                    writeStatus("Get file list returned no files, called before permission given?");
                 }
             }
 
