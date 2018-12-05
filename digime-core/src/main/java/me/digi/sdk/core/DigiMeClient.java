@@ -458,7 +458,7 @@ public final class DigiMeClient {
         }
         SDKCallback<SessionResult> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
         if (!authManager.nativeClientAvailable(activity)) {
-            forwarder = new AutoSessionForwardCallback(authManager, activity, callback, true);
+            forwarder = new AutoSessionForwardCallback(authManager, activity, callback);
         }
         authManager.resolveAuthorizationPath(activity, forwarder, true);
     }
@@ -659,14 +659,9 @@ public final class DigiMeClient {
 
     class SessionForwardCallback <T extends SessionResult> extends SDKCallback<T> {
         final SDKCallback<T> callback;
-        private boolean overrideSessionCallback = false;
 
         SessionForwardCallback(SDKCallback<T> callback) {
             this.callback = callback;
-        }
-        SessionForwardCallback(SDKCallback<T> callback, boolean overrideSessionCallback) {
-            this.callback = callback;
-            this.overrideSessionCallback = overrideSessionCallback;
         }
 
         @Override
@@ -679,7 +674,7 @@ public final class DigiMeClient {
             CASessionManager sm = (CASessionManager)consentAccessSessionManager;
             sm.setCurrentSession(session);
             getInstance().getApi(session);
-            if (callback != null && !overrideSessionCallback) {
+            if (callback != null && !(this instanceof AutoSessionForwardCallback)) {
                 callback.succeeded(new SDKResponse<>(result.body, result.response));
             }
             for (SDKListener listener : listeners) {
@@ -708,11 +703,6 @@ public final class DigiMeClient {
             this.authManager = new WeakReference<>(authManager);
         }
 
-        AutoSessionForwardCallback(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<T> callback, boolean overrideCallback) {
-            super(callback, overrideCallback);
-            this.callActivity = new WeakReference<>(activity);
-            this.authManager = new WeakReference<>(authManager);
-        }
         @Override
         public void succeeded(SDKResponse<T> result) {
             super.succeeded(result);
