@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.stream.JsonReader;
 import org.apache.commons.compress.compressors.brotli.BrotliCompressorInputStream;
@@ -86,11 +87,17 @@ public class CAExtractContentInterceptor implements Interceptor {
             decryptedAndDecompressed = ByteUtils.bytesToString(decrypted);
         }
 
-        if (TextUtils.isEmpty(decryptedAndDecompressed))
-            return response;
+        boolean stripFileContent = EncryptedPaths.isAccountsPath(chain.request().url());
+
+        // no encryption or compression
+        if (TextUtils.isEmpty(decryptedAndDecompressed)) {
+            if (!stripFileContent)
+                return response;
+            else
+                return buildNewResponse(response, gson.toJson(parsedMap.get(CONTENT_KEY)));
+        }
 
         String newBody = null;
-        boolean stripFileContent = EncryptedPaths.isAccountsPath(chain.request().url());
         try {
             if (!stripFileContent)
                 newBody = updateAndReturnJson(CONTENT_KEY, decryptedAndDecompressed, parsedMap);
@@ -131,17 +138,18 @@ public class CAExtractContentInterceptor implements Interceptor {
 
     /** Currently only {@link #CONTENT_KEY} value is encrypted */
     private boolean hasEncryptedContent(LinkedTreeMap treeMap) {
-        return keyHasValue(CONTENT_KEY, treeMap);
+        // Is (base64) String value when encrypted, JsonObject when unencrypted
+        return keyHasStringValue(CONTENT_KEY, treeMap);
     }
 
     /** Currently only {@link #CONTENT_KEY} value is compressed */
     private boolean hasCompressedContent(LinkedTreeMap treeMap) {
-        return keyHasValue(CONTENT_KEY, treeMap) && !TextUtils.isEmpty(compressedWith(treeMap));
+        return keyHasStringValue(CONTENT_KEY, treeMap) && !TextUtils.isEmpty(compressedWith(treeMap));
     }
 
-    private boolean keyHasValue(String key, LinkedTreeMap treeMap) {
-        return (treeMap.get(key) != null && (treeMap.get(key) instanceof String)
-            && !((String)(treeMap.get(key))).isEmpty());
+    private boolean keyHasStringValue(String key, LinkedTreeMap treeMap) {
+        return treeMap.get(key) != null && (treeMap.get(key) instanceof String)
+            && !((String)(treeMap.get(key))).isEmpty();
     }
 
     @Nullable
