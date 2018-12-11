@@ -43,7 +43,7 @@ public class TimeRange implements Serializable {
         return new TimeRange(from, to, null);
     }
 
-    public static TimeRange last(long x, @NonNull Unit unit) {
+    public static TimeRange last(int x, @NonNull Unit unit) {
         return new TimeRange(null, null, String.valueOf(x)+unit.id);
     }
 
