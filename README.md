@@ -31,6 +31,7 @@ For detailed explanation of the Consent Access architecture please visit [Dev Su
      * [Handling fetch failures and automatic exponential backoff](#handling-fetch-failures-and-automatic-exponential-backoff)
      * [Fetching raw response JSON](#fetching-raw-response-json)
      * [Fetching Account metadata](#fetching-account-metadata)
+     * [Fetching data in time range](#fetching-data-in-time-range)
      * [Decryption](#decryption)
 
 ## Manual Installation
@@ -507,6 +508,29 @@ Upon success DigiMeClient returns a `CAAccounts` object which contains `List<>` 
 
 Among others, most notable properties of`CAAccount` object are `service.name` - name of the underlying service,
 `accountId` - account identifier which can be used to link returned entities to specific account.
+
+### Fetching data in time range
+
+Every Contract will define a time range that restricts your data access. The default `authorize(Activity, SDKCallback)` method will provide access to the whole of this time range.
+Depending on your context or whether you have previously cached data, it may be desirable to only request data within a sub time range (less data = faster response).
+Use this alternative `authorize` method to achieve this:
+
+```java
+authorize(@NonNull Activity activity, TimeRange timeRange, @Nullable SDKCallback<CASession> callback)
+```
+
+Create your `TimeRange` with one of these:
+
+```java
+public static TimeRange from(@NonNull Long from)
+public static TimeRange priorTo(@NonNull Long priorTo)
+public static TimeRange fromTo(@NonNull Long from, @NonNull Long to)
+public static TimeRange last(int x, @NonNull Unit unit)
+```
+
+The timestamps are in UTC seconds format.
+Note a current restriction, because files are bucketed by month, this filtering only works with monthly granularity.
+So a timestamp effectively represents the whole of the month in which it falls.
 
 ### Decryption
 
