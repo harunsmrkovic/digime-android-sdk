@@ -425,7 +425,7 @@ DigiMeClient.getInstance().getFileList(callback)
 
 Upon success DigiMeClient returns a `CAFiles` object which contains a single field `fileIds`, a list of file IDs.
 
-Finally you can use the returned file IDs to fetch the file data in JSON format:
+You can then use the returned file IDs to fetch the file data in JSON format:
 
 ```java
  /* @param fileId         ID of the file to retrieve
@@ -434,7 +434,7 @@ Finally you can use the returned file IDs to fetch the file data in JSON format:
 DigiMeClient.getInstance().getFileJSON(fileId, callback)
 ```
 
-Typically you would look to extract the `fileContent` json object, this contains an array of data objects. Details of this structure can be found here: [Dev Docs](https://developers.digi.me/data-structure.html) and here [Dev Docs](https://developers.digi.me/reference-objects.html).
+Typically you would look to extract the `fileContent` json object, this contains an array of data objects. Details of this structure can be found here: [Data Structure](https://developers.digi.me/data-structure.html) and here [Reference Objects](https://developers.digi.me/reference-objects.html).
 We will soon release a library containing native objects to assist you in handling this data. Please contact support if you require this ahead of the official release.
 If it is Social content you are interested in there is a convenient helper method that may be of some use:
 
