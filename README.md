@@ -424,7 +424,18 @@ DigiMeClient.getInstance().getFileList(callback)
 
 Upon success DigiMeClient returns a `CAFiles` object which contains a single field `fileIds`, a list of file IDs.
 
-Finally you can use the returned file IDs to fetch their data:
+Finally you can use the returned file IDs to fetch the file data in JSON format:
+
+```java
+ /* @param fileId         ID of the file to retrieve
+  * @param callback         reference to the SDKCallback<JsonElement> or null if using SDKListener
+  */
+DigiMeClient.getInstance().getFileJSON(fileId, callback)
+```
+
+Typically you would look to extract the `fileContent` json object, this contains an array of data objects. Details of this structure can be found here: [Dev Docs](https://developers.digi.me/data-structure.html) and here [Dev Docs](https://developers.digi.me/reference-objects.html).
+We will soon release a library containing native objects to assist you in handling this data. Please contact support if you require this ahead of the official release.
+If it is Social content you are interested in there is a convenient helper method that may be of some use:
 
 ```java
  /* @param fileId         ID of the file to retrieve
@@ -433,9 +444,7 @@ Finally you can use the returned file IDs to fetch their data:
 DigiMeClient.getInstance().getFileContent(fileId, callback)
 ```
 
-Upon success DigiMeClient returns a `CAFileResponse` which contains a list of deserialized content objects (`CAContent`)
-
-For detailed content item structure look at [Dev Docs](https://developers.digi.me/data-structure.html).
+This returns a `CAFileResponse` which contains a list of deserialized generic Social data objects (`CAContent`)
 
 ### Handling fetch failures and automatic exponential backoff
  
@@ -481,22 +490,6 @@ These configuration options are set statically on DigiMeClient:
     //Set base delay to 1000 ms
     DigiMeClient.minRetryPeriod = 1000;
 ```
-
-### Fetching raw response JSON
-
-In some cases it is beneficial to have access to the complete underlying json response.
-As with regular fetch you can retrieve the data once you have the list of file IDs with:
-
-```java
- /* @param fileId         ID of the file to retrieve
-  * @param callback         reference to the SDKCallback<JsonElement> or null if using SDKListener
-  */
-DigiMeClient.getInstance().getFileJSON(fileId, callback)
-```
-
-Upon success DigiMeClient returns a `JsonElement` which contains complete file content.
-
-For detailed content item structure look at [Dev Docs](https://developers.digi.me/data-structure.html).
 
 ### Fetching Account metadata
 
