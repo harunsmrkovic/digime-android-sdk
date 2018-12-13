@@ -58,32 +58,12 @@ For detailed explanation of the Consent Access architecture please visit [Dev Su
 ```gradle
 
    dependencies {
-        compile 'me.digi.sdk:digime-core:1.3.2'
+        compile 'me.digi.sdk:digime-core:1.4.0'
    }
 ```
 
 5. You should be able to import `me.digi.sdk.core.DigiMeClient` now.
 
-### Development builds and snapshots
-
-For testing purposes or initial integration _dev_ version of the library should always be used. To use development version, following dependency should be imported.
-
-```gradle
-
-   dependencies {
-        compile '...:digime-core:1.3.2-dev'
-   }
-```
-
-Snapshot builds can be retrieved from the **SNAPSHOTS** repository. Snapshots can be used to try out new in-development features. It is discouraged to use snapshots in production releases.
-To use snapshot builds use the following dependency:
-
-```gradle
-
-   dependencies {
-        compile '...:digime-core:1.3.3-SNAPSHOT'
-   }
-```
 
 ### Directly from source code (downloaded or git submodule)
 
