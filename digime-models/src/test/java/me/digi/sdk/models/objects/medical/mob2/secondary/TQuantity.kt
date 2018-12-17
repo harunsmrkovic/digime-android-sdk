@@ -9,14 +9,14 @@ import me.digi.sdk.models.objects.ModelTestObject
 
 object TQuantity : ModelTestObject<Quantity>(
         Quantity(
-                1,
+                1.5,
                 "dummyUnit",
                 "dummySystem",
                 "dummyCode"
         ),
         """
         {
-            "value":1,
+            "value":1.5,
             "unit":"dummyUnit",
             "system":"dummySystem",
             "code":"dummyCode"

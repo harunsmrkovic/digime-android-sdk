@@ -8,7 +8,7 @@ import com.squareup.moshi.Json
 
 data class Quantity(
         @Json(name = "value")
-        val value: Long?,
+        val value: Double?,
 
         @Json(name = "unit")
         val unit: String?,
