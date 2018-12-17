@@ -18,6 +18,7 @@ import com.google.gson.JsonElement;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -27,6 +28,8 @@ import me.digi.sdk.core.config.ApiConfig;
 import me.digi.sdk.core.entities.CAAccounts;
 import me.digi.sdk.core.entities.CAFileResponse;
 import me.digi.sdk.core.entities.CAFiles;
+import me.digi.sdk.core.entities.DataRequest;
+import me.digi.sdk.core.entities.TimeRange;
 import me.digi.sdk.core.errorhandling.DigiMeClientException;
 import me.digi.sdk.core.errorhandling.DigiMeException;
 import me.digi.sdk.core.errorhandling.SDKException;
@@ -262,6 +265,18 @@ public final class DigiMeClient {
         return getAuthManager();
     }
 
+    public DigiMeConsentAccessAuthManager authorize(@NonNull Activity activity, TimeRange timeRange, @Nullable SDKCallback<CASession> callback) {
+        return authorize(activity, Collections.singletonList(timeRange), callback);
+    }
+
+    public DigiMeConsentAccessAuthManager authorize(@NonNull Activity activity, List<TimeRange> timeRanges, @Nullable SDKCallback<CASession> callback) {
+        checkClientInitialized();
+        SDKCallback<CASession> forwarder = new AutoSessionForwardCallback<>(getAuthManager(), activity, callback);
+        getAuthManager().setScope(new DataRequest(timeRanges));
+        getAuthManager().resolveAuthorizationPath(activity, forwarder, false);
+        return getAuthManager();
+    }
+
     public DigiMePostboxAuthManager createPostbox(@NonNull Activity activity, @Nullable SDKCallback<SessionResult> callback) {
         checkClientInitialized();
         SDKCallback<SessionResult> forwarder = new AutoSessionForwardCallback<>(getPostboxAuthManager(), activity, callback);
@@ -269,20 +284,19 @@ public final class DigiMeClient {
         return getPostboxAuthManager();
     }
 
-    @Deprecated
-    public <T extends SessionResult> void createSession(@Nullable SDKCallback<T>callback) throws DigiMeException {
+    public <T extends SessionResult> void createSession(@Nullable SDKCallback<T>callback, @Nullable DataRequest scope) throws DigiMeException {
         if (!caFlow.isInitialized()) {
             throw new DigiMeException("No CA contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", CONSENT_ACCESS_CONTRACTS_PATH);
         }
         if (!caFlow.next()) { caFlow.rewind().next(); }
-        createSession(caFlow.currentId, callback);
+        createSession(caFlow.currentId, scope, callback);
     }
 
-    public <T extends SessionResult> void createSession(@NonNull String contractId, @Nullable SDKCallback<T>callback) {
-        createSession(caFlow, contractId, callback);
+    public <T extends SessionResult> void createSession(@NonNull String contractId, @Nullable DataRequest scope, @Nullable SDKCallback<T>callback) {
+        createSession(caFlow, contractId, scope, callback);
     }
 
-    private <T extends SessionResult> void createSession(Flow<CAContract> flow, @NonNull String contractId, @Nullable SDKCallback<T>callback) {
+    private <T extends SessionResult> void createSession(Flow<CAContract> flow, @NonNull String contractId, @Nullable DataRequest scope, @Nullable SDKCallback<T>callback) {
         boolean useFlow = false;
         CAContract contract;
         if (flow.isInitialized()) {
@@ -296,6 +310,7 @@ public final class DigiMeClient {
             }
             contract = new CAContract(contractId, DigiMeClient.getApplicationId());
         }
+        contract.setScope(scope);
         startSessionWithContract(contract, callback);
     }
 
@@ -304,11 +319,11 @@ public final class DigiMeClient {
             throw new DigiMeException("No Postbox contracts registered! You must have forgotten to add contract Id to the meta-data path \"%s\" or pass the CAContract object to createSession.", POSTBOX_CONTRACTS_PATH);
         }
         if (!postboxFlow.next()) { postboxFlow.rewind().next(); }
-        createSession(postboxFlow.currentId, callback);
+        createSession(postboxFlow.currentId, null, callback);
     }
 
     private void createPostboxSession(@NonNull String contractId, @Nullable SDKCallback<SessionResult>callback) {
-        createSession(postboxFlow, contractId, callback);
+        createSession(postboxFlow, contractId, null, callback);
     }
 
     public <T extends SessionResult> void startSessionWithContract(CAContract contract, @Nullable SDKCallback<T> callback) {
@@ -427,6 +442,12 @@ public final class DigiMeClient {
         return networkClients.put(session, apiClient);
     }
 
+    public DigiMeConsentAccessAuthManager authorizeInitializedSession(@NonNull Activity activity, @Nullable SDKCallback<CASession> callback) {
+        checkClientInitialized();
+        this.authorizeInitializedSessionWithManager(this.getAuthManager(), activity, callback);
+        return this.getAuthManager();
+    }
+
     /**
      *  Private helpers
      */
@@ -437,7 +458,7 @@ public final class DigiMeClient {
         }
         SDKCallback<SessionResult> forwarder = (callback != null && callback instanceof AuthorizationForwardCallback) ? callback : new AuthorizationForwardCallback(callback);
         if (!authManager.nativeClientAvailable(activity)) {
-            forwarder = new AutoSessionForwardCallback(authManager, activity, callback, true);
+            forwarder = new AutoSessionForwardCallback(authManager, activity, callback);
         }
         authManager.resolveAuthorizationPath(activity, forwarder, true);
     }
@@ -638,14 +659,9 @@ public final class DigiMeClient {
 
     class SessionForwardCallback <T extends SessionResult> extends SDKCallback<T> {
         final SDKCallback<T> callback;
-        private boolean overrideSessionCallback = false;
 
         SessionForwardCallback(SDKCallback<T> callback) {
             this.callback = callback;
-        }
-        SessionForwardCallback(SDKCallback<T> callback, boolean overrideSessionCallback) {
-            this.callback = callback;
-            this.overrideSessionCallback = overrideSessionCallback;
         }
 
         @Override
@@ -658,7 +674,7 @@ public final class DigiMeClient {
             CASessionManager sm = (CASessionManager)consentAccessSessionManager;
             sm.setCurrentSession(session);
             getInstance().getApi(session);
-            if (callback != null && !overrideSessionCallback) {
+            if (callback != null && !(this instanceof AutoSessionForwardCallback)) {
                 callback.succeeded(new SDKResponse<>(result.body, result.response));
             }
             for (SDKListener listener : listeners) {
@@ -687,11 +703,6 @@ public final class DigiMeClient {
             this.authManager = new WeakReference<>(authManager);
         }
 
-        AutoSessionForwardCallback(DigiMeBaseAuthManager authManager, Activity activity, SDKCallback<T> callback, boolean overrideCallback) {
-            super(callback, overrideCallback);
-            this.callActivity = new WeakReference<>(activity);
-            this.authManager = new WeakReference<>(authManager);
-        }
         @Override
         public void succeeded(SDKResponse<T> result) {
             super.succeeded(result);

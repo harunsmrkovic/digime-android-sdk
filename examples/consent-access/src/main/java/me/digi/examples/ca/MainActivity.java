@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements SDKListener {
             public void onClick(View v) {
                 dgmClient.removeListener(MainActivity.this);
                 startActivity(new Intent(MainActivity.this, CallbackActivity.class));
+                finish();
             }
         });
         gotoCallback.setVisibility(View.GONE);

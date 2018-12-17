@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.digi.sdk.core.BuildConfig;
+import me.digi.sdk.core.errorhandling.DigiMeException;
 import okhttp3.HttpUrl;
 
 public final class ApiConfig {
@@ -44,18 +45,22 @@ public final class ApiConfig {
         return url.host();
     }
 
-    public String userAgentString(String appName, String versionCode) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(appName);
-
+    public static String parseVersion(String versionCode) {
         Pattern pattern = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)");
         Matcher matcher = pattern.matcher(versionCode);
-        if (matcher.lookingAt()) {
-            sb.append("/")
-                .append(matcher.group());
-        }
+        if (matcher.lookingAt())
+            return matcher.group();
+        else
+            throw new DigiMeException("Failed to parse valid version String from: "+versionCode);
+    }
 
-        sb.append(" (" + Build.MODEL + "; " +
+    /** Currently no validation checks on this, can be what we like. {@link me.digi.sdk.core.entities.SDKAgent} IS validated however */
+    public String userAgentString(String appName, String versionCode) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(appName)
+        .append("/")
+        .append(parseVersion(versionCode))
+        .append(" (" + Build.MODEL + "; " +
             "Android; " +
             Build.VERSION.RELEASE + ')');
 

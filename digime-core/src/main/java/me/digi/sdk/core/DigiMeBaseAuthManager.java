@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +17,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import me.digi.sdk.core.entities.DataRequest;
 import me.digi.sdk.core.internal.AuthorizationException;
 import me.digi.sdk.core.internal.ipc.AuthorizationResolver;
 import me.digi.sdk.core.internal.ipc.DigiMeDirectResolver;
@@ -43,6 +45,7 @@ public abstract class DigiMeBaseAuthManager<T extends SessionResult> {
 
     protected final String appId;
     protected String appName;
+    protected DataRequest scope;
     protected final CASession session;
     protected final SessionManager<CASession> sManager;
 
@@ -71,6 +74,14 @@ public abstract class DigiMeBaseAuthManager<T extends SessionResult> {
     abstract protected Intent createAppIntent(CASession intentSession);
 
     abstract protected void handleSuccess(@Nullable Intent data);
+
+    public DataRequest getScope() {
+        return scope;
+    }
+
+    public void setScope(DataRequest scope) {
+        this.scope = scope;
+    }
 
     @SuppressWarnings("UnusedParameters")
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

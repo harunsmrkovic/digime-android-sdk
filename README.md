@@ -31,6 +31,7 @@ For detailed explanation of the Consent Access architecture please visit [Dev Su
      * [Handling fetch failures and automatic exponential backoff](#handling-fetch-failures-and-automatic-exponential-backoff)
      * [Fetching raw response JSON](#fetching-raw-response-json)
      * [Fetching Account metadata](#fetching-account-metadata)
+     * [Fetching data in time range](#fetching-data-in-time-range)
      * [Decryption](#decryption)
 
 ## Manual Installation
@@ -57,32 +58,12 @@ For detailed explanation of the Consent Access architecture please visit [Dev Su
 ```gradle
 
    dependencies {
-        compile 'me.digi.sdk:digime-core:1.3.2'
+        compile 'me.digi.sdk:digime-core:1.4.0'
    }
 ```
 
 5. You should be able to import `me.digi.sdk.core.DigiMeClient` now.
 
-### Development builds and snapshots
-
-For testing purposes or initial integration _dev_ version of the library should always be used. To use development version, following dependency should be imported.
-
-```gradle
-
-   dependencies {
-        compile '...:digime-core:1.3.2-dev'
-   }
-```
-
-Snapshot builds can be retrieved from the **SNAPSHOTS** repository. Snapshots can be used to try out new in-development features. It is discouraged to use snapshots in production releases.
-To use snapshot builds use the following dependency:
-
-```gradle
-
-   dependencies {
-        compile '...:digime-core:1.3.3-SNAPSHOT'
-   }
-```
 
 ### Directly from source code (downloaded or git submodule)
 
@@ -424,7 +405,18 @@ DigiMeClient.getInstance().getFileList(callback)
 
 Upon success DigiMeClient returns a `CAFiles` object which contains a single field `fileIds`, a list of file IDs.
 
-Finally you can use the returned file IDs to fetch their data:
+You can then use the returned file IDs to fetch the file data in JSON format:
+
+```java
+ /* @param fileId         ID of the file to retrieve
+  * @param callback         reference to the SDKCallback<JsonElement> or null if using SDKListener
+  */
+DigiMeClient.getInstance().getFileJSON(fileId, callback)
+```
+
+Typically you would look to extract the `fileContent` json object, this contains an array of data objects. Details of this structure can be found here: [Data Structure](https://developers.digi.me/data-structure.html) and here [Reference Objects](https://developers.digi.me/reference-objects.html).
+We will soon release a library containing native objects to assist you in handling this data. Please contact support if you require this ahead of the official release.
+If it is Social content you are interested in there is a convenient helper method that may be of some use:
 
 ```java
  /* @param fileId         ID of the file to retrieve
@@ -433,9 +425,7 @@ Finally you can use the returned file IDs to fetch their data:
 DigiMeClient.getInstance().getFileContent(fileId, callback)
 ```
 
-Upon success DigiMeClient returns a `CAFileResponse` which contains a list of deserialized content objects (`CAContent`)
-
-For detailed content item structure look at [Dev Docs](https://developers.digi.me/data-structure.html).
+This returns a `CAFileResponse` which contains a list of deserialized generic Social data objects (`CAContent`)
 
 ### Handling fetch failures and automatic exponential backoff
  
@@ -482,22 +472,6 @@ These configuration options are set statically on DigiMeClient:
     DigiMeClient.minRetryPeriod = 1000;
 ```
 
-### Fetching raw response JSON
-
-In some cases it is beneficial to have access to the complete underlying json response.
-As with regular fetch you can retrieve the data once you have the list of file IDs with:
-
-```java
- /* @param fileId         ID of the file to retrieve
-  * @param callback         reference to the SDKCallback<JsonElement> or null if using SDKListener
-  */
-DigiMeClient.getInstance().getFileJSON(fileId, callback)
-```
-
-Upon success DigiMeClient returns a `JsonElement` which contains complete file content.
-
-For detailed content item structure look at [Dev Docs](https://developers.digi.me/data-structure.html).
-
 ### Fetching Account metadata
 
 DigiMeSDK also provides relevant metadata about **service accounts** linked to returned file content.
@@ -514,6 +488,29 @@ Upon success DigiMeClient returns a `CAAccounts` object which contains `List<>` 
 
 Among others, most notable properties of`CAAccount` object are `service.name` - name of the underlying service,
 `accountId` - account identifier which can be used to link returned entities to specific account.
+
+### Fetching data in time range
+
+Every Contract will define a time range that restricts your data access. The default `authorize(Activity, SDKCallback)` method will provide access to the whole of this time range.
+Depending on your context or whether you have previously cached data, it may be desirable to only request data within a sub time range (less data = faster response).
+Use this alternative `authorize` method to achieve this:
+
+```java
+authorize(@NonNull Activity activity, TimeRange timeRange, @Nullable SDKCallback<CASession> callback)
+```
+
+Create your `TimeRange` with one of these:
+
+```java
+public static TimeRange from(@NonNull Long from)
+public static TimeRange priorTo(@NonNull Long priorTo)
+public static TimeRange fromTo(@NonNull Long from, @NonNull Long to)
+public static TimeRange last(int x, @NonNull Unit unit)
+```
+
+The timestamps are in UTC seconds format.
+Note a current restriction, because files are bucketed by month, this filtering only works with monthly granularity.
+So a timestamp effectively represents the whole of the month in which it falls.
 
 ### Decryption
 
