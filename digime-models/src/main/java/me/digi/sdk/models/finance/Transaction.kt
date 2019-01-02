@@ -17,21 +17,12 @@ data class Transaction(
         @Json(name = "entityid")
         val entityId: String?,
 
-        /**
-         * jfs account id, which is converted to [Account.id]
-         */
         @Json(name = "accountentityid")
         val accountEntityId: String?,
 
-        /**
-         * mapped to [ContentItem.text2] together with [.currency]
-         */
         @Json(name = "amount")
         val amount: Float?,
 
-        /**
-         * mapped as a currency symbol to [ContentItem.text2] together with [.amount]
-         */
         @Json(name = "currency")
         val currency: String?,
 
@@ -41,18 +32,12 @@ data class Transaction(
         @Json(name = "runningbalancecurrency")
         val runningBalanceCurrency: String?,
 
-        /**
-         * mapped to [ContentItem.text3]
-         */
         @Json(name = "originalref")
         val originalRef: String?,
 
         @Json(name = "simpleref")
         val simpleRef: String?,
 
-        /**
-         * compared to "credit" type and mapped to [ContentItem.flags]
-         */
         @Json(name = "basetype")
         val baseType: String?,
 
@@ -86,9 +71,6 @@ data class Transaction(
         @Json(name = "merchantid")
         val merchantId: String?,
 
-        /**
-         * mapped to [ContentItem.text1]
-         */
         @Json(name = "merchantname")
         val merchantName: String?,
 

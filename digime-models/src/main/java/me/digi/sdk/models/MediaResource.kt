@@ -38,7 +38,7 @@ data class MediaResource(
         @Json(name = "url")
         val url: String?
 ) : Comparable<MediaResource> {
-    // calculate diagonal of image to compare it between eachother
+    // calculate diagonal of image to compare it between each other
     private fun resolutionSize(): Double = Math.sqrt((width * width + height * height).toDouble())
 
     override fun compareTo(other: MediaResource): Int =

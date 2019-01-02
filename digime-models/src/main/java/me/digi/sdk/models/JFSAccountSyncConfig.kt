@@ -20,7 +20,7 @@ enum class SyncType(val id: Int) {
     AUTO(0),
     @Json(name = "manual")
     MANUAL(1),
-    // this one is not actually used by CCS, only for local use
+    // only for local use
     @Json(name = "default")
     DEFAULT(2);
 

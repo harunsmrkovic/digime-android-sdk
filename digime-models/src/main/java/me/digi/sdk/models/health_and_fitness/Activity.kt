@@ -17,9 +17,6 @@ data class Activity(
         @Json(name = "accountentityid")
         val accountEntityId: String?,
 
-        /**
-         * mapped to [ContentItem.text1]
-         */
         @Json(name = "activityname")
         val activityName: String?,
 
@@ -29,9 +26,6 @@ data class Activity(
         @Json(name = "createddate")
         val createdDate: Long?,
 
-        /**
-         * mapped to [ContentItem.date]
-         */
         @Json(name = "originalstartdate")
         val startDate: Long?,
 

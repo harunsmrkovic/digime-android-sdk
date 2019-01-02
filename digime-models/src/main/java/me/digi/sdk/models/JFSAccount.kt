@@ -13,10 +13,6 @@ import me.digi.sdk.models.health_and_fitness.LengthUnit
 import me.digi.sdk.models.health_and_fitness.WaterUnit
 import me.digi.sdk.models.health_and_fitness.WeightUnit
 
-/**
- * POJO used to parse account from "map.json" ([JFSMap]) file
- */
-
 @JsonClass(generateAdapter = true)
 data class JFSAccount(
         @Json(name = "entityid")
@@ -56,8 +52,6 @@ data class JFSAccount(
          * UNDEFINED = 0
          * PENDING = 1
          * ACTIVE = 2
-         *
-         * https://digi-me.atlassian.net/wiki/spaces/ENG/pages/33914908/User+Accounts
          */
         @Json(name = "connectionstatus")
         val connectionStatus: Int?,
@@ -65,8 +59,7 @@ data class JFSAccount(
         @Json(name = "updateddate")
         val updatedDate: Long?,
 
-        //for finance (see Confluence if other fields needed)
-
+        //for finance
         @Json(name = "accountname")
         val accountName: String?,
 
@@ -94,7 +87,7 @@ data class JFSAccount(
         @Json(name = "accounttype")
         val accountType: AccountType = AccountType.USER,
 
-        //for finance (see Confluence if other fields needed)
+        //for finance
         @Json(name = "distancepreference")
         val distanceUnits: DistanceUnit?,
 
@@ -116,13 +109,9 @@ data class JFSAccount(
         @Json(name = "vrm")
         val vrm: String?,
 
-        /**
-         * property used for [CADemoMode]
-         */
         @Json(name = "syncenabled")
         val syncEnabled: Boolean?,
 
-        // TODO future task: syncenabled will be contained in here
         @Json(name = "sync")
         val syncConfig: JFSAccountSyncConfig?
 ) {

@@ -39,27 +39,15 @@ data class Post(
         @Json(name = "personfileurl")
         val personFileUrl: String?,
 
-        /**
-         * mapped to [ContentItem.date]
-         */
         @Json(name = "createddate")
         val createdDate: Long = 0,
 
-        /**
-         * mapped to [SocialContentItemDetails.nativeUrl]
-         */
         @Json(name = "posturl")
         val postUrl: String?,
 
-        /**
-         * mapped to [ContentItem.text3]
-         */
         @Json(name = "text")
         val text: String?,
 
-        /**
-         * mapped to [ContentItem.text1]
-         */
         @Json(name = "title")
         val title: String?,
 
@@ -69,35 +57,21 @@ data class Post(
         @Json(name = "type")
         val type: PostType?,
 
-        /**
-         * mapped to [SocialContentItemDetails.commentCount]
-         */
         @Json(name = "commentcount")
         val commentCount: Int = 0,
 
-        /**
-         * mapped to [SocialContentItemDetails.shareCount]
-         */
         @Json(name = "sharecount")
         val shareCount: Int = 0,
 
-        /**
-         * mapped to [SocialContentItemDetails.likesCount]
-         */
         @Json(name = "likecount")
         val likeCount: Int = 0,
 
         /**
          * Used by Twitter
-         *
-         * mapped to [SocialContentItemDetails.likesCount]
          */
         @Json(name = "favouritecount")
         val favouriteCount: Int = 0,
 
-        /**
-         * mapped to [ContentItem.flagsValue]
-         */
         @Json(name = "islikes")
         val isLiked: Int = 0
 ) {

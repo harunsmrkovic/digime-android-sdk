@@ -11,7 +11,7 @@ data class Appointments(
         val entityID: String?,
 
         @Json(name = "accountentityid")
-        var accountEntityId: String?,
+        val accountEntityId: String?,
 
         @Json(name = "createddate")
         val createdDate: Long?,

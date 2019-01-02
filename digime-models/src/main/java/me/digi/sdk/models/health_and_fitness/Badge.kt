@@ -8,10 +8,6 @@ import com.squareup.moshi.Json
 import me.digi.sdk.models.ItemDetails
 import me.digi.sdk.models.MediaResource
 
-/**
- * Badge (Achievement) JFS entity
- */
-
 data class Badge(
         @Json(name = "id")
         val id: String?,
@@ -34,9 +30,6 @@ data class Badge(
         @Json(name = "value")
         val value: Int?,
 
-        /**
-         * mapped to [ContentItem.text1]
-         */
         @Json(name = "name")
         val name: String?,
 
@@ -49,18 +42,12 @@ data class Badge(
         @Json(name = "shortdescription")
         val shortDescription: String?,
 
-        /**
-         * mapped to [ContentItem.text2]
-         */
         @Json(name = "earnedmessage")
         val earnedMessage: String?,
 
         @Json(name = "marketingdescription")
         val marketingDescription: String?,
 
-        /**
-         * mapped to [ContentItem.text3]
-         */
         @Json(name = "mobiledescription")
         val mobileDescription: String?,
 

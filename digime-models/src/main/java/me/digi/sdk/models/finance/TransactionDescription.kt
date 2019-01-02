@@ -11,6 +11,5 @@ data class TransactionDescription(
         val originalRef: String?,
 
         @Json(name = "simple")
-        //where present, seems to be the same as the merchant name
         val simpleRef: String?
 )
