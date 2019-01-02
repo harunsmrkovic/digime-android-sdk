@@ -59,39 +59,7 @@ class MediaTypeSpec : ModelTest<MediaTypeDummy>(MediaTypeDummy::class.java) {
 }
 
 class MediaSpec : ModelTest<Media>(Media::class.java) {
-    override val emptyTest: Media? = Media(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            0,
-            null,
-            0f,
-            0f,
-            0,
-            null,
-            null,
-            null,
-            null,
-            0,
-            0,
-            null,
-            0,
-            0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Media? = null
 
     override val jsonObjectTests: List<Pair<Media?, String>> =
             listOf(

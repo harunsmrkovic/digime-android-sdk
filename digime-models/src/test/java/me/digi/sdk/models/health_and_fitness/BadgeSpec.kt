@@ -8,26 +8,7 @@ import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.objects.TMediaResource
 
 class BadgeSpec : ModelTest<Badge>(Badge::class.java) {
-    override val emptyTest: Badge? = Badge(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Badge? = null
 
     override val jsonObjectTests: List<Pair<Badge?, String>> =
             listOf(

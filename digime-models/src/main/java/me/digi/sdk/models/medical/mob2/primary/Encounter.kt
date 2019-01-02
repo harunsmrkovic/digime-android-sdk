@@ -10,7 +10,7 @@ import me.digi.sdk.models.medical.mob2.secondary.*
 
 data class Encounter(
         @Json(name = "entityid")
-        val entityID: String?,
+        val entityId: String,
 
         @Json(name = "accountentityid")
         val accountEntityId: String?,

@@ -8,19 +8,7 @@ import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.objects.medical.mob2.primary.TDevice
 
 class DeviceSpec : ModelTest<Device>(Device::class.java) {
-    override val emptyTest: Device? = Device(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Device? = null
 
     override val jsonObjectTests: List<Pair<Device?, String>> =
             listOf(

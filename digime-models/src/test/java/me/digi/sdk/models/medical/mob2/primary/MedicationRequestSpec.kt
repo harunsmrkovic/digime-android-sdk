@@ -9,21 +9,7 @@ import me.digi.sdk.models.objects.medical.mob2.primary.TMedication
 import me.digi.sdk.models.objects.medical.mob2.secondary.*
 
 class MedicationRequestSpec : ModelTest<MedicationRequest>(MedicationRequest::class.java) {
-    override val emptyTest: MedicationRequest? = MedicationRequest(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: MedicationRequest? = null
 
     override val jsonObjectTests: List<Pair<MedicationRequest?, String>> =
             listOf(

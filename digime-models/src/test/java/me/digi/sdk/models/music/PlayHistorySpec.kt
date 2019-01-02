@@ -8,12 +8,7 @@ import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.objects.music.TTrack
 
 class PlayHistorySpec : ModelTest<PlayHistory>(PlayHistory::class.java) {
-    override val emptyTest: PlayHistory? = PlayHistory(
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: PlayHistory? = null
 
     override val jsonObjectTests: List<Pair<PlayHistory?, String>> =
             listOf(

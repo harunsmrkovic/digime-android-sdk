@@ -7,26 +7,7 @@ package me.digi.sdk.models.social
 import me.digi.sdk.models.ModelTest
 
 class AlbumSpec : ModelTest<Album>(Album::class.java) {
-    override val emptyTest: Album? = Album(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            0,
-            null,
-            null,
-            null,
-            0,
-            0,
-            null,
-            null,
-            null,
-            0,
-            0,
-            0
-    )
+    override val emptyTest: Album? = null
 
     override val jsonObjectTests: List<Pair<Album?, String>> =
             listOf(

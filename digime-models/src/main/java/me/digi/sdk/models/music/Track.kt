@@ -12,7 +12,7 @@ data class Track(
         val accountEntityId: String?,
 
         @Json(name = "entityid")
-        val entityId: String?,
+        val entityId: String,
 
         @Json(name = "id")
         val apiId: String?,

@@ -10,20 +10,7 @@ import me.digi.sdk.models.objects.medical.mob2.secondary.TFamilyMemberHistoryCon
 import me.digi.sdk.models.objects.medical.mob2.secondary.TIdentifier
 
 class FamilyMemberHistorySpec : ModelTest<FamilyMemberHistory>(FamilyMemberHistory::class.java) {
-    override val emptyTest: FamilyMemberHistory? = FamilyMemberHistory(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: FamilyMemberHistory? = null
 
     override val jsonObjectTests: List<Pair<FamilyMemberHistory?, String>> =
             listOf(

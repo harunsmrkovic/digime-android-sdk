@@ -16,7 +16,7 @@ import me.digi.sdk.models.health_and_fitness.WeightUnit
 @JsonClass(generateAdapter = true)
 data class JFSAccount(
         @Json(name = "entityid")
-        val entityId: String?,
+        val entityId: String,
 
         @Json(name = "serviceid")
         val serviceId: Int = 0,

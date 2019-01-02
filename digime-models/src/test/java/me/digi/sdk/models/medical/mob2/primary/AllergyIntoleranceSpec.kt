@@ -8,23 +8,7 @@ import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.objects.medical.mob2.secondary.*
 
 class AllergyIntoleranceSpec : ModelTest<AllergyIntolerance>(AllergyIntolerance::class.java) {
-    override val emptyTest: AllergyIntolerance? = AllergyIntolerance(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: AllergyIntolerance? = null
 
     override val jsonObjectTests: List<Pair<AllergyIntolerance?, String>> =
             listOf(

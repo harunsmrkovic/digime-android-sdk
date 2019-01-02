@@ -20,7 +20,7 @@ data class VehicleRegistration(
         val engineCapacity: Long?,
 
         @Json(name = "entityid")
-        val entityId: String?,
+        val entityId: String,
 
         @Json(name = "fueltype")
         val fuelType: String?,

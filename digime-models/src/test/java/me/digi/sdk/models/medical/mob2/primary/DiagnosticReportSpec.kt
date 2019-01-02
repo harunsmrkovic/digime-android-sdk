@@ -12,21 +12,7 @@ import me.digi.sdk.models.objects.medical.mob2.secondary.TPerformer
 import me.digi.sdk.models.objects.medical.mob2.secondary.TReference
 
 class DiagnosticReportSpec : ModelTest<DiagnosticReport>(DiagnosticReport::class.java) {
-    override val emptyTest: DiagnosticReport? = DiagnosticReport(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: DiagnosticReport? = null
 
     override val jsonObjectTests: List<Pair<DiagnosticReport?, String>> =
             listOf(

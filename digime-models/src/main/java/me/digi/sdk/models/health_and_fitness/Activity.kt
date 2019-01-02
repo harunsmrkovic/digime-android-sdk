@@ -12,7 +12,7 @@ data class Activity(
         val id: String?,
 
         @Json(name = "entityid")
-        val entityId: String?,
+        val entityId: String,
 
         @Json(name = "accountentityid")
         val accountEntityId: String?,

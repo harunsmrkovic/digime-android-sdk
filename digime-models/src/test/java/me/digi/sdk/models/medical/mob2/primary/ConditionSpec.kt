@@ -10,22 +10,7 @@ import me.digi.sdk.models.objects.medical.mob2.secondary.TIdentifier
 import me.digi.sdk.models.objects.medical.mob2.secondary.TReference
 
 class ConditionSpec : ModelTest<Condition>(Condition::class.java) {
-    override val emptyTest: Condition? = Condition(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Condition? = null
 
     override val jsonObjectTests: List<Pair<Condition?, String>> =
             listOf(

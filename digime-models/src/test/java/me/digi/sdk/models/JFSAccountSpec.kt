@@ -9,38 +9,7 @@ import org.junit.Test
 
 //TODO add more cases.
 class JFSAccountSpec : ModelTest<JFSAccount>(JFSAccount::class.java) {
-    override val emptyTest: JFSAccount? = JFSAccount(
-            null,
-            0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            JFSAccount.Companion.AccountType.USER,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: JFSAccount? = null
 
     override val jsonObjectTests: List<Pair<JFSAccount?, String>> =
             listOf(

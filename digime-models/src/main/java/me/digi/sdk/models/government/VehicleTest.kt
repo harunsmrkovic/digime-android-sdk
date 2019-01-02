@@ -19,7 +19,7 @@ data class VehicleTest(
         val createdDate: Long?,
 
         @Json(name = "entityid")
-        val entityId: String?,
+        val entityId: String,
 
         @Json(name = "expirydate")
         val expiryDate: Long?,

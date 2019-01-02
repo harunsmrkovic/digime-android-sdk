@@ -137,29 +137,7 @@ class PostTypeSpec : ModelTest<PostTypeDummy>(PostTypeDummy::class.java) {
 }
 
 class PostSpec : ModelTest<Post>(Post::class.java) {
-    override val emptyTest: Post? = Post(
-            null,
-            null,
-            null,
-            null,
-            null,
-            0,
-            null,
-            null,
-            null,
-            null,
-            0,
-            null,
-            null,
-            null,
-            0,
-            null,
-            0,
-            0,
-            0,
-            0,
-            0
-    )
+    override val emptyTest: Post? = null
 
     override val jsonObjectTests: List<Pair<Post?, String>> =
             listOf(

@@ -9,39 +9,7 @@ import org.junit.Assert
 import org.junit.Test
 
 class TransactionSpec : ModelTest<Transaction>(Transaction::class.java) {
-    override val emptyTest: Transaction? = Transaction(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Transaction? = null
 
     override val jsonObjectTests: List<Pair<Transaction?, String>> =
             listOf(
@@ -119,18 +87,18 @@ class TransactionSpec : ModelTest<Transaction>(Transaction::class.java) {
 
     @Test
     fun `when baseType is null, isCredit should be false`() {
-        Assert.assertFalse(emptyTest!!.copy(baseType = null).isCredit)
+        Assert.assertFalse(jsonObjectTests[0].first!!.copy(baseType = null).isCredit)
     }
 
     @Test
     fun `when baseType is not 'credit', isCredit should be false`() {
-        Assert.assertFalse(emptyTest!!.copy(baseType = "dummyType").isCredit)
+        Assert.assertFalse(jsonObjectTests[0].first!!.copy(baseType = "dummyType").isCredit)
     }
 
     @Test
     fun `when baseType is 'credit', isCredit should be true`() {
-        Assert.assertTrue(emptyTest!!.copy(baseType = "credit").isCredit)
-        Assert.assertTrue(emptyTest!!.copy(baseType = "Credit").isCredit)
-        Assert.assertTrue(emptyTest!!.copy(baseType = "CREDIT").isCredit)
+        Assert.assertTrue(jsonObjectTests[0].first!!.copy(baseType = "credit").isCredit)
+        Assert.assertTrue(jsonObjectTests[0].first!!.copy(baseType = "Credit").isCredit)
+        Assert.assertTrue(jsonObjectTests[0].first!!.copy(baseType = "CREDIT").isCredit)
     }
 }

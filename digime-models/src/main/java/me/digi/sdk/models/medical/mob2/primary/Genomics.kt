@@ -8,7 +8,7 @@ import com.squareup.moshi.Json
 
 data class Genomics(
         @Json(name = "entityid")
-        val entityID: String?,
+        val entityId: String,
 
         @Json(name = "accountentityid")
         val accountEntityId: String?,

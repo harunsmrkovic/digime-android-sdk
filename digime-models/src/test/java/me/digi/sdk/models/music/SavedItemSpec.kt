@@ -9,12 +9,7 @@ import me.digi.sdk.models.objects.music.TAlbum
 import me.digi.sdk.models.objects.music.TTrack
 
 class SavedAlbumSpec : ModelTest<SavedAlbum>(SavedAlbum::class.java) {
-    override val emptyTest: SavedAlbum? = SavedAlbum(
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: SavedAlbum? = null
 
     override val jsonObjectTests: List<Pair<SavedAlbum?, String>> =
             listOf(
@@ -38,12 +33,7 @@ class SavedAlbumSpec : ModelTest<SavedAlbum>(SavedAlbum::class.java) {
 }
 
 class SavedTrackSpec : ModelTest<SavedTrack>(SavedTrack::class.java) {
-    override val emptyTest: SavedTrack? = SavedTrack(
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: SavedTrack? = null
 
     override val jsonObjectTests: List<Pair<SavedTrack?, String>> =
             listOf(

@@ -11,20 +11,7 @@ import me.digi.sdk.models.objects.medical.mob2.secondary.TLocation
 import me.digi.sdk.models.objects.medical.mob2.secondary.TPerformer
 
 class ProcedureSpec : ModelTest<Procedure>(Procedure::class.java) {
-    override val emptyTest: Procedure? = Procedure(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Procedure? = null
 
     override val jsonObjectTests: List<Pair<Procedure?, String>> =
             listOf(

@@ -8,14 +8,7 @@ import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.objects.music.TPlaylistTrack
 
 class PlaylistTrackSpec : ModelTest<PlaylistTrack>(PlaylistTrack::class.java) {
-    override val emptyTest: PlaylistTrack? = PlaylistTrack(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: PlaylistTrack? = null
 
     override val jsonObjectTests: List<Pair<PlaylistTrack?, String>> =
             listOf(

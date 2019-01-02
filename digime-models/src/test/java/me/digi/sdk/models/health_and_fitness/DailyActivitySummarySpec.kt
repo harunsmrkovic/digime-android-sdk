@@ -10,32 +10,7 @@ import me.digi.sdk.models.objects.health_and_fitness.TGoals
 import me.digi.sdk.models.objects.health_and_fitness.THeartRateZone
 
 class DailyActivitySummarySpec : ModelTest<DailyActivitySummary>(DailyActivitySummary::class.java) {
-    override val emptyTest: DailyActivitySummary? = DailyActivitySummary(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: DailyActivitySummary? = null
 
     override val jsonObjectTests: List<Pair<DailyActivitySummary?, String>> =
             listOf(

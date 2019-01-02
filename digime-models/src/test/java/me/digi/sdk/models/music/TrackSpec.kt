@@ -10,20 +10,7 @@ import org.junit.Assert
 import org.junit.Test
 
 class TrackSpec : ModelTest<Track>(Track::class.java) {
-    override val emptyTest: Track? = Track(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Track? = null
 
     override val jsonObjectTests: List<Pair<Track?, String>> =
             listOf(
@@ -35,14 +22,14 @@ class TrackSpec : ModelTest<Track>(Track::class.java) {
 
     @Test
     fun `when album is null, isSimplifiedTrack should be true`() {
-        Assert.assertTrue(emptyTest!!.copy(album = null).isSimplifiedTrack)
+        Assert.assertTrue(jsonObjectTests[0].first!!.copy(album = null).isSimplifiedTrack)
     }
 
     @Test
     fun `when album is not null, isSimplifiedTrack should be false`() {
         val album = Album(
                 null,
-                null,
+                "dummyEntityId",
                 null,
                 null,
                 null,
@@ -54,6 +41,6 @@ class TrackSpec : ModelTest<Track>(Track::class.java) {
                 null,
                 null
         )
-        Assert.assertFalse(emptyTest!!.copy(album = album).isSimplifiedTrack)
+        Assert.assertFalse(jsonObjectTests[0].first!!.copy(album = album).isSimplifiedTrack)
     }
 }

@@ -11,7 +11,7 @@ import me.digi.sdk.models.medical.mob2.secondary.Annotation
 
 data class AllergyIntolerance(
         @Json(name = "entityid")
-        val entityID: String?,
+        val entityId: String,
 
         @Json(name = "accountentityid")
         val accountEntityId: String?,

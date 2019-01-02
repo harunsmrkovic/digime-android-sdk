@@ -11,7 +11,7 @@ data class Album(
         val baseID: String?,
 
         @Json(name = "entityid")
-        val entityID: String?,
+        val entityId: String,
 
         @Json(name = "mediaalbumid")
         val mediaAlbumID: String?,

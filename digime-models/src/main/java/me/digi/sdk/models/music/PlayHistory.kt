@@ -12,7 +12,7 @@ data class PlayHistory(
         val accountEntityId: String?,
 
         @Json(name = "entityid")
-        val entityId: String?,
+        val entityId: String,
 
         @Json(name = "createddate")
         val playedAt: Long?,

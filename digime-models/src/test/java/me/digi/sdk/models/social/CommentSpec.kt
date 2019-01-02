@@ -7,28 +7,7 @@ package me.digi.sdk.models.social
 import me.digi.sdk.models.ModelTest
 
 class CommentSpec : ModelTest<Comment>(Comment::class.java) {
-    override val emptyTest: Comment? = Comment(
-            null,
-            null,
-            null,
-            null,
-            0,
-            null,
-            0,
-            null,
-            0,
-            0,
-            0,
-            null,
-            0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Comment? = null
 
     override val jsonObjectTests: List<Pair<Comment?, String>> =
             listOf(

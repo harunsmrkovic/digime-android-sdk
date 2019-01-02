@@ -7,18 +7,7 @@ package me.digi.sdk.models.government
 import me.digi.sdk.models.ModelTest
 
 class VehicleTestSpec : ModelTest<VehicleTest>(VehicleTest::class.java) {
-    override val emptyTest: VehicleTest? = VehicleTest(
-            null,
-            emptyList(),
-            null,
-            null,
-            null,
-            emptyList(),
-            null,
-            null,
-            null,
-            VehicleTest.Companion.TestResult.UNKNOWN
-    )
+    override val emptyTest: VehicleTest? = null
 
     override val jsonObjectTests: List<Pair<VehicleTest?, String>> =
             listOf(

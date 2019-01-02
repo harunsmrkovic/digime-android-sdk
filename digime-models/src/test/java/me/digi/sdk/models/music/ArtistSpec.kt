@@ -9,13 +9,7 @@ import me.digi.sdk.models.objects.music.TArtist
 import me.digi.sdk.models.objects.music.TFollowedArtist
 
 class ArtistSpec : ModelTest<Artist>(Artist::class.java) {
-    override val emptyTest: Artist? = Artist(
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Artist? = null
 
     override val jsonObjectTests: List<Pair<Artist?, String>> =
             listOf(
@@ -27,13 +21,7 @@ class ArtistSpec : ModelTest<Artist>(Artist::class.java) {
 }
 
 class FollowedArtistSpec : ModelTest<FollowedArtist>(FollowedArtist::class.java) {
-    override val emptyTest: FollowedArtist? = FollowedArtist(
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: FollowedArtist? = null
 
     override val jsonObjectTests: List<Pair<FollowedArtist?, String>> =
             listOf(

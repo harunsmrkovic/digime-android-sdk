@@ -11,7 +11,7 @@ data class Comment(
         val baseID: String?,
 
         @Json(name = "entityid")
-        val entityID: String?,
+        val entityId: String,
 
         @Json(name = "commentid")
         val commentID: String?,

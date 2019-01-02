@@ -11,23 +11,7 @@ import me.digi.sdk.models.objects.medical.mob2.secondary.TCodeableConcept
 import me.digi.sdk.models.objects.medical.mob2.secondary.TIdentifier
 
 class ImmunizationSpec : ModelTest<Immunization>(Immunization::class.java) {
-    override val emptyTest: Immunization? = Immunization(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Immunization? = null
 
     override val jsonObjectTests: List<Pair<Immunization?, String>> =
             listOf(

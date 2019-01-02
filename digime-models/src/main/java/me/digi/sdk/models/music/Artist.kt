@@ -10,7 +10,7 @@ import me.digi.sdk.models.MediaResource
 
 abstract class IArtist : ItemDetails.ContentItemDetails {
     abstract val accountEntityId: String?
-    abstract val entityId: String?
+    abstract val entityId: String
     abstract val apiId: String?
     abstract val name: String?
     abstract val resources: Set<MediaResource>?
@@ -21,7 +21,7 @@ data class Artist(
         override val accountEntityId: String?,
 
         @Json(name = "entityid")
-        override val entityId: String?,
+        override val entityId: String,
 
         @Json(name = "id")
         override val apiId: String?,
@@ -38,7 +38,7 @@ data class FollowedArtist(
         override val accountEntityId: String?,
 
         @Json(name = "entityid")
-        override val entityId: String?,
+        override val entityId: String,
 
         @Json(name = "id")
         override val apiId: String?,

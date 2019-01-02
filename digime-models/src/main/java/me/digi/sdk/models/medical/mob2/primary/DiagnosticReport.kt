@@ -12,7 +12,7 @@ import me.digi.sdk.models.medical.mob2.secondary.Reference
 
 data class DiagnosticReport(
         @Json(name = "entityid")
-        val entityID: String?,
+        val entityId: String,
 
         @Json(name = "accountentityid")
         val accountEntityId: String?,

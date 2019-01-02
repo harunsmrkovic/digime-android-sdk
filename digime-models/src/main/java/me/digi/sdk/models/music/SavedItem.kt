@@ -9,7 +9,7 @@ import me.digi.sdk.models.ItemDetails
 
 abstract class SavedItem : ItemDetails.ContentItemDetails {
     abstract val accountEntityId: String?
-    abstract val entityId: String?
+    abstract val entityId: String
     abstract val addedAt: Long?
 }
 
@@ -18,7 +18,7 @@ data class SavedAlbum(
         override val accountEntityId: String?,
 
         @Json(name = "entityid")
-        override val entityId: String?,
+        override val entityId: String,
 
         @Json(name = "createddate")
         override val addedAt: Long?,
@@ -32,7 +32,7 @@ data class SavedTrack(
         override val accountEntityId: String?,
 
         @Json(name = "entityid")
-        override val entityId: String?,
+        override val entityId: String,
 
         @Json(name = "createddate")
         override val addedAt: Long?,

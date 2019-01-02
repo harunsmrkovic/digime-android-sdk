@@ -7,12 +7,7 @@ package me.digi.sdk.models.medical.mob2.primary
 import me.digi.sdk.models.ModelTest
 
 class AppointmentsSpec : ModelTest<Appointments>(Appointments::class.java) {
-    override val emptyTest: Appointments? = Appointments(
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Appointments? = null
 
     override val jsonObjectTests: List<Pair<Appointments?, String>> =
             listOf(

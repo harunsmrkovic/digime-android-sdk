@@ -9,7 +9,7 @@ import me.digi.sdk.models.MediaResource
 
 data class Playlist(
         @Json(name = "entityid")
-        val entityId: String?,
+        val entityId: String,
 
         @Json(name = "accountentityid")
         val accountEntityId: String?,

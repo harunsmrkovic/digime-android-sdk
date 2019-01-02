@@ -14,7 +14,7 @@ data class Media(
         val baseID: String?,
 
         @Json(name = "entityid")
-        val entityID: String?,
+        val entityId: String,
 
         @Json(name = "mediaid")
         val mediaID: String?,

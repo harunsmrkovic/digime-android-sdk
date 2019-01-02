@@ -27,7 +27,7 @@ object TMedication : ModelTestObject<Medication>(
                                 MedicationPackageContent(
                                         TCodeableConcept.obj,
                                         Medication(
-                                                null,
+                                                "dummyEntityId",
                                                 null,
                                                 null,
                                                 null,
@@ -57,7 +57,9 @@ object TMedication : ModelTestObject<Medication>(
                 "content":[
                     {
                         "itemcodeableconcept":${TCodeableConcept.json},
-                        "itemReference":{},
+                        "itemReference":{
+                            "entityid":"dummyEntityId"
+                        },
                         "amount":${TQuantity.json}
                     }
                 ]

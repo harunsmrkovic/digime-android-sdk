@@ -8,43 +8,7 @@ import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.objects.health_and_fitness.*
 
 class ActivitySpec : ModelTest<Activity>(Activity::class.java) {
-    override val emptyTest: Activity? = Activity(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: Activity? = null
 
     override val jsonObjectTests: List<Pair<Activity?, String>> =
             listOf(

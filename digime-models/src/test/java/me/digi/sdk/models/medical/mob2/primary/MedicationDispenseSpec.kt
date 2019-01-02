@@ -8,22 +8,7 @@ import me.digi.sdk.models.ModelTest
 import me.digi.sdk.models.objects.medical.mob2.secondary.*
 
 class MedicationDispenseSpec : ModelTest<MedicationDispense>(MedicationDispense::class.java) {
-    override val emptyTest: MedicationDispense? = MedicationDispense(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-    )
+    override val emptyTest: MedicationDispense? = null
 
     override val jsonObjectTests: List<Pair<MedicationDispense?, String>> =
             listOf(
