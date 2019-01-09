@@ -147,4 +147,13 @@ public class ExtractFileContentTest {
         assertEquals(Util.removeNewLinesAndSpaces(decompressed2), Util.removeNewLinesAndSpaces(sampleData2));
     }
 
+   /* @Test
+    public void gzip_decompression() throws IOException {
+        String decompressed1 = extractContentInterceptor.decompressGZIP(Base64.decode(brotliCompressedData1.getBytes("UTF-8"), Base64.DEFAULT));
+        String decompressed2 = extractContentInterceptor.decompressGZIP(Base64.decode(brotliCompressedData2.getBytes("UTF-8"), Base64.DEFAULT));
+
+        assertEquals(Util.removeNewLinesAndSpaces(decompressed1), Util.removeNewLinesAndSpaces(sampleData1));
+        assertEquals(Util.removeNewLinesAndSpaces(decompressed2), Util.removeNewLinesAndSpaces(sampleData2));
+    }*/
+
 }

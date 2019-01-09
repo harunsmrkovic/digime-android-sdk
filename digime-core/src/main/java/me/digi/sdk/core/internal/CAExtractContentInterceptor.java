@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+
 import me.digi.sdk.core.config.ApiConfig;
 import me.digi.sdk.core.entities.ErrorResponse;
 import me.digi.sdk.core.errorhandling.DigiMeException;
@@ -172,6 +174,7 @@ public class CAExtractContentInterceptor implements Interceptor {
         } catch (IOException e) {
             throw new DigiMeException("Problem decoding: "+e);
         }
+        System.out.println("hmac decompressed: "+decompressed);
         return decompressed;
     }
 
@@ -194,12 +197,12 @@ public class CAExtractContentInterceptor implements Interceptor {
         return decompress(compressedWith, Base64.decode(compressedContent.getBytes("UTF-8"), Base64.DEFAULT));
     }
 
-    @VisibleForTesting
-    public String decompress(String compressedWith, byte[] compressedContent) throws IOException {
-        if (!compressedWith.equals("brotli"))
-            throw new DigiMeException("Unsupported compression algorithm: "+compressedWith);
-
-        return decompressBrotli(compressedContent);
+    private String decompress(String compressedWith, byte[] compressedContent) throws IOException {
+        switch(compressedWith) {
+            case "brotli": return decompressBrotli(compressedContent);
+            case "gzip" : return decompressGZIP(compressedContent);
+            default: throw new DigiMeException("Unsupported compression algorithm: "+compressedWith);
+        }
     }
 
     @VisibleForTesting
@@ -217,6 +220,23 @@ public class CAExtractContentInterceptor implements Interceptor {
         stream.close();
 
         return ByteUtils.bytesToString(buffer.toByteArray());
+    }
+
+    @VisibleForTesting
+    public String decompressGZIP(byte[] compressedContent) throws IOException {
+        System.out.println("hmac decompressing gzip");
+        final int BUFFER_SIZE = 32;
+        ByteArrayInputStream is = new ByteArrayInputStream(compressedContent);
+        GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE);
+        StringBuilder string = new StringBuilder();
+        byte[] data = new byte[BUFFER_SIZE];
+        int bytesRead;
+        while ((bytesRead = gis.read(data)) != -1) {
+            string.append(new String(data, 0, bytesRead));
+        }
+        gis.close();
+        is.close();
+        return string.toString();
     }
 
     private static class EncryptedPaths {

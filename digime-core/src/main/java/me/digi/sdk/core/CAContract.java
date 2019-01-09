@@ -52,7 +52,7 @@ public class CAContract implements Parcelable {
         }
         this.contractId = trim(contractId);
         this.appId = trim(appId);
-        this.accept = new AcceptData("brotli");
+        this.accept = new AcceptData("gzip");
     }
 
     private CAContract(Parcel newParcel) {
