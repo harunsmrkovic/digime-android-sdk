@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.stream.JsonReader;
 import org.apache.commons.compress.compressors.brotli.BrotliCompressorInputStream;
@@ -174,7 +173,6 @@ public class CAExtractContentInterceptor implements Interceptor {
         } catch (IOException e) {
             throw new DigiMeException("Problem decoding: "+e);
         }
-        System.out.println("hmac decompressed: "+decompressed);
         return decompressed;
     }
 
@@ -224,7 +222,6 @@ public class CAExtractContentInterceptor implements Interceptor {
 
     @VisibleForTesting
     public String decompressGZIP(byte[] compressedContent) throws IOException {
-        System.out.println("hmac decompressing gzip");
         final int BUFFER_SIZE = 32;
         ByteArrayInputStream is = new ByteArrayInputStream(compressedContent);
         GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE);
