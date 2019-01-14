@@ -205,35 +205,35 @@ public class CAExtractContentInterceptor implements Interceptor {
 
     @VisibleForTesting
     public String decompressBrotli(byte[] compressedContent) throws IOException {
-        BrotliCompressorInputStream stream = new BrotliCompressorInputStream(new ByteArrayInputStream(compressedContent));
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        try (
+            BrotliCompressorInputStream stream = new BrotliCompressorInputStream(new ByteArrayInputStream(compressedContent));
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream())
+        {
+            int nRead;
+            byte[] data = new byte[16];
+            while ((nRead = stream.read(data)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
 
-        int nRead;
-        byte[] data = new byte[16];
-        while ((nRead = stream.read(data)) != -1) {
-            buffer.write(data, 0, nRead);
+            return ByteUtils.bytesToString(buffer.toByteArray());
         }
-
-        buffer.flush();
-        stream.close();
-
-        return ByteUtils.bytesToString(buffer.toByteArray());
     }
 
     @VisibleForTesting
     public String decompressGZIP(byte[] compressedContent) throws IOException {
         final int BUFFER_SIZE = 32;
-        ByteArrayInputStream is = new ByteArrayInputStream(compressedContent);
-        GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE);
-        StringBuilder string = new StringBuilder();
-        byte[] data = new byte[BUFFER_SIZE];
-        int bytesRead;
-        while ((bytesRead = gis.read(data)) != -1) {
-            string.append(new String(data, 0, bytesRead));
+        try (
+            ByteArrayInputStream is = new ByteArrayInputStream(compressedContent);
+            GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE))
+        {
+            StringBuilder string = new StringBuilder();
+            byte[] data = new byte[BUFFER_SIZE];
+            int bytesRead;
+            while ((bytesRead = gis.read(data)) != -1) {
+                string.append(new String(data, 0, bytesRead));
+            }
+            return string.toString();
         }
-        gis.close();
-        is.close();
-        return string.toString();
     }
 
     private static class EncryptedPaths {
