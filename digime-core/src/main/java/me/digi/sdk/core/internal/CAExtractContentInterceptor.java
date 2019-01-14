@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.stream.JsonReader;
 import org.apache.commons.compress.compressors.brotli.BrotliCompressorInputStream;
@@ -21,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+
 import me.digi.sdk.core.config.ApiConfig;
 import me.digi.sdk.core.entities.ErrorResponse;
 import me.digi.sdk.core.errorhandling.DigiMeException;
@@ -194,29 +195,45 @@ public class CAExtractContentInterceptor implements Interceptor {
         return decompress(compressedWith, Base64.decode(compressedContent.getBytes("UTF-8"), Base64.DEFAULT));
     }
 
-    @VisibleForTesting
-    public String decompress(String compressedWith, byte[] compressedContent) throws IOException {
-        if (!compressedWith.equals("brotli"))
-            throw new DigiMeException("Unsupported compression algorithm: "+compressedWith);
-
-        return decompressBrotli(compressedContent);
+    private String decompress(String compressedWith, byte[] compressedContent) throws IOException {
+        switch(compressedWith) {
+            case "brotli": return decompressBrotli(compressedContent);
+            case "gzip" : return decompressGZIP(compressedContent);
+            default: throw new DigiMeException("Unsupported compression algorithm: "+compressedWith);
+        }
     }
 
     @VisibleForTesting
     public String decompressBrotli(byte[] compressedContent) throws IOException {
-        BrotliCompressorInputStream stream = new BrotliCompressorInputStream(new ByteArrayInputStream(compressedContent));
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        try (
+            BrotliCompressorInputStream stream = new BrotliCompressorInputStream(new ByteArrayInputStream(compressedContent));
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream())
+        {
+            int nRead;
+            byte[] data = new byte[16];
+            while ((nRead = stream.read(data)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
 
-        int nRead;
-        byte[] data = new byte[16];
-        while ((nRead = stream.read(data)) != -1) {
-            buffer.write(data, 0, nRead);
+            return ByteUtils.bytesToString(buffer.toByteArray());
         }
+    }
 
-        buffer.flush();
-        stream.close();
-
-        return ByteUtils.bytesToString(buffer.toByteArray());
+    @VisibleForTesting
+    public String decompressGZIP(byte[] compressedContent) throws IOException {
+        final int BUFFER_SIZE = 32;
+        try (
+            ByteArrayInputStream is = new ByteArrayInputStream(compressedContent);
+            GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE))
+        {
+            StringBuilder string = new StringBuilder();
+            byte[] data = new byte[BUFFER_SIZE];
+            int bytesRead;
+            while ((bytesRead = gis.read(data)) != -1) {
+                string.append(new String(data, 0, bytesRead));
+            }
+            return string.toString();
+        }
     }
 
     private static class EncryptedPaths {
